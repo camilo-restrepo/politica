@@ -1,0 +1,17 @@
+Mongdb Scripts:
+
+use crawler
+db.createCollection("twitterTargets")
+db.twitterTargets.createIndex({id: 1}, {unique: true})
+db.twitterTargets.insert({id: "CVderoux"}) // Carlos Vicente De Roux
+db.twitterTargets.insert({id: "ClaraLopezObre"}) // Clara Lopez
+db.twitterTargets.insert({id: "RafaelPardo"}) //Rafael Pardo
+db.twitterTargets.insert({id: "EnriquePenalosa"}) //Enrique Peñaloza
+db.twitterTargets.insert({id: "MMMaldonadoC"}) 
+db.twitterTargets.insert({id: "RicardoAriasM"}) //Ricardo Arias Mora
+
+db.createCollection("twitterUsers")
+db.twitterUsers.createIndex({twitterId: 1, likes:1}, {unique: true})
+
+db.createCollection("tweets")
+db.tweets.createIndex({twitterId: 1, createAt:1}, {unique: true})

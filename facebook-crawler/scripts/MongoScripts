@@ -1,0 +1,26 @@
+Mongdb Scripts:
+
+use crawler
+db.createCollection("facebookTargets")
+db.facebookTargets.createIndex({id: 1}, {unique: true})
+db.facebookTargets.insert({id: "51571361925"}) // Carlos Vicente De Roux
+db.facebookTargets.insert({id: "585219218202365"}) // Clara Lopez
+db.facebookTargets.insert({id: "182513911837986"}) //Rafael Pardo
+db.facebookTargets.insert({id: "193631447514110"}) //Enrique Peñaloza
+db.facebookTargets.insert({id: "867260176641267"}) // Maria Mercedez Maldonado
+db.facebookTargets.insert({id: "372732356120382"}) //Ricardo Arias Mora
+
+db.createCollection("facebookPages")
+db.facebookPages.createIndex({facebookId: 1, likes:1}, {unique: true})
+
+db.createCollection("facebookComments")
+db.facebookComments.createIndex({facebookId: 1, timestamp:1}, {unique: true})
+
+db.createCollection("facebookLikes")
+db.facebookLikes.createIndex({facebookId: 1, user:1, comment: 1, post: 1}, {unique: true})
+
+db.createCollection("facebookPosts")
+db.facebookPosts.createIndex({facebookId: 1, commentsCount: 1, likesCount: 1, sharesCount: 1}, {unique: true})
+
+db.createCollection("facebookUsers")
+db.facebookUsers.createIndex({id: 1}, {unique: true})
