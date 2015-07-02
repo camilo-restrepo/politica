@@ -60,7 +60,7 @@ app.controller('MainController',
         twtr: [TwitterService],
         both: [FacebookService, TwitterService]
       }[_this.active];
-      _this.$providerIndex = (_this.$providerIndex || 0 + 1) % currentProvider.length;
+      _this.$providerIndex = ((_this.$providerIndex || 0) + 1) % currentProvider.length;
       currentProvider = currentProvider[_this.$providerIndex];
 
       // Get next
@@ -78,37 +78,63 @@ app.factory('FacebookService',
           _index = -1;
 
       var data = [
-        // Post 1
-        {
-        "facebookId": "51571361925_10153234901146926",
-        "message": null,
-        "commentsCount": 0,
-        "likesCount": null,
-        "sharesCount": 0,
-        "timestamp": 1429026272000,
-        "page": {
-            "facebookId": "51571361925",
-            "name": "Carlos Vicente de Roux",
-            "likes": 1055,
-            "timestamp": 1429050956464
-        }
-        },
-        // Post 2
-        {
-        "facebookId": "51571361925_10153234876336926",
-        "message": null,
-        "commentsCount": 0,
+    {
+        "facebookId": "10153226078491926_10153227022611926",
+        "message": "Y el resto de los candidatos? No se lo preguntan?",
         "likesCount": 0,
-        "sharesCount": 0,
-        "timestamp": 1429025587000,
-        "page": {
-            "facebookId": "51571361925",
-            "name": "Carlos Vicente de Roux",
-            "likes": 1055,
-            "timestamp": 1429051058109
+        "timestamp": 1428753003000,
+        "post": {
+            "facebookId": "51571361925_10153226078491926",
+            "message": null,
+            "commentsCount": 0,
+            "likesCount": 0,
+            "sharesCount": 1,
+            "timestamp": 1428712081000,
+            "page": {
+                "facebookId": "51571361925",
+                "name": "Carlos Vicente de Roux",
+                "likes": 1055,
+                "timestamp": 1429051058109
+            }
         }
+    },
+    {
+        "facebookId": "10153187253441926_10153190081096926",
+        "message": "https://www.youtube.com/watch?v=2vYeyWPAxtI",
+        "likesCount": 0,
+        "timestamp": 1427390571000,
+        "post": {
+            "facebookId": "51571361925_10153187253441926",
+            "message": "Hoy después de las 8 a.m. estaré en el Primer Café, programa del canal Capital, dando a conocer cómo avanza mi precandidatura a la Alcaldía de Bogotá por el partido Alianza Verde. Gracias por su sintonía.",
+            "commentsCount": 0,
+            "likesCount": 0,
+            "sharesCount": 0,
+            "timestamp": 1427285390000,
+            "page": {
+                "facebookId": "51571361925",
+                "name": "Carlos Vicente de Roux",
+                "likes": 1055,
+                "timestamp": 1429051058109
+            }
         }
-        ];
+    }
+];
+
+      var text = function (str) {
+          var li = 0;
+          var i = -1;
+          // Get links
+          while((i = str.indexOf('http', li) || str.indexOf('https', li)) > -1) {
+            var next = str.indexOf(' ', i) || str.indexOf("\n", i);
+            if(next === -1) { next = str.length; }
+            var href = str.substring(i, next);
+            str = str.substring(0, i) + "<a target='_blank' href='" + href + "'>" +
+                  str.substring(i, next)+ "</a>" +
+                  str.substring(next);
+            li = i + ("<a target='_blank' href='" + href + "'>").length + "</a>".length;
+          }
+          return str;
+      };
 
       return {
         next: function () {
@@ -116,8 +142,8 @@ app.factory('FacebookService',
           var d = data[_index];
           return {
             $provider: _this,
-            id: d.twitterId,
-            content: d.text,
+            id: d.facebookId,
+            content: text(d.message),
             provider: 'facebook'
           };
         }
@@ -175,7 +201,6 @@ app.factory('TwitterService',
           str = str.substring(0, i) + "<span class='mention'>" +
                 str.substring(i, next)+ "</span>" +
                 str.substring(next);
-                console.log(li, i)
           li = i + "<span class='mention'>".length + "</span>".length;
         }
         return str;
