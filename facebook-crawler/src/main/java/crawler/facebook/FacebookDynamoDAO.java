@@ -44,7 +44,7 @@ public class FacebookDynamoDAO implements FacebookDAO {
 	private final ObjectMapper objectMapper;
 	private final AmazonDynamoDB dynamoDBClient;
 	
-	public boolean createTableIfDontExists(String tableName, String primaryKeyName) throws InterruptedException {
+	public boolean createTableIfDontExists(String tableName, String primaryKeyName, ScalarAttributeType primaryKeyType) throws InterruptedException {
 
 		LOGGER.info("createTableIfDontExists: " + tableName + ", " + primaryKeyName);
 		
@@ -56,7 +56,7 @@ public class FacebookDynamoDAO implements FacebookDAO {
 		if (!doesTableExist) {
 			
 			List<AttributeDefinition> attributeDefinitions = new ArrayList<AttributeDefinition>();
-			attributeDefinitions.add(new AttributeDefinition().withAttributeName(primaryKeyName).withAttributeType(ScalarAttributeType.S));
+			attributeDefinitions.add(new AttributeDefinition().withAttributeName(primaryKeyName).withAttributeType(primaryKeyType));
 
 			List<KeySchemaElement> keySchemaElements = new ArrayList<KeySchemaElement>();
 			keySchemaElements.add(new KeySchemaElement().withAttributeName(primaryKeyName).withKeyType(KeyType.HASH));
@@ -91,10 +91,10 @@ public class FacebookDynamoDAO implements FacebookDAO {
 
 		try {
 
-			createTableIfDontExists(TARGETS_COLLECTION, "id");
-			createTableIfDontExists(PAGES_COLLECTION, "facebookId");
-			createTableIfDontExists(POSTS_COLLECTION, "facebookId");
-			createTableIfDontExists(COMMENTS_COLLECTION, "facebookId");
+			createTableIfDontExists(TARGETS_COLLECTION, "id", ScalarAttributeType.S);
+			createTableIfDontExists(PAGES_COLLECTION, "facebookId", ScalarAttributeType.S);
+			createTableIfDontExists(POSTS_COLLECTION, "facebookId", ScalarAttributeType.S);
+			createTableIfDontExists(COMMENTS_COLLECTION, "facebookId", ScalarAttributeType.S);
 
 		} catch (InterruptedException e) {
 
