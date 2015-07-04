@@ -7,7 +7,7 @@ public class FacebookTarget {
 
 	private String id;
 
-	public FacebookTarget(){
+	public FacebookTarget() {
 		
 	}
 	

@@ -2,8 +2,6 @@ package crawler.facebook;
 
 import java.util.List;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.mongodb.client.MongoDatabase;
 import com.restfb.Connection;
 import com.restfb.DefaultFacebookClient;
 import com.restfb.FacebookClient;
@@ -20,20 +18,21 @@ import crawler.entities.FacebookTarget;
 
 public class FacebookCrawler {
 
-	private final static String APP_ID = "756372024384811";
-	private final static String APP_SECRET = "4f97cf98298f9abe86d99328bc7a8b64";
+	private final static String FACEBOOK_APP_ID = "756372024384811";
+	private final static String FACEBOOK_APP_SECRET = "4f97cf98298f9abe86d99328bc7a8b64";
 
-	private final FacebookMongoDAO dao;
+	private final FacebookDAO dao;
 
 	private FacebookClient client;
 
-	public FacebookCrawler(MongoDatabase database, ObjectMapper objectMapper) {
-		dao = new FacebookMongoDAO(database, objectMapper);
+	public FacebookCrawler(FacebookDAO facebookDAO) {
+		dao = facebookDAO;
 	}
 
 	public void init() {
-		AccessToken accessToken = new DefaultFacebookClient(Version.VERSION_2_2).obtainAppAccessToken(APP_ID, APP_SECRET);
-		client = new DefaultFacebookClient(accessToken.getAccessToken(), APP_SECRET, Version.VERSION_2_2);
+		
+		AccessToken accessToken = new DefaultFacebookClient(Version.VERSION_2_2).obtainAppAccessToken(FACEBOOK_APP_ID, FACEBOOK_APP_SECRET);
+		client = new DefaultFacebookClient(accessToken.getAccessToken(), FACEBOOK_APP_SECRET, Version.VERSION_2_2);
 
 		List<FacebookTarget> targets = dao.getTargets();
 		System.out.println(targets);
