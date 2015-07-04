@@ -18,8 +18,7 @@ import crawler.entities.FacebookPage;
 import crawler.entities.FacebookPost;
 import crawler.entities.FacebookTarget;
 
-
-public class FacebookMongoDAO {
+public class FacebookMongoDAO implements FacebookDAO {
 	
 	public static final String TARGETS_COLLECTION = "facebookTargets";
 	public static final String PAGES_COLLECTION = "facebookPages";
@@ -34,7 +33,7 @@ public class FacebookMongoDAO {
 		this.objectMapper = objectMapper;
 	}
 	
-	public List<FacebookTarget> getTargets(){
+	public List<FacebookTarget> getTargets() {
 		List<FacebookTarget> targets = new ArrayList<FacebookTarget>();
 		MongoCursor<Document> it = database.getCollection(TARGETS_COLLECTION).find().iterator();
 		while(it.hasNext()){
@@ -53,7 +52,7 @@ public class FacebookMongoDAO {
 		return targets;
 	}
 
-	public void insertPage(FacebookPage page){
+	public void insertPage(FacebookPage page) {
 		MongoCollection<Document> collection = database.getCollection(PAGES_COLLECTION);
 		try {
 			String pageJson = objectMapper.writeValueAsString(page);
