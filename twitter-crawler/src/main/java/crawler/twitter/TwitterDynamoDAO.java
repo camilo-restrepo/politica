@@ -1,4 +1,4 @@
-package crawler.facebook;
+package crawler.twitter;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -12,8 +12,10 @@ import com.amazonaws.services.dynamodbv2.AmazonDynamoDB;
 import com.amazonaws.services.dynamodbv2.document.DynamoDB;
 import com.amazonaws.services.dynamodbv2.document.Item;
 import com.amazonaws.services.dynamodbv2.document.ItemCollection;
+import com.amazonaws.services.dynamodbv2.document.QueryOutcome;
 import com.amazonaws.services.dynamodbv2.document.ScanOutcome;
 import com.amazonaws.services.dynamodbv2.document.Table;
+import com.amazonaws.services.dynamodbv2.document.spec.QuerySpec;
 import com.amazonaws.services.dynamodbv2.model.AttributeDefinition;
 import com.amazonaws.services.dynamodbv2.model.CreateTableRequest;
 import com.amazonaws.services.dynamodbv2.model.KeySchemaElement;
@@ -25,36 +27,30 @@ import com.amazonaws.services.dynamodbv2.util.Tables;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import crawler.entities.FacebookComment;
-import crawler.entities.FacebookPage;
-import crawler.entities.FacebookPost;
-import crawler.entities.FacebookTarget;
+import crawler.entities.Tweet;
+import crawler.entities.TwitterTarget;
+import crawler.entities.TwitterUser;
 
-public class FacebookDynamoDAO implements FacebookDAO {
+public class TwitterDynamoDAO implements TwitterDAO {
 
-	private static final Logger LOGGER = LoggerFactory.getLogger(FacebookDynamoDAO.class);
-
-	public static final String TARGETS_COLLECTION = "facebookTargets";
-	public static final String PAGES_COLLECTION = "facebookPages";
-	public static final String POSTS_COLLECTION = "facebookPosts";
-	public static final String COMMENTS_COLLECTION = "facebookComments";
+	private static final Logger LOGGER = LoggerFactory.getLogger(TwitterDynamoDAO.class);
 
 	public static final String ACTIVE_STATUS = "ACTIVE";
 
 	private final ObjectMapper objectMapper;
 	private final AmazonDynamoDB dynamoDBClient;
-	
+
 	public boolean createTableIfDontExists(String tableName, String primaryKeyName, ScalarAttributeType primaryKeyType) throws InterruptedException {
 
 		LOGGER.info("createTableIfDontExists: " + tableName + ", " + primaryKeyName);
-		
+
 		boolean tableWasCreated = false;
 
 		DynamoDB dynamoDB = new DynamoDB(dynamoDBClient);
 		boolean doesTableExist = Tables.doesTableExist(dynamoDBClient, tableName);
-		
+
 		if (!doesTableExist) {
-			
+
 			List<AttributeDefinition> attributeDefinitions = new ArrayList<AttributeDefinition>();
 			attributeDefinitions.add(new AttributeDefinition().withAttributeName(primaryKeyName).withAttributeType(primaryKeyType));
 
@@ -76,111 +72,145 @@ public class FacebookDynamoDAO implements FacebookDAO {
 
 			TableDescription tableDescription = dynamoDB.getTable(tableName).describe();
 			tableWasCreated = tableDescription.getTableStatus().equalsIgnoreCase(ACTIVE_STATUS);
-			
+
 		} else {
-			
+
 			tableWasCreated = true;
 		}
-		
+
 		LOGGER.info("createTableIfDontExists: tableWasCreated? " + tableWasCreated);
 
 		return tableWasCreated;
 	}
 
-	public void createFacebookTablesIfDontExist() {
+	public void createTwitterTablesIfDontExist() {
 
 		try {
 
 			createTableIfDontExists(TARGETS_COLLECTION, "id", ScalarAttributeType.S);
-			createTableIfDontExists(PAGES_COLLECTION, "facebookId", ScalarAttributeType.S);
-			createTableIfDontExists(POSTS_COLLECTION, "facebookId", ScalarAttributeType.S);
-			createTableIfDontExists(COMMENTS_COLLECTION, "facebookId", ScalarAttributeType.S);
+			createTableIfDontExists(USERS_COLLECTION, "twitterId", ScalarAttributeType.N);
+			createTableIfDontExists(TWEETS_COLLECTION, "twitterId", ScalarAttributeType.N);
 
 		} catch (InterruptedException e) {
 
-			LOGGER.error("createFacebookTablesIfDontExist", e);
+			LOGGER.error("createTwitterTablesIfDontExist", e);
 			throw new IllegalStateException(e);
 		}
 	}
 
-	public FacebookDynamoDAO(ObjectMapper objectMapper, AmazonDynamoDB dynamoDBClient) {
+	public TwitterDynamoDAO(ObjectMapper objectMapper, AmazonDynamoDB dynamoDBClient) {
 
 		this.objectMapper = objectMapper;
 		this.dynamoDBClient = dynamoDBClient;
-		createFacebookTablesIfDontExist();
+		createTwitterTablesIfDontExist();
 	}
 
-	public List<FacebookTarget> getTargets() {
-		
+	@Override
+	public List<TwitterTarget> getTargets() {
+
 		LOGGER.info("getTargets");
 
-		List<FacebookTarget> targets = new ArrayList<FacebookTarget>();
-		
+		List<TwitterTarget> targets = new ArrayList<TwitterTarget>();
+
 		try {
-			
+
 			DynamoDB dynamoDB = new DynamoDB(dynamoDBClient);
 			Table table = dynamoDB.getTable(TARGETS_COLLECTION);
 			ItemCollection<ScanOutcome> items = table.scan();
-			
+
 			Iterator<Item> iterator = items.iterator();
 			while (iterator.hasNext()) {
-				
+
 				Item item = iterator.next();
 				LOGGER.info(item.toJSONPretty());
-				FacebookTarget facebookTarget = objectMapper.readValue(item.toJSON(), FacebookTarget.class);
+				TwitterTarget facebookTarget = objectMapper.readValue(item.toJSON(), TwitterTarget.class);
 				targets.add(facebookTarget);
 			}
-			
+
 		} catch (IOException e) {
-			
+
 			LOGGER.error("getTargets", e);
 			throw new IllegalArgumentException(e);
 		}
 
 		return targets;
 	}
-	
+
 	private boolean insertObjectInTable(String tableName, Object object) {
-		
+
 		boolean objectWasInsertedInTable = false;
-		
+
 		try {
-			
+
 			DynamoDB dynamoDB = new DynamoDB(dynamoDBClient);
 			Table table = dynamoDB.getTable(tableName);
-			
+
 			String jsonObject = objectMapper.writeValueAsString(object);
 			Item itemObject = Item.fromJSON(jsonObject);
 			table.putItem(itemObject);
 			objectWasInsertedInTable = true;
-			
+
 		} catch (JsonProcessingException e) {
-			
+
 			LOGGER.error("insertObjectInTable", e);
 			throw new IllegalArgumentException(e);
 		}
-		
+
 		return objectWasInsertedInTable;
 	}
 
 	@Override
-	public void insertPage(FacebookPage page) {
+	public void insertUser(TwitterUser twitterUser) {
 		
-		LOGGER.info("insertPage");
-		insertObjectInTable(PAGES_COLLECTION, page);
+		LOGGER.info("insertUser");
+		insertObjectInTable(USERS_COLLECTION, twitterUser);
 	}
 
 	@Override
-	public void insertPost(FacebookPost fbPost) {
+	public void insertTweet(Tweet tweet) {
 		
-		LOGGER.info("insertPost");
-		insertObjectInTable(POSTS_COLLECTION, fbPost);
+		LOGGER.info("insertTweet");
+		insertObjectInTable(TWEETS_COLLECTION, tweet);
+	}
+	
+	@Override
+	public List<Tweet> getAllTweets(int offset, int limit) {
+		
+		String message = "DynamoDB does not support this type of pagination.";
+		throw new IllegalStateException(message);
 	}
 
 	@Override
-	public void insertComment(FacebookComment fbComment) {
+	public List<Tweet> getAllTweets(String lastEvaluatedTwitterId, int limit) {
 		
-		LOGGER.info("insertComment");
-		insertObjectInTable(COMMENTS_COLLECTION, fbComment);
+		LOGGER.info("getAllTweets");
+		List<Tweet> tweets = new ArrayList<Tweet>();
+		
+		try {
+			
+			DynamoDB dynamoDB = new DynamoDB(dynamoDBClient);
+			Table table = dynamoDB.getTable(TARGETS_COLLECTION);
+			
+			QuerySpec querySpec = new QuerySpec()
+					.withMaxPageSize(limit)
+					.withExclusiveStartKey("twitterId", lastEvaluatedTwitterId);
+			
+			ItemCollection<QueryOutcome> items = table.query(querySpec);
+			Iterator<Item> iterator = items.iterator();
+			
+			while (iterator.hasNext()) {
+
+				Item item = iterator.next();
+				LOGGER.info(item.toJSONPretty());
+				Tweet tweet = objectMapper.readValue(item.toJSON(), Tweet.class);
+				tweets.add(tweet);
+			}
+			
+		} catch (IOException e) {
+			
+			LOGGER.error("getAllTweets", e);
+		}
+		
+		return tweets;
 	}
 }

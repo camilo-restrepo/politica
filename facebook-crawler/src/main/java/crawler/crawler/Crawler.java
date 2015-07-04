@@ -23,7 +23,7 @@ public class Crawler extends Application<CrawlerConfiguration> {
 	@Override
 	public void initialize(Bootstrap<CrawlerConfiguration> bootstrap) {
 	}
-	
+
 	private ObjectMapper configureJacksonObjectMapper(Environment environment) {
 		ObjectMapper objectMapper = environment.getObjectMapper();
 		objectMapper.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
@@ -50,9 +50,9 @@ public class Crawler extends Application<CrawlerConfiguration> {
 		AmazonDynamoDB dynamoDBClient = getAmazonDynamoDBClient();
 		FacebookDAO facebookDAO = new FacebookDynamoDAO(objectMapper, dynamoDBClient);
 
-		//		MongoClient mongoClient = new MongoClient(configuration.getMongoConfiguration().getHost());
-		//		MongoDatabase database = mongoClient.getDatabase(configuration.getMongoConfiguration().getDatabase());
-		//		FacebookMongoDAO facebookMongoDAO = new FacebookMongoDAO(database, objectMapper);
+		// MongoClient mongoClient = new MongoClient(configuration.getMongoConfiguration().getHost());
+		// MongoDatabase database = mongoClient.getDatabase(configuration.getMongoConfiguration().getDatabase());
+		// FacebookDAO facebookDAO = new FacebookMongoDAO(database, objectMapper);
 
 		FacebookCrawler fbCrawler = new FacebookCrawler(facebookDAO);
 		fbCrawler.init();

@@ -2,6 +2,9 @@ package crawler.twitter;
 
 import java.util.List;
 
+import crawler.entities.Tweet;
+import crawler.entities.TwitterTarget;
+import crawler.entities.TwitterUser;
 import twitter4j.GeoLocation;
 import twitter4j.Paging;
 import twitter4j.Status;
@@ -9,13 +12,6 @@ import twitter4j.Twitter;
 import twitter4j.TwitterException;
 import twitter4j.TwitterFactory;
 import twitter4j.conf.ConfigurationBuilder;
-
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.mongodb.client.MongoDatabase;
-
-import crawler.entities.Tweet;
-import crawler.entities.TwitterTarget;
-import crawler.entities.TwitterUser;
 
 //https://github.com/yusuke/twitter4j/blob/master/twitter4j-examples/src/main/java/twitter4j/examples/timeline/GetUserTimeline.java
 
@@ -27,10 +23,10 @@ public class TwitterCrawler {
 	private final static String ACCESS_TOKEN = "263623229-NEcwbcSBdDnYxtnoFFdbi4VOPCtdTjBpwnSc5a8b";
 	private final static String ACCESS_TOKEN_SECRET = "eWXxlbezHqQN4NFyPZe5TGxwinhOVEeERDhU9irT5cXTc";
 
-	private final TwitterMongoDAO dao;
+	private final TwitterDAO dao;
 
-	public TwitterCrawler(MongoDatabase database, ObjectMapper objectMapper) {
-		dao = new TwitterMongoDAO(database, objectMapper);
+	public TwitterCrawler(TwitterDAO twitterDAO) {
+		dao = twitterDAO;
 	}
 
 	public void init() {
