@@ -19,11 +19,7 @@ import crawler.entities.Tweet;
 import crawler.entities.TwitterTarget;
 import crawler.entities.TwitterUser;
 
-public class TwitterMongoDAO {
-
-	public static final String TARGETS_COLLECTION = "twitterTargets";
-	public static final String USERS_COLLECTION = "twitterUsers";
-	public static final String TWEETS_COLLECTION = "tweets";
+public class TwitterMongoDAO implements TwitterDAO {
 
 	private final MongoDatabase database;
 	private final ObjectMapper objectMapper;
@@ -74,7 +70,6 @@ public class TwitterMongoDAO {
 		}
 	}
 	
-	
 	public List<Tweet> getAllTweets(int offset, int limit) {
 		List<Tweet> tweets = new ArrayList<Tweet>();
 		MongoCollection<Document> collection = database.getCollection(TWEETS_COLLECTION);
@@ -91,5 +86,11 @@ public class TwitterMongoDAO {
 		}
 		it.close();
 		return tweets;
+	}
+	
+	public List<Tweet> getAllTweets(String lastEvaluatedTwitterId, int limit) {
+		
+		String message = "MongoDB does not support this type of pagination.";
+		throw new IllegalStateException(message);
 	}
 }
