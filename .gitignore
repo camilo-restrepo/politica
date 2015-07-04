@@ -107,3 +107,6 @@ Session.vim
 
 ## Front end files
 needaname-web/files
+
+# Git
+**/.gitignore
