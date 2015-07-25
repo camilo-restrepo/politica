@@ -57,17 +57,12 @@ public class Board extends Application<BoardConfig> {
 
 	private void addCORSSupport(Environment environment) {
 
-		Dynamic filter = environment.servlets().addFilter("CORS",
-				CrossOriginFilter.class);
-		filter.addMappingForUrlPatterns(EnumSet.allOf(DispatcherType.class),
-				true, "/*");
-		filter.setInitParameter(CrossOriginFilter.ALLOWED_METHODS_PARAM,
-				"GET,PUT,POST,DELETE,OPTIONS,PATCH");
+		Dynamic filter = environment.servlets().addFilter("CORS", CrossOriginFilter.class);
+		filter.addMappingForUrlPatterns(EnumSet.allOf(DispatcherType.class), true, "/*");
+		filter.setInitParameter(CrossOriginFilter.ALLOWED_METHODS_PARAM, "GET,PUT,POST,DELETE,OPTIONS,PATCH");
 		filter.setInitParameter(CrossOriginFilter.ALLOWED_ORIGINS_PARAM, "*");
-		filter.setInitParameter(
-				CrossOriginFilter.ACCESS_CONTROL_ALLOW_ORIGIN_HEADER, "*");
-		filter.setInitParameter("allowedHeaders",
-				"Content-Type,Authorization,X-Requested-With,Content-Length,Accept,Origin");
+		filter.setInitParameter(CrossOriginFilter.ACCESS_CONTROL_ALLOW_ORIGIN_HEADER, "*");
+		filter.setInitParameter("allowedHeaders", "Content-Type,Authorization,X-Requested-With,Content-Length,Accept,Origin");
 		filter.setInitParameter("allowCredentials", "true");
 	}
 
@@ -75,25 +70,21 @@ public class Board extends Application<BoardConfig> {
 
 		ObjectMapper objectMapper = environment.getObjectMapper();
 		objectMapper.configure(SerializationFeature.FAIL_ON_EMPTY_BEANS, false);
-		objectMapper.configure(
-				SerializationFeature.WRITE_ENUMS_USING_TO_STRING, true);
-		objectMapper.configure(
-				DeserializationFeature.READ_ENUMS_USING_TO_STRING, true);
-		objectMapper.configure(
-				DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+		objectMapper.configure(SerializationFeature.WRITE_ENUMS_USING_TO_STRING, true);
+		objectMapper.configure(DeserializationFeature.READ_ENUMS_USING_TO_STRING, true);
+		objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
 
 		return objectMapper;
 	}
 
 	private MongoClient getMongoClient(BoardConfig boardConfig) {
-		
+
 		MongoConfig mongoConfig = boardConfig.getMongoConfig();
 		return new MongoClient(mongoConfig.getDbName());
 	}
 
 	@Override
-	public void run(BoardConfig boardConfig, Environment environment)
-			throws Exception {
+	public void run(BoardConfig boardConfig, Environment environment) throws Exception {
 
 		// add CORS support.
 		addCORSSupport(environment);
@@ -104,19 +95,33 @@ public class Board extends Application<BoardConfig> {
 		MongoClient mongoClient = getMongoClient(boardConfig);
 	}
 
-	public static void main(String[] args) throws InterruptedException,
-			FileNotFoundException {
+	public static void main(String[] args) throws InterruptedException, FileNotFoundException {
 
-		long twitterId = 62945553;
-		String screenName = "cvderoux";
-		List<String> relatedWords = Lists.newArrayList("Carlos Vicente De Roux", "Carlos Vicente de Roux", "cvderoux");
-		TwitterTarget twitterTarget = new TwitterTarget(twitterId, screenName, relatedWords);
-		
+		TwitterTarget carlosVicenteDeRoux = new TwitterTarget(62945553, "cvderoux", Lists.newArrayList("Carlos Vicente De Roux", "Carlos Vicente de Roux", "cvderoux"));
+		TwitterTarget claraLopez = new TwitterTarget(126832572, "ClaraLopezObre", Lists.newArrayList("Clara Lopez Obregon", "Clara Lopez", "ClaraLopezObre"));
+		TwitterTarget rafaelPardo = new TwitterTarget(21938850, "rafaelpardo", Lists.newArrayList("Rafael Pardo", "rafaelpardo"));
+		TwitterTarget enriquePenalosa = new TwitterTarget(108717093, "enriquepenalosa", Lists.newArrayList("Enrique Penalosa", "Enrique Peñalosa", "enriquepenalosa", "equipoporbogota"));
+		TwitterTarget mariaMercedesMaldonado = new TwitterTarget(2846242097L, "mmmaldonadoc", Lists.newArrayList("Maria Mercedes Maldonado", "mmmaldonadoc"));
+		TwitterTarget ricardoArias = new TwitterTarget(249445743, "ricardoariasm", Lists.newArrayList("Ricardo Arias Mora", "ricardoariasm"));
+		TwitterTarget franciscoSantos = new TwitterTarget(184590625, "PachoSantosC", Lists.newArrayList("Francisco Santos", "Pacho Santos", "Pachito Santos", "PachoSantosC", "CambioConSeguridad"));
+		TwitterTarget hollmanMorris = new TwitterTarget(87266285, "HollmanMorris", Lists.newArrayList("Hollman Morris", "HollmanMorris"));
+		TwitterTarget alexVernot = new TwitterTarget(184618018, "AlexVernot", Lists.newArrayList("Alex Vernot", "AlexVernot"));
+		TwitterTarget danielRaisbeck = new TwitterTarget(204283675, "danielraisbeck", Lists.newArrayList("Daniel Raisbeck", "danielraisbeck"));
+
 		List<TwitterTarget> targets = new ArrayList<TwitterTarget>();
-		targets.add(twitterTarget);
-		
-		//-------------------------------------------------------------------------
-		
+		targets.add(carlosVicenteDeRoux);
+		targets.add(claraLopez);
+		targets.add(rafaelPardo);
+		targets.add(enriquePenalosa);
+		targets.add(mariaMercedesMaldonado);
+		targets.add(ricardoArias);
+		targets.add(franciscoSantos);
+		targets.add(hollmanMorris);
+		targets.add(alexVernot);
+		targets.add(danielRaisbeck);
+
+		// -------------------------------------------------------------------------
+
 		int numberOfThreads = targets.size();
 		ExecutorService threadPool = Executors.newFixedThreadPool(numberOfThreads);
 
@@ -124,17 +129,14 @@ public class Board extends Application<BoardConfig> {
 		String databaseName = "boarddb";
 		MongoDatabase database = mongoClient.getDatabase(databaseName);
 		TweetDAO tweetDAO = new TweetDAO(database);
-		
+
 		for (TwitterTarget target : targets) {
-			
+
 			StreamingBusiness streamingBusiness = new StreamingBusiness();
 			TwitterConsumerWorker worker = new TwitterConsumerWorker(streamingBusiness, target, tweetDAO);
 			threadPool.submit(worker);
 		}
-		
-		System.out.println("************************************** 1");
 
-		
 		// try {
 		//
 		// Board board = new Board();
@@ -146,5 +148,4 @@ public class Board extends Application<BoardConfig> {
 		// }
 	}
 
-	
 }
