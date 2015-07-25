@@ -1,7 +1,7 @@
 server:
   type: simple
-  applicationContextPath: /borad/api
-  adminContextPath: /borad/admin
+  applicationContextPath: /board/api
+  adminContextPath: /board/admin
   connector:
     type: http
     port: 9001

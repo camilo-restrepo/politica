@@ -7,8 +7,16 @@ db.twitterTargets.insert({id: "CVderoux"}) // Carlos Vicente De Roux
 db.twitterTargets.insert({id: "ClaraLopezObre"}) // Clara Lopez
 db.twitterTargets.insert({id: "RafaelPardo"}) //Rafael Pardo
 db.twitterTargets.insert({id: "EnriquePenalosa"}) //Enrique Peñaloza
-db.twitterTargets.insert({id: "MMMaldonadoC"}) 
+db.twitterTargets.insert({id: "MMMaldonadoC"}) //Maria Mercedez Maldonado
 db.twitterTargets.insert({id: "RicardoAriasM"}) //Ricardo Arias Mora
+db.twitterTargets.insert({id: "PachoSantosC"}) // Pacho Santos
+db.twitterTargets.insert({id: "HOLLMANMORRIS}) //Hollman morris
+db.twitterTargets.insert({id: "AlexVernot"}) //Alex Vernot
+
+
+
+
+
 
 db.createCollection("twitterUsers")
 db.twitterUsers.createIndex({twitterId: 1, likes:1}, {unique: true})
