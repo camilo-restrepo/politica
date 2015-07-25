@@ -21,7 +21,6 @@ public class TwitterConsumerWorker implements Runnable {
 
 	public TwitterConsumerWorker(StreamingBusiness streamingBusiness, TwitterTarget twitterTarget, 
 			TweetDAO tweetDAO) {
-		
 		this.streamingBusiness = streamingBusiness;
 		this.twitterTarget = twitterTarget;
 		this.tweetDAO = tweetDAO;
@@ -29,21 +28,14 @@ public class TwitterConsumerWorker implements Runnable {
 
 	@Override
 	public void run() {
-		
 		Client hosebirdClient = streamingBusiness.getHosebirdClient(twitterTarget);
 		hosebirdClient.connect();
-		
 		BlockingQueue<String> msgQueue = streamingBusiness.getMsgQueue();
-		
 		while (!hosebirdClient.isDone()) {
-			
 			try {
-				
 				String stringTweet = msgQueue.take();
 				tweetDAO.insertTweet(twitterTarget.getTwitterId(), stringTweet);
-				
 			} catch (InterruptedException e) {
-				
 				LOGGER.error("run", e);
 			}
 		}

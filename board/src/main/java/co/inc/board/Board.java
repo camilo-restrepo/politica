@@ -97,45 +97,83 @@ public class Board extends Application<BoardConfig> {
 
 	public static void main(String[] args) throws InterruptedException, FileNotFoundException {
 
-		TwitterTarget carlosVicenteDeRoux = new TwitterTarget(62945553, "cvderoux", Lists.newArrayList("Carlos Vicente De Roux", "Carlos Vicente de Roux", "cvderoux"));
-		TwitterTarget claraLopez = new TwitterTarget(126832572, "ClaraLopezObre", Lists.newArrayList("Clara Lopez Obregon", "Clara Lopez", "ClaraLopezObre"));
-		TwitterTarget rafaelPardo = new TwitterTarget(21938850, "rafaelpardo", Lists.newArrayList("Rafael Pardo", "rafaelpardo"));
-		TwitterTarget enriquePenalosa = new TwitterTarget(108717093, "enriquepenalosa", Lists.newArrayList("Enrique Penalosa", "Enrique Peñalosa", "enriquepenalosa", "equipoporbogota"));
-		TwitterTarget mariaMercedesMaldonado = new TwitterTarget(2846242097L, "mmmaldonadoc", Lists.newArrayList("Maria Mercedes Maldonado", "mmmaldonadoc"));
-		TwitterTarget ricardoArias = new TwitterTarget(249445743, "ricardoariasm", Lists.newArrayList("Ricardo Arias Mora", "ricardoariasm"));
-		TwitterTarget franciscoSantos = new TwitterTarget(184590625, "PachoSantosC", Lists.newArrayList("Francisco Santos", "Pacho Santos", "Pachito Santos", "PachoSantosC", "CambioConSeguridad"));
-		TwitterTarget hollmanMorris = new TwitterTarget(87266285, "HollmanMorris", Lists.newArrayList("Hollman Morris", "HollmanMorris"));
-		TwitterTarget alexVernot = new TwitterTarget(184618018, "AlexVernot", Lists.newArrayList("Alex Vernot", "AlexVernot"));
-		TwitterTarget danielRaisbeck = new TwitterTarget(204283675, "danielraisbeck", Lists.newArrayList("Daniel Raisbeck", "danielraisbeck"));
-
-		List<TwitterTarget> targets = new ArrayList<TwitterTarget>();
-		targets.add(carlosVicenteDeRoux);
-		targets.add(claraLopez);
-		targets.add(rafaelPardo);
-		targets.add(enriquePenalosa);
-		targets.add(mariaMercedesMaldonado);
-		targets.add(ricardoArias);
-		targets.add(franciscoSantos);
-		targets.add(hollmanMorris);
-		targets.add(alexVernot);
-		targets.add(danielRaisbeck);
+//		TwitterTarget carlosVicenteDeRoux = new TwitterTarget(62945553, "cvderoux", Lists.newArrayList("Carlos Vicente De Roux",
+//				"Carlos Vicente de Roux", "cvderoux"));
+//		TwitterTarget claraLopez = new TwitterTarget(126832572, "ClaraLopezObre", Lists.newArrayList("Clara Lopez Obregon",
+//				"Clara Lopez", "ClaraLopezObre"));
+//		TwitterTarget rafaelPardo = new TwitterTarget(21938850, "rafaelpardo", Lists.newArrayList("Rafael Pardo", "rafaelpardo"));
+//		TwitterTarget enriquePenalosa = new TwitterTarget(108717093, "enriquepenalosa", Lists.newArrayList("Enrique Penalosa",
+//				"Enrique Peñalosa", "enriquepenalosa", "equipoporbogota"));
+//		TwitterTarget mariaMercedesMaldonado = new TwitterTarget(2846242097L, "mmmaldonadoc", Lists.newArrayList(
+//				"Maria Mercedes Maldonado", "mmmaldonadoc"));
+//		TwitterTarget ricardoArias = new TwitterTarget(249445743, "ricardoariasm", Lists.newArrayList("Ricardo Arias Mora",
+//				"ricardoariasm"));
+//		TwitterTarget franciscoSantos = new TwitterTarget(184590625, "PachoSantosC", Lists.newArrayList("Francisco Santos",
+//				"Pacho Santos", "Pachito Santos", "PachoSantosC", "CambioConSeguridad"));
+//		TwitterTarget hollmanMorris = new TwitterTarget(87266285, "HollmanMorris", Lists.newArrayList("Hollman Morris",
+//				"HollmanMorris"));
+//		TwitterTarget alexVernot = new TwitterTarget(184618018, "AlexVernot", Lists.newArrayList("Alex Vernot", "AlexVernot"));
+//		TwitterTarget danielRaisbeck = new TwitterTarget(204283675, "danielraisbeck", Lists.newArrayList("Daniel Raisbeck",
+//				"danielraisbeck"));
+//
+//		List<TwitterTarget> targets = new ArrayList<TwitterTarget>();
+//		targets.add(carlosVicenteDeRoux);
+//		targets.add(claraLopez);
+//		targets.add(rafaelPardo);
+//		targets.add(enriquePenalosa);
+//		targets.add(mariaMercedesMaldonado);
+//		targets.add(ricardoArias);
+//		targets.add(franciscoSantos);
+//		targets.add(hollmanMorris);
+//		targets.add(alexVernot);
+//		targets.add(danielRaisbeck);
 
 		// -------------------------------------------------------------------------
 
-		int numberOfThreads = targets.size();
-		ExecutorService threadPool = Executors.newFixedThreadPool(numberOfThreads);
+		// int numberOfThreads = targets.size();
+		// ExecutorService threadPool =
+		// Executors.newFixedThreadPool(numberOfThreads);
 
 		MongoClient mongoClient = new MongoClient();
 		String databaseName = "boarddb";
 		MongoDatabase database = mongoClient.getDatabase(databaseName);
+
 		TweetDAO tweetDAO = new TweetDAO(database);
+		StreamingBusiness streamingBusiness = new StreamingBusiness();
 
-		for (TwitterTarget target : targets) {
-
-			StreamingBusiness streamingBusiness = new StreamingBusiness();
-			TwitterConsumerWorker worker = new TwitterConsumerWorker(streamingBusiness, target, tweetDAO);
-			threadPool.submit(worker);
+		List<String> relatedWords = Lists.newArrayList("Carlos Vicente De Roux", "Carlos Vicente de Roux", "cvderoux",
+				"Clara Lopez Obregon", "Clara Lopez", "ClaraLopezObre", "Rafael Pardo", "rafaelpardo", "Enrique Penalosa",
+				"Enrique Peñalosa", "enriquepenalosa", "equipoporbogota", "Maria Mercedes Maldonado", "mmmaldonadoc",
+				"Ricardo Arias Mora", "ricardoariasm", "Francisco Santos", "Pacho Santos", "Pachito Santos", "PachoSantosC",
+				"CambioConSeguridad", "Hollman Morris", "HollmanMorris", "Alex Vernot", "AlexVernot", "Daniel Raisbeck",
+				"danielraisbeck");
+		TwitterTarget twitterTarget = new TwitterTarget(0L, "TODOS", relatedWords);
+		Client hosebirdClient = streamingBusiness.getHosebirdClient(twitterTarget);
+		hosebirdClient.connect();
+		BlockingQueue<String> msgQueue = streamingBusiness.getMsgQueue();
+		while (!hosebirdClient.isDone()) {
+			try {
+				String stringTweet = msgQueue.take();
+				tweetDAO.insertTweet(stringTweet);
+			} catch (InterruptedException e) {
+				LOGGER.error("run", e);
+			}
 		}
+		
+//		for (TwitterTarget target : targets) {
+//			// TwitterConsumerWorker worker = new
+//			// TwitterConsumerWorker(streamingBusiness, target, tweetDAO);
+//			// threadPool.submit(worker);
+//
+//			while (!hosebirdClient.isDone()) {
+//				try {
+//					String stringTweet = msgQueue.take();
+//					tweetDAO.insertTweet(stringTweet);
+//				} catch (InterruptedException e) {
+//					LOGGER.error("run", e);
+//				}
+//			}
+//		}
 
 		// try {
 		//
