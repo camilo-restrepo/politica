@@ -1,0 +1,22 @@
+server:
+  type: simple
+  applicationContextPath: /borad/api
+  adminContextPath: /borad/admin
+  connector:
+    type: http
+    port: 9001
+    
+logging:
+  level: INFO
+  appenders:
+    - type: console
+      timeZone: UTC
+      target: stdout
+    - type: file
+      timeZone: UTC
+      currentLogFilename: ./logs/borad.log
+      archivedLogFilenamePattern: ./logs/borad-%d.log
+      archivedFileCount: 5
+
+mongoConfig:
+  dbName: boarddb
