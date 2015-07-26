@@ -5,6 +5,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.bson.Document;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import co.inc.board.domain.entities.TwitterId;
 import co.inc.board.domain.entities.TwitterTarget;
@@ -15,7 +17,9 @@ import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoCursor;
 import com.mongodb.client.MongoDatabase;
 
-public class TargetsDAO {
+public class TargetDAO {
+	
+	private static final Logger LOGGER = LoggerFactory.getLogger(TargetDAO.class);
 	
 	public static final String IDS_COLLECTION = "twitterIds";
 	public static final String TARGETS_COLLECTION = "twitterTargets";
@@ -23,12 +27,12 @@ public class TargetsDAO {
 	private final MongoDatabase mongoDatabase;
 	private final ObjectMapper objectMapper;
 
-	public TargetsDAO(MongoDatabase mongoDatabase, ObjectMapper objectMapper) {
+	public TargetDAO(MongoDatabase mongoDatabase, ObjectMapper objectMapper) {
 		this.mongoDatabase = mongoDatabase;
 		this.objectMapper = objectMapper;
 	}
 
-	public List<TwitterId> getAllIds(){
+	public List<TwitterId> getAllIds() {
 		MongoCollection<Document> collection = mongoDatabase.getCollection(IDS_COLLECTION);
 		MongoCursor<Document> it = collection.find().iterator();
 		List<TwitterId> ids = new ArrayList<TwitterId>();
@@ -37,13 +41,13 @@ public class TargetsDAO {
 				TwitterId id = objectMapper.readValue(it.next().toJson(), TwitterId.class);
 				ids.add(id);
 			} catch (IOException e) {
-				//TODO
+				LOGGER.error("getAllIds", e);
 			}
 		}
 		return ids;
 	}
 	
-	public List<TwitterTarget> getAllTargets(){
+	public List<TwitterTarget> getAllTargets() {
 		MongoCollection<Document> collection = mongoDatabase.getCollection(TARGETS_COLLECTION);
 		MongoCursor<Document> it = collection.find().iterator();
 		List<TwitterTarget> targets = new ArrayList<TwitterTarget>();
@@ -52,20 +56,20 @@ public class TargetsDAO {
 				TwitterTarget target = objectMapper.readValue(it.next().toJson(), TwitterTarget.class);
 				targets.add(target);
 			} catch (IOException e) {
-				//TODO
+				LOGGER.error("getAllTargets", e);
 			}
 		}
 		return targets;
 	}
 	
-	public void insertTwitterTarget(TwitterTarget target){
+	public void insertTwitterTarget(TwitterTarget target) {
 		MongoCollection<Document> collection = mongoDatabase.getCollection(TARGETS_COLLECTION);
 		try {
 			String targetJson = objectMapper.writeValueAsString(target);
 			Document targetDocument = Document.parse(targetJson);
 			collection.insertOne(targetDocument);
 		} catch (JsonProcessingException e) {
-			// TODO Auto-generated catch block
+			LOGGER.error("insertTwitterTarget", e);
 		}
 	}
 }
