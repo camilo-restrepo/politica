@@ -1,4 +1,4 @@
-package co.inc.board.persistence.daos;
+package co.inc.twitterStreamCrawler.persistence.daos;
 
 import org.bson.Document;
 
