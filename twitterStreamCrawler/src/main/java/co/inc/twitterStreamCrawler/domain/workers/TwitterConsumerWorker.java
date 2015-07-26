@@ -1,5 +1,6 @@
 package co.inc.twitterStreamCrawler.domain.workers;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -11,6 +12,14 @@ import co.inc.twitterStreamCrawler.domain.dto.TweetDTO;
 import co.inc.twitterStreamCrawler.domain.entities.TwitterId;
 import co.inc.twitterStreamCrawler.persistence.daos.TargetDAO;
 import co.inc.twitterStreamCrawler.persistence.daos.TweetDAO;
+
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.DeserializationFeature;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
+import com.sun.jersey.api.client.Client;
+import com.sun.jersey.api.client.ClientResponse;
+import com.sun.jersey.api.client.WebResource;
 
 public class TwitterConsumerWorker implements Runnable {
 
@@ -32,28 +41,64 @@ public class TwitterConsumerWorker implements Runnable {
 		String tweetText = (String) documentTweet.get("text");
 		List<String> foundtargets = new ArrayList<String>();
 		List<TwitterId> ids = targetsDAO.getAllIds();
-		for(TwitterId target : ids){
+		for (TwitterId target : ids) {
 			List<String> relatedWords = target.getRelatedWords();
-			for(String word : relatedWords){
-				if(tweetText.toLowerCase().contains(word.toLowerCase())){
+			for (String word : relatedWords) {
+				if (tweetText.toLowerCase().contains(word.toLowerCase())) {
 					foundtargets.add(target.getId());
 					break;
 				}
 			}
 		}
-		
+
 		documentTweet.append("targetTwitterIds", foundtargets);
 		tweetDAO.insertTweet(documentTweet);
-		//TODO
+		sendTweetToBoard(documentTweet);
+	}
+
+	private TweetDTO getTweetDTO(Document documentTweet) {
 		String text = documentTweet.getString("text");
 		List<String> targets = (List<String>) documentTweet.get("targetTwitterIds");
-		long favorites = documentTweet.getLong("favorite_count");
-		long retweets = documentTweet.getLong("retweet_count");
-		long date = documentTweet.getLong("timestamp_ms");
+		long favorites = documentTweet.getInteger("favorite_count").longValue();
+		long retweets = documentTweet.getInteger("retweet_count").longValue();
+		long date = Long.parseLong(documentTweet.getString("timestamp_ms"));
 		String userId = ((Document) documentTweet.get("user")).getString("screen_name");
 		String screenName = ((Document) documentTweet.get("user")).getString("name");
 		String userImageUrl = ((Document) documentTweet.get("user")).getString("profile_image_url");
 		TweetDTO tweetDTO = new TweetDTO(text, targets, retweets, favorites, date, screenName, userId, userImageUrl);
-		//TODO
+		return tweetDTO;
+	}
+
+	private void sendTweetToBoard(Document documentTweet) {
+		TweetDTO tweetDTO = getTweetDTO(documentTweet);
+		try {
+			sendTweet(tweetDTO);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+
+	private void sendTweet(TweetDTO tweetDTO) throws IOException {
+		Client client = Client.create();
+		WebResource webResource = client.resource("http://localhost:9001/board/api/broadcast");
+		String input = getJsonString(tweetDTO);
+		System.out.println("Sending... " + input);
+		webResource.type("application/json").post(input);
+		client.destroy();
+	}
+
+	private String getJsonString(TweetDTO tweetDTO) throws JsonProcessingException {
+		ObjectMapper objectMapper = getObjectMapper();
+		String jsonTweet = objectMapper.writeValueAsString(tweetDTO);
+		return jsonTweet;
+	}
+
+	private ObjectMapper getObjectMapper() {
+		ObjectMapper objectMapper = new ObjectMapper();
+		objectMapper.configure(SerializationFeature.FAIL_ON_EMPTY_BEANS, false);
+		objectMapper.configure(SerializationFeature.WRITE_ENUMS_USING_TO_STRING, true);
+		objectMapper.configure(DeserializationFeature.READ_ENUMS_USING_TO_STRING, true);
+		objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+		return objectMapper;
 	}
 }

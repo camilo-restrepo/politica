@@ -90,14 +90,10 @@ public class Board extends Application<BoardConfig> {
 	}
 
 	public static void main(String[] args) {
-
 		try {
-
 			Board board = new Board();
 			board.run(args);
-
 		} catch (Exception e) {
-
 			LOGGER.error("main", e);
 		}
 	}
