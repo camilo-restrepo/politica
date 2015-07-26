@@ -22,7 +22,7 @@ bower_components/
 build/
 dist/
 
-.htaccess 
+**/.htaccess 
 
 # Node
 
