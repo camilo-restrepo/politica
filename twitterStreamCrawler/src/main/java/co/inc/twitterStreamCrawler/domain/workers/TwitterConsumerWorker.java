@@ -7,6 +7,7 @@ import org.bson.Document;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import co.inc.twitterStreamCrawler.domain.dto.TweetDTO;
 import co.inc.twitterStreamCrawler.domain.entities.TwitterId;
 import co.inc.twitterStreamCrawler.persistence.daos.TargetDAO;
 import co.inc.twitterStreamCrawler.persistence.daos.TweetDAO;
@@ -43,6 +44,16 @@ public class TwitterConsumerWorker implements Runnable {
 		
 		documentTweet.append("targetTwitterIds", foundtargets);
 		tweetDAO.insertTweet(documentTweet);
-		//TODO Enviar Tweet
+		//TODO
+		String text = documentTweet.getString("text");
+		List<String> targets = (List<String>) documentTweet.get("targetTwitterIds");
+		long favorites = documentTweet.getLong("favorite_count");
+		long retweets = documentTweet.getLong("retweet_count");
+		long date = documentTweet.getLong("timestamp_ms");
+		String userId = ((Document) documentTweet.get("user")).getString("screen_name");
+		String screenName = ((Document) documentTweet.get("user")).getString("name");
+		String userImageUrl = ((Document) documentTweet.get("user")).getString("profile_image_url");
+		TweetDTO tweetDTO = new TweetDTO(text, targets, retweets, favorites, date, screenName, userId, userImageUrl);
+		//TODO
 	}
 }
