@@ -1,7 +1,6 @@
 package co.inc.twitterStreamCrawler.domain.workers;
 
 import java.util.ArrayList;
-import java.util.Hashtable;
 import java.util.List;
 
 import org.bson.Document;
@@ -9,10 +8,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import co.inc.twitterStreamCrawler.domain.entities.TwitterId;
-import co.inc.twitterStreamCrawler.persistence.daos.TargetsDAO;
+import co.inc.twitterStreamCrawler.persistence.daos.TargetDAO;
 import co.inc.twitterStreamCrawler.persistence.daos.TweetDAO;
-
-import com.google.common.collect.Lists;
 
 public class TwitterConsumerWorker implements Runnable {
 
@@ -20,9 +17,9 @@ public class TwitterConsumerWorker implements Runnable {
 
 	private final String stringTweet;
 	private final TweetDAO tweetDAO;
-	private final TargetsDAO targetsDAO;
+	private final TargetDAO targetsDAO;
 
-	public TwitterConsumerWorker(TargetsDAO targetsDAO, TweetDAO tweetDAO, String stringTweet) {
+	public TwitterConsumerWorker(TargetDAO targetsDAO, TweetDAO tweetDAO, String stringTweet) {
 		this.tweetDAO = tweetDAO;
 		this.stringTweet = stringTweet;
 		this.targetsDAO = targetsDAO;
