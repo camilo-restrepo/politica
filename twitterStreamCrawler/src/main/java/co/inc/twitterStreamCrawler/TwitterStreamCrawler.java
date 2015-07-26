@@ -19,7 +19,7 @@ import twitter4j.conf.ConfigurationBuilder;
 import co.inc.twitterStreamCrawler.domain.entities.TwitterId;
 import co.inc.twitterStreamCrawler.domain.entities.TwitterTarget;
 import co.inc.twitterStreamCrawler.domain.workers.TwitterConsumerWorker;
-import co.inc.twitterStreamCrawler.persistence.daos.TargetsDAO;
+import co.inc.twitterStreamCrawler.persistence.daos.TargetDAO;
 import co.inc.twitterStreamCrawler.persistence.daos.TweetDAO;
 
 import com.fasterxml.jackson.databind.DeserializationFeature;
@@ -50,7 +50,7 @@ public class TwitterStreamCrawler {
 	private final BlockingQueue<String> msgQueue = new LinkedBlockingQueue<String>(100000);
 	private final BlockingQueue<Event> eventQueue = new LinkedBlockingQueue<Event>(1000);
 
-	private final TargetsDAO targetsDAO;
+	private final TargetDAO targetsDAO;
 	private final TweetDAO tweetDAO;
 	
 	public TwitterStreamCrawler() {
@@ -63,7 +63,7 @@ public class TwitterStreamCrawler {
 		objectMapper.configure(DeserializationFeature.READ_ENUMS_USING_TO_STRING, true);
 		objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
 
-		targetsDAO = new TargetsDAO(mongoDatabase, objectMapper);
+		targetsDAO = new TargetDAO(mongoDatabase, objectMapper);
 		tweetDAO = new TweetDAO(mongoDatabase);
 		init();
 	}

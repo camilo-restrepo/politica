@@ -17,7 +17,7 @@ import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoCursor;
 import com.mongodb.client.MongoDatabase;
 
-public class TargetsDAO {
+public class TargetDAO {
 	
 	public static final String IDS_COLLECTION = "twitterIds";
 	public static final String TARGETS_COLLECTION = "twitterTargets";
@@ -25,7 +25,7 @@ public class TargetsDAO {
 	private final MongoDatabase mongoDatabase;
 	private final ObjectMapper objectMapper;
 
-	public TargetsDAO(MongoDatabase mongoDatabase, ObjectMapper objectMapper) {
+	public TargetDAO(MongoDatabase mongoDatabase, ObjectMapper objectMapper) {
 		this.mongoDatabase = mongoDatabase;
 		this.objectMapper = objectMapper;
 	}
