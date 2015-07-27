@@ -19,28 +19,30 @@
 
     <hr>
 
-    <div class="panel panel-default">
+<div ng-contorller="boardController" class="form-group">
+    <div class="panel panel-default" ng-repeat="tw in primerCandidato">
       <div class="panel-body">
 
         <div class="tweet">
           <div class="col-md-3 inline">
             <img class="img-thumbnail img-xsm img-responsive" 
-            src="https://pbs.twimg.com/profile_images/601350004951810050/2SDHmYBa_400x400.jpg">
+            src={{tw.userImageUrl}}>
           </div>
           <div class="col-md-9 inline">
-            <h4>El Tiempo
-              <a class="small" target="blank" href="https://twitter.com/eltiempo">@ElTiempo</a>
+            <h4>{{tw.screenName}}
+              <a class="small" target="blank" href="https://twitter.com/eltiempo">@{{tw.userId}}</a>
             </h4>
           </div>
           <div class="col-md-12">
-            <p>Cambio Radical anuncia respaldo a Enrique Peñalosa para la Alcaldía de Bogotá http://ow.ly/PXQMR</p>
-            <div class="padding-right-sm inline"><small>5:17 PM - 22 Jul 2015 </small></div>
-            <div class="padding-right-sm inline"><small><span class="glyphicon glyphicon-retweet"> 102</span></small></div>
-            <div class="padding-right-sm inline"><small><span class="glyphicon glyphicon-star">37</span></small></div>
+            <p>{{tw.text}}</p>
+            <div class="padding-right-sm inline"><small>{{tw.date | date:'dd-MM-yyyy HH:mm:ss'}}</small></div>
+            <div class="padding-right-sm inline"><small><span class="glyphicon glyphicon-retweet">{{tw.retweets}}</span></small></div>
+            <div class="padding-right-sm inline"><small><span class="glyphicon glyphicon-star">{{tw.favorites}}</span></small></div>
           </div>
         </div>
 
       </div>
+    </div>
     </div>
 
   </div>

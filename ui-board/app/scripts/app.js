@@ -9,4 +9,4 @@
  * Main module of the application.
  */
 var boardModule = angular.module('boardModule', []);
-var app = angular.module('boardApp', [ 'ngResource', 'ui.router' ]);
+var app = angular.module('boardApp', [ 'ngResource', 'ui.router', 'ngWebsocket' ]);
