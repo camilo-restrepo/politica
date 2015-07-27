@@ -82,7 +82,7 @@ public class TwitterConsumerWorker implements Runnable {
 		Client client = Client.create();
 		WebResource webResource = client.resource("http://localhost:9001/board/api/broadcast");
 		String input = getJsonString(tweetDTO);
-		System.out.println("Sending... " + input);
+//		System.out.println("Sending... " + input);
 		webResource.type("application/json").post(input);
 		client.destroy();
 	}
