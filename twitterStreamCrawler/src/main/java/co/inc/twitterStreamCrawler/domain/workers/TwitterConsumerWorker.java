@@ -12,13 +12,13 @@ import co.inc.twitterStreamCrawler.domain.dto.TweetDTO;
 import co.inc.twitterStreamCrawler.domain.entities.TwitterId;
 import co.inc.twitterStreamCrawler.persistence.daos.TargetDAO;
 import co.inc.twitterStreamCrawler.persistence.daos.TweetDAO;
+import co.inc.twitterStreamCrawler.utils.PolarityClassifier;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.sun.jersey.api.client.Client;
-import com.sun.jersey.api.client.ClientResponse;
 import com.sun.jersey.api.client.WebResource;
 
 public class TwitterConsumerWorker implements Runnable {
@@ -28,15 +28,32 @@ public class TwitterConsumerWorker implements Runnable {
 	private final String stringTweet;
 	private final TweetDAO tweetDAO;
 	private final TargetDAO targetsDAO;
+	private final PolarityClassifier polarityClassifier;
 
-	public TwitterConsumerWorker(TargetDAO targetsDAO, TweetDAO tweetDAO, String stringTweet) {
+	public TwitterConsumerWorker(TargetDAO targetsDAO, TweetDAO tweetDAO, String stringTweet,
+			PolarityClassifier polarityClassifier) {
 		this.tweetDAO = tweetDAO;
 		this.stringTweet = stringTweet;
 		this.targetsDAO = targetsDAO;
+		this.polarityClassifier = polarityClassifier;
 	}
 
 	@Override
 	public void run() {
+		Document documentTweet = getTweetWithTargets();
+		documentTweet = getTweetWithPolarity(documentTweet);
+		tweetDAO.insertTweet(documentTweet);
+		sendTweetToBoard(documentTweet);
+	}
+
+	private Document getTweetWithPolarity(Document documentTweet) {
+		String tweetText = (String) documentTweet.get("text");
+		int polarity = polarityClassifier.getTweetPolarity(tweetText);
+		documentTweet.append("polarity", polarity);
+		return documentTweet;
+	}
+
+	private Document getTweetWithTargets() {
 		Document documentTweet = Document.parse(stringTweet);
 		String tweetText = (String) documentTweet.get("text");
 		List<String> foundtargets = new ArrayList<String>();
@@ -50,10 +67,8 @@ public class TwitterConsumerWorker implements Runnable {
 				}
 			}
 		}
-
 		documentTweet.append("targetTwitterIds", foundtargets);
-		tweetDAO.insertTweet(documentTweet);
-		sendTweetToBoard(documentTweet);
+		return documentTweet;
 	}
 
 	private TweetDTO getTweetDTO(Document documentTweet) {
@@ -65,7 +80,8 @@ public class TwitterConsumerWorker implements Runnable {
 		String userId = ((Document) documentTweet.get("user")).getString("screen_name");
 		String screenName = ((Document) documentTweet.get("user")).getString("name");
 		String userImageUrl = ((Document) documentTweet.get("user")).getString("profile_image_url");
-		TweetDTO tweetDTO = new TweetDTO(text, targets, retweets, favorites, date, screenName, userId, userImageUrl);
+		int polarity = documentTweet.getInteger("polarity");
+		TweetDTO tweetDTO = new TweetDTO(text, targets, retweets, favorites, date, screenName, userId, userImageUrl, polarity);
 		return tweetDTO;
 	}
 
@@ -82,7 +98,7 @@ public class TwitterConsumerWorker implements Runnable {
 		Client client = Client.create();
 		WebResource webResource = client.resource("http://localhost:9001/board/api/broadcast");
 		String input = getJsonString(tweetDTO);
-//		System.out.println("Sending... " + input);
+		// System.out.println("Sending... " + input);
 		webResource.type("application/json").post(input);
 		client.destroy();
 	}

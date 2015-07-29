@@ -13,6 +13,13 @@
 
 	<!-- core -->
 
+	<repositories>
+		<repository>
+			<id>clojars.org</id>
+			<url>http://clojars.org/repo</url>
+		</repository>
+	</repositories>
+
 	<dependencies>
 		<dependency>
 			<groupId>com.fasterxml.jackson.jaxrs</groupId>
@@ -39,6 +46,47 @@
 			<artifactId>jersey-client</artifactId>
 			<version>1.19</version>
 		</dependency>
+		<dependency>
+			<groupId>com.aliasi</groupId>
+			<artifactId>lingpipe</artifactId>
+			<version>4.0.1</version>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.commons</groupId>
+			<artifactId>commons-lang3</artifactId>
+			<version>3.0</version>
+		</dependency>
+		<dependency>
+			<groupId>edu.stanford.nlp</groupId>
+			<artifactId>stanford-corenlp</artifactId>
+			<version>3.5.2</version>
+		</dependency>
+		<dependency>
+			<groupId>edu.stanford.nlp</groupId>
+			<artifactId>stanford-corenlp</artifactId>
+			<version>3.5.2</version>
+			<classifier>models-spanish</classifier>
+		</dependency>
+		<dependency>
+			<groupId>com.github.rholder</groupId>
+			<artifactId>snowball-stemmer</artifactId>
+			<version>1.3.0.581.1</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.apache.lucene</groupId>
+			<artifactId>lucene-core</artifactId>
+			<version>5.2.1</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.apache.lucene</groupId>
+			<artifactId>lucene-snowball</artifactId>
+			<version>3.0.3</version>
+		</dependency>
+
+
+
 
 		<!-- testing -->
 		<dependency>

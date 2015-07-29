@@ -15,12 +15,13 @@ public class TweetDTO {
 	private final String screenName;
 	private final String userId;
 	private final String userImageUrl;
+	private final int polarity;
 
 	@JsonCreator
 	public TweetDTO(@JsonProperty("text") String text, @JsonProperty("targets") List<String> targets,
 			@JsonProperty("retweets") long retweets, @JsonProperty("favorites") long favorites, @JsonProperty("date") long date,
 			@JsonProperty("screenName") String screenName, @JsonProperty("userId") String userId,
-			@JsonProperty("userImageUrl") String userImageUrl) {
+			@JsonProperty("userImageUrl") String userImageUrl, @JsonProperty("polarity") int polarity) {
 		this.text = text;
 		this.targets = targets;
 		this.retweets = retweets;
@@ -29,6 +30,7 @@ public class TweetDTO {
 		this.screenName = screenName;
 		this.userId = userId;
 		this.userImageUrl = userImageUrl;
+		this.polarity = polarity;
 	}
 
 	public String getText() {
@@ -61,5 +63,9 @@ public class TweetDTO {
 
 	public String getUserImageUrl() {
 		return userImageUrl;
+	}
+	
+	public int getPolarity(){
+		return polarity;
 	}
 }

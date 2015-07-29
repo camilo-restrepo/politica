@@ -1,11 +1,10 @@
 'use strict';
 
 boardModule.controller('boardController', boardController);
-boardController.$inject = ['$scope', '$websocket'];
+boardController.$inject = ['$scope', '$websocket', 'TargetsService'];
 
-function boardController($scope, $websocket) {
-
-	$scope.primerCandidato = [];
+function boardController($scope, $websocket, TargetsService) {
+	$scope.candidatos = [];
 
     var ws = $websocket.$new({
 		url: 'ws://localhost:9001/board/api/ws',
@@ -28,13 +27,34 @@ function boardController($scope, $websocket) {
     ws.$open();
 
     function pushData(data){
-		$scope.primerCandidato.push(data);
-		//console.log(data);
-		if($scope.primerCandidato.length > 5){
-			$scope.primerCandidato.shift();
+		var tweet = data;
+		console.log(tweet);
+		for(var i = 0; i < $scope.candidatos.length; i++){
+			if($scope.candidatos[i].twitterId.id === tweet.targets[0]){
+				$scope.candidatos[i].tweets.push(tweet);
+				if($scope.candidatos[i].tweets.length > 5){
+					$scope.candidatos[i].tweets.shift();
+				}
+			}
 		}
 		$scope.$apply();
     }
 
+    function onError(data){
+    	console.log(data);
+    }
 
+    function onSuccess(data){
+    	for (var i = 0; i < data.length; i++) {
+        	$scope.candidatos.push(data[i]);
+      	}
+
+      	for (i = 0; i < $scope.candidatos.length; i++) {
+        	$scope.candidatos[i].tweets = [];
+      	}
+    }
+
+    $scope.init = function(){
+    	TargetsService.getTargets(onSuccess, onError);
+    };
 }

@@ -21,6 +21,7 @@ import co.inc.twitterStreamCrawler.domain.entities.TwitterTarget;
 import co.inc.twitterStreamCrawler.domain.workers.TwitterConsumerWorker;
 import co.inc.twitterStreamCrawler.persistence.daos.TargetDAO;
 import co.inc.twitterStreamCrawler.persistence.daos.TweetDAO;
+import co.inc.twitterStreamCrawler.utils.PolarityClassifier;
 
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -52,6 +53,7 @@ public class TwitterStreamCrawler {
 
 	private final TargetDAO targetsDAO;
 	private final TweetDAO tweetDAO;
+	private final PolarityClassifier polarityClassifier;
 	
 	public TwitterStreamCrawler() {
 		MongoClient mongoClient = new MongoClient();
@@ -65,6 +67,7 @@ public class TwitterStreamCrawler {
 
 		targetsDAO = new TargetDAO(mongoDatabase, objectMapper);
 		tweetDAO = new TweetDAO(mongoDatabase);
+		polarityClassifier = new PolarityClassifier();
 		init();
 	}
 
@@ -127,7 +130,7 @@ public class TwitterStreamCrawler {
 		while (!hosebirdClient.isDone()) {
 			try {
 				String stringTweet = msgQueue.take();
-				TwitterConsumerWorker worker = new TwitterConsumerWorker(targetsDAO, tweetDAO, stringTweet);
+				TwitterConsumerWorker worker = new TwitterConsumerWorker(targetsDAO, tweetDAO, stringTweet, polarityClassifier);
 				threadPool.submit(worker);
 			} catch (InterruptedException e) {
 				LOGGER.error("run", e);

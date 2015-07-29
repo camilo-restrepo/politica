@@ -1,4 +1,4 @@
-package co.inc.board.utils;
+package co.inc.twitterStreamCrawler.utils;
 
 import java.text.CharacterIterator;
 import java.text.StringCharacterIterator;
@@ -160,15 +160,6 @@ public class FuzzyMatch {
 
 	public static void main(String[] args) {
 		boolean debug = false;
-		// A score of 100 means complete match.
-//		System.out.println(getRatio("web services as a software", "software as a services", debug));
-//		System.out.println(getRatio("CSK vs RCB", "RCB vs CSK", debug));
-//		System.out.println(getRatio("software-as-a-service", "software as a service", debug));
-//		System.out.println(getRatio("Microsoft's deal with skype", "Microsoft skype deal", debug));
-//		System.out.println(getRatio("apple is good", "Google is best apple is", debug));
-		
-		String str = "@lasillaenvivo: EnriquePenalosa dice que la diferencia con Rafael Pardo es que a él sí le parece un desastre lo que ha pasado con Bogotá";
-		System.out.println(getRatio(str, "Enrique Penalosa", debug));
-		System.out.println(getRatio(str, "Rafael Pardo", debug));
+		System.out.println(getRatio("alegria", "alergia", debug));
 	}
 }
