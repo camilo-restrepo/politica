@@ -19,23 +19,26 @@ public class PolarityClassifier {
 	private Hashtable<String, List<Polarity>> englishPolarities;	
 	private Set<String> spanishWords;
 	private Set<String> englishWords;
+	
+	private final String stopwordsFile;
 
-	public PolarityClassifier() {
+	public PolarityClassifier(String nrcFile, String translateFile, String stopwordsFile) {
+		this.stopwordsFile = stopwordsFile;
 		englishDictionary = new Hashtable<String, List<String>>();
 		englishPolarities = new Hashtable<String, List<Polarity>>();
 		spanishWords = new HashSet<String>();
 		englishWords = new HashSet<String>();
 		try {
-			loadEnglishTranslation();
-			loadEnglishPolarities();
+			loadEnglishTranslation(translateFile);
+			loadEnglishPolarities(nrcFile);
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
 
-	private void loadEnglishPolarities() throws IOException {
-		BufferedReader bf = new BufferedReader(new FileReader(new File("./data/NRC.txt")));
+	private void loadEnglishPolarities(String nrcFile) throws IOException {
+		BufferedReader bf = new BufferedReader(new FileReader(new File(nrcFile)));
 		String str = bf.readLine();
 		str = bf.readLine();
 		while (str != null) {
@@ -58,8 +61,8 @@ public class PolarityClassifier {
 		bf.close();
 	}
 
-	private void loadEnglishTranslation() throws IOException {
-		BufferedReader bf = new BufferedReader(new FileReader(new File("./data/translate.csv")));
+	private void loadEnglishTranslation(String translateFile) throws IOException {
+		BufferedReader bf = new BufferedReader(new FileReader(new File(translateFile)));
 		String str = bf.readLine();
 		str = bf.readLine();
 		while (str != null) {
@@ -87,7 +90,7 @@ public class PolarityClassifier {
 		tweet = removeSpanishAccent(tweet);
 		tweet = tweet.replace(".", "").replace(",", "").replace(":", "").trim().toLowerCase();
 		String[] tweetTokens = tweet.split(" +");
-		StopwordsSpanish stopwords = new StopwordsSpanish("./data/stopwords_es.txt");
+		StopwordsSpanish stopwords = new StopwordsSpanish(stopwordsFile);
 		for (String token : tweetTokens) {
 			if (!token.startsWith("@") && !token.startsWith("http") && !stopwords.isStopword(token)) {
 				tokens.add(token);
@@ -156,22 +159,6 @@ public class PolarityClassifier {
 		}else{
 			return 0;	
 		}
-	}
-
-	public static void main(String[] args) throws IOException {
-		PolarityClassifier polarityClassifier = new PolarityClassifier();
-
-		String[] tweets = {
-				"@gusgomez1701 @AlejaRodC @CVderoux Gustavo, no apoye a ninguno, la política perjudica hasta a los más nobles.",
-				"RT @elespectador: Carlos Vicente de Roux, candidato oficial de Alianza Verde para la Alcaldía de Bogotá http://t.co/wx6JPz5yjb http://t.co/…",
-				"RT @CVderoux: Acabo de suscribir, en señal de aceptación, el aval de Alianza Verde a mi candidatura a la Alcaldía de Bogotá http://t.co/tcq…",
-				"@lasillaenvivo: @EnriquePenalosa dice que la diferencia con Rafael Pardo es que a él sí le parece un desastre lo que ha pasado con Bogotá" };
-
-		for (String tweet : tweets) {
-			System.out.println(tweet);
-			System.out.println(polarityClassifier.getTweetPolarity(tweet));
-		}
-
 	}
 
 	public static String removeSpanishAccent(String word) {

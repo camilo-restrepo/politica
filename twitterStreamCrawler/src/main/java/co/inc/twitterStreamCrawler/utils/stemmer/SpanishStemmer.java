@@ -59,15 +59,4 @@ public class SpanishStemmer extends Stemmer {
 
 		return word;
 	}
-
-	public static void main(String[] ops) {
-
-		SpanishStemmer s = new SpanishStemmer();
-		String str = "dice que la diferencia con Rafael Pardo es que a él sí le parece un "
-				+ "desastre lo que ha pasado con Bogotá estamos";
-		String[] ss = str.split(" ");
-		for(String m : ss){
-			System.out.println(s.stem(m));			
-		}
-	}
 }

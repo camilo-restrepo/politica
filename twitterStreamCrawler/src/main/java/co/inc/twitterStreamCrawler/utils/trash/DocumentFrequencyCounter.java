@@ -162,32 +162,32 @@ public class DocumentFrequencyCounter {
 	private static final String OUT_FILE = "df-counts.ser";
 	private static final DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
 
-	public static void main(String[] args) throws InterruptedException, ExecutionException, IOException {
-		ExecutorService pool = Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors());
-		List<Future<Counter<String>>> futures = new ArrayList<Future<Counter<String>>>();
-
-		for (String filePath : args)
-			futures.add(pool.submit(new FileIDFBuilder(new File(filePath))));
-
-		int finished = 0;
-		Counter<String> overall = new ClassicCounter<String>();
-
-		for (Future<Counter<String>> future : futures) {
-			System.err.printf("%s: Polling future #%d / %d%n", dateFormat.format(new Date()), finished + 1, args.length);
-			Counter<String> result = future.get();
-			finished++;
-			System.err.printf("%s: Finished future #%d / %d%n", dateFormat.format(new Date()), finished, args.length);
-
-			System.err.printf("\tMerging counter.. ");
-			overall.addAll(result);
-			System.err.printf("done.%n");
-		}
-		pool.shutdown();
-
-		System.err.printf("\n%s: Saving to '%s'.. ", dateFormat.format(new Date()), OUT_FILE);
-		ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(OUT_FILE));
-		oos.writeObject(overall);
-		System.err.printf("done.%n");
-	}
+//	public static void main(String[] args) throws InterruptedException, ExecutionException, IOException {
+//		ExecutorService pool = Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors());
+//		List<Future<Counter<String>>> futures = new ArrayList<Future<Counter<String>>>();
+//
+//		for (String filePath : args)
+//			futures.add(pool.submit(new FileIDFBuilder(new File(filePath))));
+//
+//		int finished = 0;
+//		Counter<String> overall = new ClassicCounter<String>();
+//
+//		for (Future<Counter<String>> future : futures) {
+//			System.err.printf("%s: Polling future #%d / %d%n", dateFormat.format(new Date()), finished + 1, args.length);
+//			Counter<String> result = future.get();
+//			finished++;
+//			System.err.printf("%s: Finished future #%d / %d%n", dateFormat.format(new Date()), finished, args.length);
+//
+//			System.err.printf("\tMerging counter.. ");
+//			overall.addAll(result);
+//			System.err.printf("done.%n");
+//		}
+//		pool.shutdown();
+//
+//		System.err.printf("\n%s: Saving to '%s'.. ", dateFormat.format(new Date()), OUT_FILE);
+//		ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(OUT_FILE));
+//		oos.writeObject(overall);
+//		System.err.printf("done.%n");
+//	}
 
 }

@@ -66,14 +66,14 @@ public class TestStanford {
         return posTagging;
     }
 	
-	public static void main(String[] args) throws IOException, ClassNotFoundException {
-		String content = "@lasillaenvivo: @EnriquePenalosa dice que la diferencia con Rafael Pardo es que a él sí le parece un "
-				+ "desastre lo que ha pasado con Bogotá estoy";
-		
-		TestStanford t = new TestStanford();
-//		List<String> result = t.lemmatize(content);
-		System.out.println(t.lemmatize(content).toString());
-		System.out.println(t.posTagging(content).toString());
-	}
+//	public static void main(String[] args) throws IOException, ClassNotFoundException {
+//		String content = "@lasillaenvivo: @EnriquePenalosa dice que la diferencia con Rafael Pardo es que a él sí le parece un "
+//				+ "desastre lo que ha pasado con Bogotá estoy";
+//		
+//		TestStanford t = new TestStanford();
+////		List<String> result = t.lemmatize(content);
+//		System.out.println(t.lemmatize(content).toString());
+//		System.out.println(t.posTagging(content).toString());
+//	}
 
 }

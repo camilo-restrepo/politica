@@ -157,9 +157,4 @@ public class FuzzyMatch {
 		token = s.toString();
 		return token;
 	}
-
-	public static void main(String[] args) {
-		boolean debug = false;
-		System.out.println(getRatio("alegria", "alergia", debug));
-	}
 }

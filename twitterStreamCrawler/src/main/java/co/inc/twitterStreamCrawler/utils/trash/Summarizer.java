@@ -120,16 +120,16 @@ public class Summarizer {
 		return (Counter<String>) ois.readObject();
 	}
 
-	public static void main(String[] args) throws IOException, ClassNotFoundException {
-		String filename = args[0];
-		String content = IOUtils.slurpFile(filename);
-
-		Counter<String> dfCounter = loadDfCounter(DF_COUNTER_PATH);
-
-		Summarizer summarizer = new Summarizer(dfCounter);
-		String result = summarizer.summarize(content, 2);
-
-		System.out.println(result);
-	}
+//	public static void main(String[] args) throws IOException, ClassNotFoundException {
+//		String filename = args[0];
+//		String content = IOUtils.slurpFile(filename);
+//
+//		Counter<String> dfCounter = loadDfCounter(DF_COUNTER_PATH);
+//
+//		Summarizer summarizer = new Summarizer(dfCounter);
+//		String result = summarizer.summarize(content, 2);
+//
+//		System.out.println(result);
+//	}
 
 }
