@@ -28,6 +28,7 @@ module.exports = function(config) {
       'bower_components/angular-resource/angular-resource.js',
       'bower_components/angular-ui-router/release/angular-ui-router.js',
       'bower_components/ng-websocket/ng-websocket.js',
+      'bower_components/materialize/bin/materialize.js',
       'bower_components/angular-mocks/angular-mocks.js',
       // endbower
       "app/scripts/**/*.js",
