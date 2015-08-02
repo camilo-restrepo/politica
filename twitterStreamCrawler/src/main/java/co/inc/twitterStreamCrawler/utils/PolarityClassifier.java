@@ -16,10 +16,10 @@ import co.inc.twitterStreamCrawler.utils.stopwords.StopwordsSpanish;
 public class PolarityClassifier {
 
 	private Hashtable<String, List<String>> englishDictionary;
-	private Hashtable<String, List<Polarity>> englishPolarities;	
+	private Hashtable<String, List<Polarity>> englishPolarities;
 	private Set<String> spanishWords;
 	private Set<String> englishWords;
-	
+
 	private final String stopwordsFile;
 
 	public PolarityClassifier(String nrcFile, String translateFile, String stopwordsFile) {
@@ -85,16 +85,19 @@ public class PolarityClassifier {
 		bf.close();
 	}
 
-	private List<String> getTweetTokens(String tweet) {
-		List<String> tokens = new ArrayList<String>();
+	private List<Token> getTweetTokens(String tweet) {
+		List<Token> tokens = new ArrayList<Token>();
 		tweet = removeSpanishAccent(tweet);
 		tweet = tweet.replace(".", "").replace(",", "").replace(":", "").trim().toLowerCase();
 		String[] tweetTokens = tweet.split(" +");
 		StopwordsSpanish stopwords = new StopwordsSpanish(stopwordsFile);
 		for (String token : tweetTokens) {
 			if (!token.startsWith("@") && !token.startsWith("http") && !stopwords.isStopword(token)) {
-				tokens.add(token);
-				tokens.addAll(getSimilarities(token));
+				tokens.add(new Token(token, 1.0));
+				List<String> similarities = getSimilarities(token);
+				for (int j = 0; j < similarities.size(); j++) {
+					tokens.add(new Token(similarities.get(j), 0.6));
+				}
 			}
 		}
 		return tokens;
@@ -102,8 +105,8 @@ public class PolarityClassifier {
 
 	private List<String> getSimilarities(String token) {
 		Set<String> similarities = new HashSet<String>();
-		for(String word : spanishWords){
-			if(FuzzyMatch.getRatio(word, token, false) > 80){
+		for (String word : spanishWords) {
+			if (FuzzyMatch.getRatio(word, token, false) > 80) {
 				similarities.add(word);
 			}
 		}
@@ -111,23 +114,32 @@ public class PolarityClassifier {
 		return new ArrayList<String>(similarities);
 	}
 
-	private List<String> translateTokens(String tweet) {
-		Set<String> translatedTokens = new HashSet<String>();
-		List<String> tokens = getTweetTokens(tweet);
-		for (String token : tokens) {
-			if (englishDictionary.containsKey(token)) {
-				translatedTokens.addAll(englishDictionary.get(token));
+	private ArrayList<Token> translateTokens(String tweet) {
+		Set<Token> translatedTokens = new HashSet<Token>();
+		List<Token> tokens = getTweetTokens(tweet);
+		for (Token token : tokens) {
+			if (englishDictionary.containsKey(token.getToken())) {
+				List<String> englishTokens = englishDictionary.get(token.getToken());
+				for (int i = 0; i < englishTokens.size(); i++) {
+					translatedTokens.add(new Token(englishTokens.get(i), token.getWeight()));
+				}
 			}
 		}
-		return new ArrayList<String>(translatedTokens);
+		return new ArrayList<Token>(translatedTokens);
 	}
 
 	private List<Polarity> getTweetPolarities(String tweet) {
-		List<String> translatedTokens = translateTokens(tweet);
+		List<Token> translatedTokens = translateTokens(tweet);
 		List<Polarity> polarities = new ArrayList<Polarity>();
-		for (String token : translatedTokens) {
-			if (englishPolarities.containsKey(token)) {
-				polarities.addAll(englishPolarities.get(token));
+		for (Token token : translatedTokens) {
+			if (englishPolarities.containsKey(token.getToken())) {
+				List<Polarity> actualPolarities = englishPolarities.get(token.getToken());
+				if(actualPolarities != null){
+					for (int i = 0; i < actualPolarities.size(); i++) {
+						polarities.add(new Polarity(actualPolarities.get(i).getWord(), token.getWeight(),
+								actualPolarities.get(i).getCategory()));
+					}					
+				}
 			}
 		}
 
@@ -136,28 +148,28 @@ public class PolarityClassifier {
 		return polarities;
 	}
 
-	public int getTweetPolarity(String tweet){
+	public int getTweetPolarity(String tweet) {
 		List<Polarity> polarities = getTweetPolarities(tweet);
-		
-		int positiveCount = 0;
-		int negativeCount = 0;
-		for(Polarity polarity : polarities){
-//			System.out.println(polarity);
-			if(polarity.getCategory().equals("joy") || polarity.getCategory().equals("positive")){
-				positiveCount++;
-			}else if(polarity.getCategory().equals("anger") || polarity.getCategory().equals("fear") || 
-					polarity.getCategory().equals("disgust") || polarity.getCategory().equals("sadness") || 
-					polarity.getCategory().equals("negative")){
-				negativeCount++;
+
+		double positiveCount = 0;
+		double negativeCount = 0;
+		for (Polarity polarity : polarities) {
+			System.out.println(polarity);
+			if (polarity.getCategory().equals("joy") || polarity.getCategory().equals("positive")) {
+				positiveCount += polarity.getProbability();
+			} else if (polarity.getCategory().equals("anger") || polarity.getCategory().equals("fear")
+					|| polarity.getCategory().equals("disgust") || polarity.getCategory().equals("sadness")
+					|| polarity.getCategory().equals("negative")) {
+				negativeCount += polarity.getProbability();
 			}
 		}
-		
-		if(negativeCount>positiveCount){
-			return -1;			
-		}else if(positiveCount>negativeCount){
-			return 1;	
-		}else{
-			return 0;	
+		System.out.println(negativeCount + " - " + positiveCount);
+		if (negativeCount > positiveCount) {
+			return -1;
+		} else if (positiveCount > negativeCount) {
+			return 1;
+		} else {
+			return 0;
 		}
 	}
 
@@ -169,5 +181,11 @@ public class PolarityClassifier {
 		word = word.replaceAll("ì|í|î|ï", "i");
 
 		return word;
+	}
+	
+	public static void main(String[] args) {
+		PolarityClassifier p = new PolarityClassifier("./data/NRC.txt", "./data/Translate.csv", "./data/stopwords_es.txt");
+		String tweet = "Para mí el único que tiene una apuesta política coherente, renovadora y equilibrada es @CVderoux. Ahí les dejo el pendiente.";
+		p.getTweetPolarity(tweet);
 	}
 }
