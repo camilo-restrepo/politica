@@ -11,6 +11,15 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import org.bson.Document;
+
+import com.fasterxml.jackson.databind.DeserializationFeature;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
+import com.mongodb.MongoClient;
+import com.mongodb.client.MongoDatabase;
+
+import co.inc.twitterStreamCrawler.persistence.daos.TweetDAO;
 import co.inc.twitterStreamCrawler.utils.stopwords.StopwordsSpanish;
 
 public class PolarityClassifier {
@@ -110,7 +119,7 @@ public class PolarityClassifier {
 				similarities.add(word);
 			}
 		}
-//		System.out.println(token + ": " + similarities.toString());
+		// System.out.println(token + ": " + similarities.toString());
 		return new ArrayList<String>(similarities);
 	}
 
@@ -134,11 +143,11 @@ public class PolarityClassifier {
 		for (Token token : translatedTokens) {
 			if (englishPolarities.containsKey(token.getToken())) {
 				List<Polarity> actualPolarities = englishPolarities.get(token.getToken());
-				if(actualPolarities != null){
+				if (actualPolarities != null) {
 					for (int i = 0; i < actualPolarities.size(); i++) {
 						polarities.add(new Polarity(actualPolarities.get(i).getWord(), token.getWeight(),
 								actualPolarities.get(i).getCategory()));
-					}					
+					}
 				}
 			}
 		}
@@ -182,10 +191,41 @@ public class PolarityClassifier {
 
 		return word;
 	}
-	
+
 	public static void main(String[] args) {
-		PolarityClassifier p = new PolarityClassifier("./data/NRC.txt", "./data/Translate.csv", "./data/stopwords_es.txt");
-		String tweet = "Para mí el único que tiene una apuesta política coherente, renovadora y equilibrada es @CVderoux. Ahí les dejo el pendiente.";
-		p.getTweetPolarity(tweet);
+//		PolarityClassifier p = new PolarityClassifier("./data/NRC.txt", "./data/Translate.csv",
+//				"./data/stopwords_es.txt");
+//		String tweet = "Para mí el único que tiene una apuesta política coherente, renovadora y equilibrada es @CVderoux. Ahí les dejo el pendiente.";
+//		p.getTweetPolarity(tweet);
+
+		
+		classifyAllTweets();
+	}
+
+	public static void classifyAllTweets() {
+		MongoClient mongoClient = new MongoClient();
+		String databaseName = "boarddb";
+		MongoDatabase mongoDatabase = mongoClient.getDatabase(databaseName);
+		ObjectMapper objectMapper = new ObjectMapper();
+		objectMapper.configure(SerializationFeature.FAIL_ON_EMPTY_BEANS, false);
+		objectMapper.configure(SerializationFeature.WRITE_ENUMS_USING_TO_STRING, true);
+		objectMapper.configure(DeserializationFeature.READ_ENUMS_USING_TO_STRING, true);
+		objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+		PolarityClassifier p = new PolarityClassifier("./data/NRC.txt", "./data/Translate.csv",
+				"./data/stopwords_es.txt");
+
+		TweetDAO tweetDAO = new TweetDAO(mongoDatabase);
+		List<Document> documents = tweetDAO.getAllTweets();
+		int i = 0;
+		for (Document doc : documents) {
+			Document updatedDocument = new Document(doc);
+			if (!doc.containsKey("polarity")) {
+				System.out.println(i + "/" + documents.size());
+				String tweetText = (String) doc.get("text");
+				int polarity = p.getTweetPolarity(tweetText);
+				updatedDocument.append("polarity", polarity);
+				tweetDAO.updateTweetPolarity(doc, updatedDocument);
+			}
+		}
 	}
 }
