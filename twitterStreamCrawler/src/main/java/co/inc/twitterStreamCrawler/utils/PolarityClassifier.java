@@ -9,6 +9,8 @@ import java.util.HashSet;
 import java.util.Hashtable;
 import java.util.List;
 import java.util.Set;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 import java.util.stream.Collectors;
 
 import org.bson.Document;
@@ -96,16 +98,18 @@ public class PolarityClassifier {
 
 	private List<Token> getTweetTokens(String tweet) {
 		List<Token> tokens = new ArrayList<Token>();
-		tweet = removeSpanishAccent(tweet);
-		tweet = tweet.replace(".", "").replace(",", "").replace(":", "").trim().toLowerCase();
-		String[] tweetTokens = tweet.split(" +");
-		StopwordsSpanish stopwords = new StopwordsSpanish(stopwordsFile);
-		for (String token : tweetTokens) {
-			if (!token.startsWith("@") && !token.startsWith("http") && !stopwords.isStopword(token)) {
-				tokens.add(new Token(token, 1.0));
-				List<String> similarities = getSimilarities(token);
-				for (int j = 0; j < similarities.size(); j++) {
-					tokens.add(new Token(similarities.get(j), 0.6));
+		if (tweet != null) {
+			tweet = removeSpanishAccent(tweet);
+			tweet = tweet.replace(".", "").replace(",", "").replace(":", "").trim().toLowerCase();
+			String[] tweetTokens = tweet.split(" +");
+			StopwordsSpanish stopwords = new StopwordsSpanish(stopwordsFile);
+			for (String token : tweetTokens) {
+				if (!token.startsWith("@") && !token.startsWith("http") && !stopwords.isStopword(token)) {
+					tokens.add(new Token(token, 1.0));
+					List<String> similarities = getSimilarities(token);
+					for (int j = 0; j < similarities.size(); j++) {
+						tokens.add(new Token(similarities.get(j), 0.6));
+					}
 				}
 			}
 		}
@@ -163,7 +167,7 @@ public class PolarityClassifier {
 		double positiveCount = 0;
 		double negativeCount = 0;
 		for (Polarity polarity : polarities) {
-			System.out.println(polarity);
+			// System.out.println(polarity);
 			if (polarity.getCategory().equals("joy") || polarity.getCategory().equals("positive")) {
 				positiveCount += polarity.getProbability();
 			} else if (polarity.getCategory().equals("anger") || polarity.getCategory().equals("fear")
@@ -172,7 +176,7 @@ public class PolarityClassifier {
 				negativeCount += polarity.getProbability();
 			}
 		}
-		System.out.println(negativeCount + " - " + positiveCount);
+		// System.out.println(negativeCount + " - " + positiveCount);
 		if (negativeCount > positiveCount) {
 			return -1;
 		} else if (positiveCount > negativeCount) {
@@ -183,27 +187,30 @@ public class PolarityClassifier {
 	}
 
 	public static String removeSpanishAccent(String word) {
-		word = word.replaceAll("à|á|â|ä", "a");
-		word = word.replaceAll("ò|ó|ô|ö", "o");
-		word = word.replaceAll("è|é|ê|ë", "e");
-		word = word.replaceAll("ù|ú|û|ü", "u");
-		word = word.replaceAll("ì|í|î|ï", "i");
-
+		if (word != null) {
+			word = word.replaceAll("à|á|â|ä", "a");
+			word = word.replaceAll("ò|ó|ô|ö", "o");
+			word = word.replaceAll("è|é|ê|ë", "e");
+			word = word.replaceAll("ù|ú|û|ü", "u");
+			word = word.replaceAll("ì|í|î|ï", "i");
+		}
 		return word;
 	}
 
 	public static void main(String[] args) {
-//		PolarityClassifier p = new PolarityClassifier("./data/NRC.txt", "./data/Translate.csv",
-//				"./data/stopwords_es.txt");
-//		String tweet = "Para mí el único que tiene una apuesta política coherente, renovadora y equilibrada es @CVderoux. Ahí les dejo el pendiente.";
-//		p.getTweetPolarity(tweet);
+		// PolarityClassifier p = new PolarityClassifier("./data/NRC.txt",
+		// "./data/Translate.csv",
+		// "./data/stopwords_es.txt");
+		// String tweet = "Para mí el único que tiene una apuesta política
+		// coherente, renovadora y equilibrada es @CVderoux. Ahí les dejo el
+		// pendiente.";
+		// p.getTweetPolarity(tweet);
 
-		
-		classifyAllTweets();
+//		classifyAllTweets();
 	}
 
 	public static void classifyAllTweets() {
-		MongoClient mongoClient = new MongoClient();
+		MongoClient mongoClient = new MongoClient("192.168.0.15");
 		String databaseName = "boarddb";
 		MongoDatabase mongoDatabase = mongoClient.getDatabase(databaseName);
 		ObjectMapper objectMapper = new ObjectMapper();
@@ -217,15 +224,14 @@ public class PolarityClassifier {
 		TweetDAO tweetDAO = new TweetDAO(mongoDatabase);
 		List<Document> documents = tweetDAO.getAllTweets();
 		int i = 0;
+		ExecutorService threadPool = Executors.newFixedThreadPool(10);
 		for (Document doc : documents) {
-			Document updatedDocument = new Document(doc);
-			if (!doc.containsKey("polarity")) {
-				System.out.println(i + "/" + documents.size());
-				String tweetText = (String) doc.get("text");
-				int polarity = p.getTweetPolarity(tweetText);
-				updatedDocument.append("polarity", polarity);
-				tweetDAO.updateTweetPolarity(doc, updatedDocument);
+//			PolarityWorker worker = new PolarityWorker(p, tweetDAO, doc, i);
+//			threadPool.submit(worker);
+			if(!doc.containsKey("polarity")){
+				System.out.println("picho");
 			}
+			i++;
 		}
 	}
 }

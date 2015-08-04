@@ -43,6 +43,7 @@ public class TweetDAO {
 		while(it.hasNext()){
 			result.add(it.next());
 		}
+		it.close();
 		return result;
 	}
 	
