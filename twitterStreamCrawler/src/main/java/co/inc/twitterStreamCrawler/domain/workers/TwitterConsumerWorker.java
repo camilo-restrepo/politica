@@ -44,6 +44,11 @@ public class TwitterConsumerWorker implements Runnable {
 		documentTweet = getTweetWithPolarity(documentTweet);
 		tweetDAO.insertTweet(documentTweet);
 		sendTweetToBoard(documentTweet);
+		updateWordCount(documentTweet);
+	}
+
+	private void updateWordCount(Document documentTweet) {
+		//TODO 
 	}
 
 	private Document getTweetWithPolarity(Document documentTweet) {

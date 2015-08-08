@@ -55,7 +55,7 @@ public class TwitterStreamCrawler {
 	private final TweetDAO tweetDAO;
 	private final PolarityClassifier polarityClassifier;
 	
-	public TwitterStreamCrawler(String nrcFile, String translateFile, String stopwordsFile) {
+	public TwitterStreamCrawler(String nrcFile, String translateFile) {
 		MongoClient mongoClient = new MongoClient();
 		String databaseName = "boarddb";
 		MongoDatabase mongoDatabase = mongoClient.getDatabase(databaseName);
@@ -67,7 +67,7 @@ public class TwitterStreamCrawler {
 
 		targetsDAO = new TargetDAO(mongoDatabase, objectMapper);
 		tweetDAO = new TweetDAO(mongoDatabase);
-		polarityClassifier = new PolarityClassifier(nrcFile, translateFile, stopwordsFile);
+		polarityClassifier = new PolarityClassifier(nrcFile, translateFile);
 		init();
 	}
 
@@ -139,7 +139,7 @@ public class TwitterStreamCrawler {
 	}
 
 	public static void main(String[] args) throws InterruptedException, FileNotFoundException {
-		TwitterStreamCrawler crawler = new TwitterStreamCrawler(args[0], args[1], args[2]);
+		TwitterStreamCrawler crawler = new TwitterStreamCrawler(args[0], args[1]);
 		crawler.crawl();
 	}
 }
