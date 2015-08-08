@@ -22,13 +22,14 @@ import scala.Tuple2;
 public final class WordCount {
 
 	private static final Pattern UNDESIRABLES = Pattern.compile("[\\d+\\]\\[\\+(){},.;¡!¿?<>%]");
+	private static final Pattern SPACE = Pattern.compile(" +");
 
 	public static void main(String[] args) {
 		Configuration mongodbConfig = new Configuration();
 		mongodbConfig.set("mongo.job.input.format", "com.mongodb.hadoop.MongoInputFormat");
 		mongodbConfig.set("mongo.input.uri", "mongodb://localhost:27017/boarddb.tweets");
 
-		SparkConf conf = new SparkConf().setMaster("spark://0.0.0.0:7077").setAppName("Test Application");
+		SparkConf conf = new SparkConf().setMaster("spark://0.0.0.0:7077").setAppName("Word Count");
 
 		JavaSparkContext sc = new JavaSparkContext(conf);
 
@@ -48,7 +49,7 @@ public final class WordCount {
 									.toLowerCase();
 							text = UNDESIRABLES.matcher(text).replaceAll("");
 
-							String[] tweetTokens = text.split(" +");
+							String[] tweetTokens = SPACE.split(text);
 							StopwordsSpanish stopwords = new StopwordsSpanish();
 							for (String token : tweetTokens) {
 								if (!token.equals("rt") && !token.startsWith("@") && !token.startsWith("#")

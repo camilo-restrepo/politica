@@ -28,6 +28,8 @@ import co.inc.twitterStreamCrawler.utils.stopwords.classification.Classification
 public class PolarityClassifier {
 
 	private static final Pattern UNDESIRABLES = Pattern.compile("[\\d+\\]\\[\\+(){},.;¡!¿?<>%]");
+	private static final Pattern SPACE = Pattern.compile(" +");
+	
 	private Hashtable<String, List<String>> englishDictionary;
 	private Hashtable<String, List<Polarity>> englishPolarities;
 	private Set<String> spanishWords;
@@ -102,7 +104,7 @@ public class PolarityClassifier {
 			tweet = tweet.replace(".", "").replace("\u2026", "").replace(",", "").replace(":", "").replace("\r", "")
 					.replace("\n", "").replace("\"", "").replace("|", "").trim().toLowerCase();
 			tweet = UNDESIRABLES.matcher(tweet).replaceAll("");
-			String[] tweetTokens = tweet.split(" +");
+			String[] tweetTokens = SPACE.split(tweet);
 			ClassificationStopwordsSpanish stopwords = new ClassificationStopwordsSpanish();
 			for (String token : tweetTokens) {
 				if (!token.startsWith("@") && !token.startsWith("#") && !token.startsWith("http")
