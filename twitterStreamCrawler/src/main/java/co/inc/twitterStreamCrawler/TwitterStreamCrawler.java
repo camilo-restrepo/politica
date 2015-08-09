@@ -56,7 +56,7 @@ public class TwitterStreamCrawler {
 	private final PolarityClassifier polarityClassifier;
 	
 	public TwitterStreamCrawler(String nrcFile, String translateFile) {
-		MongoClient mongoClient = new MongoClient();
+		MongoClient mongoClient = new MongoClient("192.168.0.15");
 		String databaseName = "boarddb";
 		MongoDatabase mongoDatabase = mongoClient.getDatabase(databaseName);
 		ObjectMapper objectMapper = new ObjectMapper();

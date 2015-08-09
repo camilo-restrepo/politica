@@ -2,24 +2,28 @@ package co.inc.twitterStreamCrawler.domain.workers;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 import org.bson.Document;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.DeserializationFeature;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
+import com.rabbitmq.client.Channel;
+import com.rabbitmq.client.Connection;
+import com.rabbitmq.client.ConnectionFactory;
+import com.sun.jersey.api.client.Client;
+import com.sun.jersey.api.client.WebResource;
+
 import co.inc.twitterStreamCrawler.domain.dto.TweetDTO;
 import co.inc.twitterStreamCrawler.domain.entities.TwitterId;
 import co.inc.twitterStreamCrawler.persistence.daos.TargetDAO;
 import co.inc.twitterStreamCrawler.persistence.daos.TweetDAO;
 import co.inc.twitterStreamCrawler.utils.PolarityClassifier;
-
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.DeserializationFeature;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.SerializationFeature;
-import com.sun.jersey.api.client.Client;
-import com.sun.jersey.api.client.WebResource;
 
 public class TwitterConsumerWorker implements Runnable {
 
@@ -43,12 +47,37 @@ public class TwitterConsumerWorker implements Runnable {
 		Document documentTweet = getTweetWithTargets();
 		documentTweet = getTweetWithPolarity(documentTweet);
 		tweetDAO.insertTweet(documentTweet);
+//		updateWordCount(documentTweet);
 		sendTweetToBoard(documentTweet);
-		updateWordCount(documentTweet);
 	}
 
 	private void updateWordCount(Document documentTweet) {
-		//TODO 
+		Iterator<String> it = documentTweet.keySet().iterator();
+		Document newDocument = new Document();
+		while (it.hasNext()) {
+			String k = it.next();
+			if (k.equals("text") || k.equals("targetTwitterIds")) {
+				newDocument.append(k, documentTweet.get(k));
+			}
+		}
+		enqueueDocument(newDocument);
+	}
+
+	private void enqueueDocument(Document newDocument) {
+		try {
+			ConnectionFactory factory = new ConnectionFactory();
+			factory.setHost("192.168.0.15");
+			Connection connection = factory.newConnection();
+			Channel channel = connection.createChannel();
+
+			channel.queueDeclare("wordCount", false, false, false, null);
+			channel.basicPublish("", "wordCount", null, newDocument.toJson().getBytes());
+
+			channel.close();
+			connection.close();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 
 	private Document getTweetWithPolarity(Document documentTweet) {
@@ -86,7 +115,8 @@ public class TwitterConsumerWorker implements Runnable {
 		String screenName = ((Document) documentTweet.get("user")).getString("name");
 		String userImageUrl = ((Document) documentTweet.get("user")).getString("profile_image_url");
 		int polarity = documentTweet.getInteger("polarity");
-		TweetDTO tweetDTO = new TweetDTO(text, targets, retweets, favorites, date, screenName, userId, userImageUrl, polarity);
+		TweetDTO tweetDTO = new TweetDTO(text, targets, retweets, favorites, date, screenName, userId, userImageUrl,
+				polarity);
 		return tweetDTO;
 	}
 

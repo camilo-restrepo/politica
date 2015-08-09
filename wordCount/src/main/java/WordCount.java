@@ -39,7 +39,7 @@ public final class WordCount {
 		JavaRDD<CandidateWord> words = documents
 				.flatMap(new FlatMapFunction<Tuple2<Object, BSONObject>, CandidateWord>() {
 					public Iterable<CandidateWord> call(Tuple2<Object, BSONObject> t) throws Exception {
-						BasicDBList target = (BasicDBList) t._2.get("targetTwitterIds");
+						BasicDBList targets = (BasicDBList) t._2.get("targetTwitterIds");
 						String text = (String) t._2.get("text");
 
 						List<CandidateWord> words = new ArrayList<CandidateWord>();
@@ -54,8 +54,12 @@ public final class WordCount {
 							for (String token : tweetTokens) {
 								if (!token.equals("rt") && !token.startsWith("@") && !token.startsWith("#")
 										&& !token.startsWith("http") && !stopwords.isStopword(token)) {
-									if (target != null && target.size() > 0 && !token.isEmpty()) {
-										words.add(new CandidateWord(token, (String) target.get(0)));
+									if (targets != null && targets.size() > 0 && !token.isEmpty()) {
+										
+										for(int i = 0 ; i < targets.size() ; i++){
+											String target = (String) targets.get(i);
+											words.add(new CandidateWord(token, target));									
+										}
 									}
 								}
 							}
