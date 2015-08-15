@@ -1,6 +1,7 @@
 package co.inc.board.api.resources;
 
-import java.util.List;
+import co.inc.board.domain.business.TargetBusiness;
+import co.inc.board.domain.entities.TwitterTarget;
 
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
@@ -9,9 +10,7 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
-
-import co.inc.board.domain.business.TargetBusiness;
-import co.inc.board.domain.entities.TwitterTarget;
+import java.util.List;
 
 @Path("/targets")
 @Consumes(MediaType.APPLICATION_JSON)
