@@ -1,5 +1,7 @@
 package co.inc.board.domain.entities;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import org.joda.time.DateTime;
 
 public class TweetPerDay {
@@ -7,7 +9,8 @@ public class TweetPerDay {
     private final DateTime date;
     private final long tweetsPerDay;
 
-    public TweetPerDay(DateTime date, long tweetsPerDay) {
+    @JsonCreator
+    public TweetPerDay(@JsonProperty("date") DateTime date, @JsonProperty("tweetsPerDay") long tweetsPerDay) {
         this.date = date;
         this.tweetsPerDay = tweetsPerDay;
     }
