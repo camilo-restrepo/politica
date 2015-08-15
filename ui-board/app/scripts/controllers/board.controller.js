@@ -12,7 +12,7 @@ function boardController($scope, $websocket, TargetsService) {
   }); 
 
   ws.$on('$open', function () {
-    console.log('Oh my gosh, websocket is really open! Fukken awesome!');
+    //console.log('open');
   });
 
   ws.$on('$message', function (data) {
@@ -21,33 +21,28 @@ function boardController($scope, $websocket, TargetsService) {
   });
 
   ws.$on('$close', function () {
-    console.log('Noooooooooou, I want to have more fun with ngWebsocket, damn it!');
+    //console.log('close');
   });
 
   ws.$open();
 
   function compareTweets(tweet1, tweet2) {
-
     return (tweet1.text === tweet2.text) && (tweet1.userId === tweet2.userId); 
   }
 
   function tweetIsInList(tweet, tweetList) {
-
     var isInList = false;
-
     for (var i = 0; i < tweetList.length && !isInList; i++) {
-
       isInList = compareTweets(tweet, tweetList[i]);
     }
-
     return isInList;
   }
 
   function pushData(data){
     var tweet = data;
-    console.log(tweet);
+    tweet.timestamp_ms = tweet.timestamp_ms.$numberLong
     for(var i = 0; i < $scope.candidatos.length; i++){
-      if($scope.candidatos[i].twitterId.id === tweet.targets[0]){
+      if($scope.candidatos[i].twitterId.id === tweet.targetTwitterId){
         if (!tweetIsInList(tweet, $scope.candidatos[i].tweets)) {
           $scope.candidatos[i].tweets.push(tweet);
           if($scope.candidatos[i].tweets.length > 5){

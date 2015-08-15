@@ -46,6 +46,16 @@ public class TargetDAO {
 		return ids;
 	}
 	
+	public List<Document> getAllTargetsIds(){
+		MongoCollection<Document> targets = mongoDatabase.getCollection(IDS_COLLECTION);
+		List<Document> targetsList = new ArrayList<Document>();
+		MongoCursor<Document> it = targets.find().iterator();
+		while(it.hasNext()){
+			targetsList.add(it.next());
+		}
+		return targetsList;
+	}
+	
 	public List<TwitterTarget> getAllTargets(){
 		MongoCollection<Document> collection = mongoDatabase.getCollection(TARGETS_COLLECTION);
 		MongoCursor<Document> it = collection.find().iterator();

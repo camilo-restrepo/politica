@@ -12,6 +12,7 @@ import com.mongodb.client.MongoDatabase;
 public class TweetDAO {
 
 	public static final String TWEETS_COLLECTION = "tweets";
+	public static final String MINIMUM_TWEETS = "minimumTweets";
 
 	private final MongoDatabase mongoDatabase;
 
@@ -19,21 +20,14 @@ public class TweetDAO {
 		this.mongoDatabase = mongoDatabase;
 	}
 
-	public void insertTweet(long targetTwitterId, String stringTweet) {
-		MongoCollection<Document> collection = mongoDatabase.getCollection(TWEETS_COLLECTION);
-		Document documentTweet = Document.parse(stringTweet);
-		documentTweet.put("targetTwitterId", targetTwitterId);
-		collection.insertOne(documentTweet);
-	}
-
-	public void insertTweet(String stringTweet) {
-		Document documentTweet = Document.parse(stringTweet);
-		insertTweet(documentTweet);
-	}
-	
 	public void insertTweet(Document documentTweet) {
 		MongoCollection<Document> collection = mongoDatabase.getCollection(TWEETS_COLLECTION);
 		collection.insertOne(documentTweet);
+	}
+	
+	public void insertCleanTweet(Document minTweet) {
+		MongoCollection<Document> collection = mongoDatabase.getCollection(MINIMUM_TWEETS);
+		collection.insertOne(minTweet);
 	}
 	
 	public List<Document> getAllTweets(){

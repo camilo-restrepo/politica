@@ -16,9 +16,6 @@ import java.util.stream.Collectors;
 
 import org.bson.Document;
 
-import com.fasterxml.jackson.databind.DeserializationFeature;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.SerializationFeature;
 import com.mongodb.MongoClient;
 import com.mongodb.client.MongoDatabase;
 
@@ -201,33 +198,17 @@ public class PolarityClassifier {
 		return word;
 	}
 
-	public static void main(String[] args) {
-		// PolarityClassifier p = new PolarityClassifier("./data/NRC.txt",
-		// "./data/Translate.csv",
-		// "./data/stopwords_es.txt");
-		// String tweet = "Para mí el único que tiene una apuesta política
-		// coherente, renovadora y equilibrada es @CVderoux. Ahí les dejo el
-		// pendiente.";
-		// p.getTweetPolarity(tweet);
-
-		// classifyAllTweets();
-	}
-
 	public static void classifyAllTweets() {
-		MongoClient mongoClient = new MongoClient("192.168.0.15");
+		MongoClient mongoClient = new MongoClient("");
 		String databaseName = "boarddb";
+		
 		MongoDatabase mongoDatabase = mongoClient.getDatabase(databaseName);
-		ObjectMapper objectMapper = new ObjectMapper();
-		objectMapper.configure(SerializationFeature.FAIL_ON_EMPTY_BEANS, false);
-		objectMapper.configure(SerializationFeature.WRITE_ENUMS_USING_TO_STRING, true);
-		objectMapper.configure(DeserializationFeature.READ_ENUMS_USING_TO_STRING, true);
-		objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
 		PolarityClassifier p = new PolarityClassifier("./data/NRC.txt", "./data/Translate.csv");
 
 		TweetDAO tweetDAO = new TweetDAO(mongoDatabase);
 		List<Document> documents = tweetDAO.getAllTweets();
 		int i = 0;
-		ExecutorService threadPool = Executors.newFixedThreadPool(10);
+		ExecutorService threadPool = Executors.newFixedThreadPool(2);
 		for (Document doc : documents) {
 			// PolarityWorker worker = new PolarityWorker(p, tweetDAO, doc, i);
 			// threadPool.submit(worker);

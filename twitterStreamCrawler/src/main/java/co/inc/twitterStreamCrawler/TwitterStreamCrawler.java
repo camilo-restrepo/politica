@@ -47,7 +47,8 @@ public class TwitterStreamCrawler {
 	public final static String CONSUMER_SECRET = "FVc5dgZ05j288pf0mKUQuvqeJsP550nnVvxUqINdI";
 	public final static String ACCESS_TOKEN = "263623229-NEcwbcSBdDnYxtnoFFdbi4VOPCtdTjBpwnSc5a8b";
 	public final static String ACCESS_TOKEN_SECRET = "eWXxlbezHqQN4NFyPZe5TGxwinhOVEeERDhU9irT5cXTc";
-	public final static String MONGO_IP = "192.168.0.5";
+	
+	public final static String MONGO_IP = "";
 	public final static String MONGO_DB = "boarddb";
 	
 	private final BlockingQueue<String> msgQueue = new LinkedBlockingQueue<String>(100000);
