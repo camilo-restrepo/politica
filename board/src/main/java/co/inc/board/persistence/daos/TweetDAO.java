@@ -73,7 +73,7 @@ public class TweetDAO {
         List<TweetPerDay> tweetPerDayList = new ArrayList<>();
 
         int limit = 30;
-        DateTime now = DateTime.now().withHourOfDay(11).withMinuteOfHour(59).withSecondOfMinute(59);
+        DateTime now = DateTime.now().withHourOfDay(23).withMinuteOfHour(59).withSecondOfMinute(59);
         MongoCollection<Document> collection = mongoDatabase.getCollection(TWEETS_COLLECTION);
 
         for (int i = 0; i < limit; i++) {
@@ -81,11 +81,11 @@ public class TweetDAO {
             DateTime oneDay = now.minusDays(1);
 
             long count = collection.count((Filters.and(Filters.in("targetTwitterIds", twitterId),
-                    Filters.gte("timestamp_ms", oneDay), Filters.lte("timestamp_ms", now))));
+                    Filters.gte("timestamp_ms", oneDay.getMillis()), Filters.lte("timestamp_ms", now.getMillis()))));
 
-            // MongoCursor<Document> iterator = collection.find().
-              //      filter(Filters.and(Filters.in("targetTwitterIds", twitterId),
-                //    Filters.gte("timestamp_ms", oneDay), Filters.lte("timestamp_ms", now))).iterator();
+//             MongoCursor<Document> iterator = collection.find().
+//                    filter(Filters.and(Filters.in("targetTwitterIds", twitterId),
+//                    Filters.gte("timestamp_ms", oneDay), Filters.lte("timestamp_ms", now))).iterator();
 
             TweetPerDay tweetPerDay = new TweetPerDay(now, count);
             tweetPerDayList.add(tweetPerDay);
@@ -100,7 +100,7 @@ public class TweetDAO {
         List<PolarityPerDay> polarityPerDayList = new ArrayList<>();
 
         int limit = 30;
-        DateTime now = DateTime.now().withHourOfDay(11).withMinuteOfHour(59).withSecondOfMinute(59);
+        DateTime now = DateTime.now().withHourOfDay(23).withMinuteOfHour(59).withSecondOfMinute(59);
         MongoCollection<Document> collection = mongoDatabase.getCollection(TWEETS_COLLECTION);
 
         for (int i = 0; i < limit; i++) {
@@ -108,10 +108,10 @@ public class TweetDAO {
             DateTime oneDay = now.minusDays(1);
 
             long positivePolarity = collection.count((Filters.and(Filters.in("targetTwitterIds", twitterId),
-                    Filters.eq("polarity", 1), Filters.gte("timestamp_ms", oneDay), Filters.lte("timestamp_ms", now))));
+                    Filters.eq("polarity", 1), Filters.gte("timestamp_ms", oneDay.getMillis()), Filters.lte("timestamp_ms", now.getMillis()))));
 
             long negativePolarity = collection.count((Filters.and(Filters.in("targetTwitterIds", twitterId),
-                    Filters.eq("polarity", -1), Filters.gte("timestamp_ms", oneDay), Filters.lte("timestamp_ms", now))));
+                    Filters.eq("polarity", -1), Filters.gte("timestamp_ms", oneDay.getMillis()), Filters.lte("timestamp_ms", now.getMillis()))));
 
             PolarityPerDay polarityPerDay = new PolarityPerDay(now, positivePolarity, negativePolarity);
             polarityPerDayList.add(polarityPerDay);
