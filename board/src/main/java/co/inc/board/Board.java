@@ -16,11 +16,14 @@ import org.slf4j.LoggerFactory;
 
 import co.inc.board.api.resources.BroadcasterResource;
 import co.inc.board.api.resources.TargetResource;
+import co.inc.board.api.resources.TweetResource;
 import co.inc.board.api.ws.BroadcastServlet;
 import co.inc.board.domain.business.TargetBusiness;
+import co.inc.board.domain.business.TweetBusiness;
 import co.inc.board.infrastructure.config.BoardConfig;
 import co.inc.board.infrastructure.config.MongoConfig;
 import co.inc.board.persistence.daos.TargetDAO;
+import co.inc.board.persistence.daos.TweetDAO;
 
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -80,7 +83,12 @@ public class Board extends Application<BoardConfig> {
 		TargetBusiness targetBusiness = new TargetBusiness(targetDAO);
 		TargetResource targetResource = new TargetResource(targetBusiness);
 		environment.jersey().register(targetResource);
-
+		
+		TweetDAO tweetDAO = new TweetDAO(mongoDatabase);
+		TweetBusiness tweetBusiness = new TweetBusiness(tweetDAO);
+		TweetResource tweetResource = new TweetResource(tweetBusiness);
+		environment.jersey().register(tweetResource);
+		
 		// webSockets
 
 		environment.jersey().register(new BroadcasterResource(objectMapper));
