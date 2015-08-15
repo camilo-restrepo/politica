@@ -47,6 +47,8 @@ public class TwitterStreamCrawler {
 	public final static String CONSUMER_SECRET = "FVc5dgZ05j288pf0mKUQuvqeJsP550nnVvxUqINdI";
 	public final static String ACCESS_TOKEN = "263623229-NEcwbcSBdDnYxtnoFFdbi4VOPCtdTjBpwnSc5a8b";
 	public final static String ACCESS_TOKEN_SECRET = "eWXxlbezHqQN4NFyPZe5TGxwinhOVEeERDhU9irT5cXTc";
+	public final static String MONGO_IP = "192.168.0.5";
+	public final static String MONGO_DB = "boarddb";
 	
 	private final BlockingQueue<String> msgQueue = new LinkedBlockingQueue<String>(100000);
 	private final BlockingQueue<Event> eventQueue = new LinkedBlockingQueue<Event>(1000);
@@ -56,9 +58,8 @@ public class TwitterStreamCrawler {
 	private final PolarityClassifier polarityClassifier;
 	
 	public TwitterStreamCrawler(String nrcFile, String translateFile) {
-		MongoClient mongoClient = new MongoClient("192.168.0.15");
-		String databaseName = "boarddb";
-		MongoDatabase mongoDatabase = mongoClient.getDatabase(databaseName);
+		MongoClient mongoClient = new MongoClient(MONGO_IP);
+		MongoDatabase mongoDatabase = mongoClient.getDatabase(MONGO_DB);
 		ObjectMapper objectMapper = new ObjectMapper();
 		objectMapper.configure(SerializationFeature.FAIL_ON_EMPTY_BEANS, false);
 		objectMapper.configure(SerializationFeature.WRITE_ENUMS_USING_TO_STRING, true);
