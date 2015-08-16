@@ -1,6 +1,7 @@
 package webClassifier.resources;
 
 import java.util.List;
+import java.util.Random;
 
 import javax.validation.Valid;
 import javax.ws.rs.Consumes;

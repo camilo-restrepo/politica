@@ -2,6 +2,7 @@ package webClassifier.daos;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 import org.bson.Document;
 import org.mongodb.morphia.Datastore;
@@ -30,6 +31,8 @@ public class TweetDAO {
 	}
 
 	public List<Tweet> getTweets(int offset, int limit) {
+		Random r = new Random();
+		offset = r.nextInt((int) database.getCollection(ORIGINAL_TWEETS).count());
 		List<Tweet> tweets = ds.find(Tweet.class).limit(limit).offset(offset).asList();
 		List<Tweet> result = new ArrayList<>(); 
 		for(Tweet t : tweets){
