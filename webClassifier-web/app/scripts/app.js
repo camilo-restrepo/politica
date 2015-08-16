@@ -11,7 +11,8 @@
 angular
   .module('webClassifierWebApp', [
     'ngResource',
-    'ngRoute'
+    'ngRoute',
+    'config'
   ])
   .config(function ($routeProvider) {
     $routeProvider

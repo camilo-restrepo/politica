@@ -1,8 +1,8 @@
 'use strict';
 
-angular.module('webClassifierWebApp').factory('TweetService', ['$resource', function ($resource) {
+angular.module('webClassifierWebApp').factory('TweetService', ['$resource', 'environment', function ($resource, environment) {
   	
-  	var url = 'http://localhost:8080/tweets/:id';
+  	var url = environment.webClassifier + '/tweets/:id';
   	var defaultParams = {};
   	var actions= {
   		updateTweet: {method: 'PUT'},

@@ -16,6 +16,7 @@ module.exports = function (grunt) {
   require('jit-grunt')(grunt, {
     useminPrepare: 'grunt-usemin',
     ngtemplates: 'grunt-angular-templates',
+    ngconstant: 'grunt-ng-constant',
     cdnify: 'grunt-google-cdn'
   });
 
@@ -342,6 +343,33 @@ module.exports = function (grunt) {
       }
     },
 
+    ngconstant: {
+      // Options for all targets
+      options: {
+        space: '  ',
+        dest: '<%= yeoman.app %>/scripts/config.js',
+        wrap: '"use strict";\n\n {%= __ngModule %}',
+        name: 'config',
+      },
+      // Environment targets
+      development: {
+        constants: {
+          environment: {
+            name: 'development',
+            webClassifier: 'http://localhost:8080'
+          }
+        }
+      },
+      production: {
+        constants: {
+          environment: {
+            name: 'production',
+            webClassifier: 'http://104.236.26.163:8080'
+          }
+        }
+      }
+    },
+
     // Replace Google CDN references
     cdnify: {
       dist: {
@@ -362,7 +390,7 @@ module.exports = function (grunt) {
             '.htaccess',
             '*.html',
             'images/{,*/}*.{webp}',
-            'styles/fonts/{,*/}*.*'
+        'styles/fonts/{,*/}*.*'
           ]
         }, {
           expand: true,
@@ -416,6 +444,7 @@ module.exports = function (grunt) {
 
     grunt.task.run([
       'clean:server',
+      'ngconstant:development',
       'wiredep',
       'concurrent:server',
       'autoprefixer:server',
@@ -440,6 +469,7 @@ module.exports = function (grunt) {
 
   grunt.registerTask('build', [
     'clean:dist',
+    'ngconstant:production',
     'wiredep',
     'useminPrepare',
     'concurrent:dist',
