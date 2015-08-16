@@ -1,2 +1,2 @@
 cd ../../
-node serve.js &
+node webClassifier-server.js &
