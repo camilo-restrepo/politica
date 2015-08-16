@@ -34,9 +34,9 @@ angular.module('webClassifierWebApp').controller('MainCtrl', function ($scope, T
 
     $scope.setPolarity = function(tweet, polarity, index){
     	tweet.polarity = polarity;
+        console.log(tweet);
         TweetService.updateTweet({id: tweet.id}, tweet, updateTweetOnSuccess, onError);
     	$scope.tweets.splice(index, 1);
-    	//traer un nuevo tweet
         TweetsService.getTweets({offset: 10, limit: 1}, onSuccess, onError);
     };
 

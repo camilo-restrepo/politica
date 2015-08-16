@@ -41,7 +41,7 @@ public class TweetResource {
 	
 	@PUT
 	@Path("/{id}")
-	public Response updateTweet(@PathParam("id") String id, @Valid ClassifiedTweet classifiedTweet){
+	public Response updateTweet(@PathParam("id") String id, ClassifiedTweet classifiedTweet){
 		dao.updateTweet(classifiedTweet);
 		return Response.status(Status.OK).build();
 	}

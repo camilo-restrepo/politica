@@ -12,6 +12,7 @@ public class ClassifiedTweet {
 	private long id;
 	private String text;
 	private int polarity;
+	private int classification;
 	
 	public ClassifiedTweet() {
 	}
@@ -33,4 +34,14 @@ public class ClassifiedTweet {
 	public void setPolarit(int polarity){
 		this.polarity = polarity;
 	}
+	public int getClassification() {
+		return classification;
+	}
+	public void setClassification(int classification) {
+		this.classification = classification;
+	}
+	public void setPolarity(int polarity) {
+		this.polarity = polarity;
+	}
+	
 }

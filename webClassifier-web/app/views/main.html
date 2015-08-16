@@ -8,6 +8,8 @@
     <tbody>
       <tr ng-repeat="tweet in tweets track by $index">
         <td>
+          {{tweet.classification}}
+          <br>
           {{tweet.text}}
           <br>
           <button type="button" class="btn btn-sm btn-danger" ng-click="setPolarity(tweet, -1, $index)">Negative</button>
