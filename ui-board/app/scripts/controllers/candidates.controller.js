@@ -4,6 +4,7 @@ boardModule.controller('candidatesController', candidatesController);
 candidatesController.$inject = ['$scope', '$websocket', 'TargetsService'];
 
 function candidatesController($scope, $websocket, TargetsService) {
+
   $scope.candidatos = [];
 
   var ws = $websocket.$new({
@@ -68,7 +69,8 @@ function candidatesController($scope, $websocket, TargetsService) {
     }
   }
 
-  $scope.init = function(){
+  $scope.init = function() {
+    console.debug('************************************ candidatesController');
     TargetsService.getTargets(onSuccess, onError);
   };
 }
