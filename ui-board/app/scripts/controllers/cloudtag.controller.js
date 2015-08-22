@@ -7,9 +7,9 @@ function cloudtagController($scope) {
 
   function getTreeMap() {
 
-    var margin = {top: 40, right: 10, bottom: 10, left: 10},
-      width = 960 - margin.left - margin.right,
-      height = 500 - margin.top - margin.bottom;
+    var margin = {top: 40, right: 10, bottom: 10, left: 10};
+    var width = 960 - margin.left - margin.right;
+    var height = 500 - margin.top - margin.bottom;
 
     var color = d3.scale.category20c();
 

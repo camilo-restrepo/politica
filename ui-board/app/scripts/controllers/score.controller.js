@@ -11,8 +11,8 @@ function scoreController($scope) {
       bindto: '#scoreChart',
       data: {
         columns: [
-          ['Positive', 30],
-          ['Negative', 10]
+          ['Positive', 70, 50, 23],
+          ['Negative', 30, 50, 77]
         ],
         type: 'bar',
         groups: [

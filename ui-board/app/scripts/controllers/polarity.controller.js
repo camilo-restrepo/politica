@@ -12,6 +12,8 @@ function polarityController($scope) {
       data: {
         columns: [
           [candidateName, 30, 200, 100, 400, 150, 250],
+          ['Rafael Pardo', 80, 150, 30, 300, 320, 125],
+          ['Clara Lopez', 40, 190, 230, 80, 20, 300]
         ]
       }
     });
