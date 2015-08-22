@@ -1,9 +1,9 @@
 'use strict';
 
-boardModule.controller('boardController', boardController);
-boardController.$inject = ['$scope', '$websocket', 'TargetsService'];
+boardModule.controller('candidatesController', candidatesController);
+candidatesController.$inject = ['$scope', '$websocket', 'TargetsService'];
 
-function boardController($scope, $websocket, TargetsService) {
+function candidatesController($scope, $websocket, TargetsService) {
   $scope.candidatos = [];
 
   var ws = $websocket.$new({

@@ -6,7 +6,6 @@ app.config(function($stateProvider, $urlRouterProvider) {
 
     $stateProvider.state('home', {
         url: '/home',
-        controller: boardController,
         templateUrl: 'views/board.html'
     });
 });
