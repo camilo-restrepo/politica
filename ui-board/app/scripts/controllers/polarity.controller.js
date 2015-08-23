@@ -11,9 +11,12 @@ function polarityController($scope) {
       bindto: '#polarityChart',
       data: {
         columns: [
-          [candidateName, 30, 200, 100, 400, 150, 250],
-          ['Rafael Pardo', 80, 150, 30, 300, 320, 125],
-          ['Clara Lopez', 40, 190, 230, 80, 20, 300]
+          ['Positive', 70, 50, 23],
+          ['Negative', 30, 50, 77]
+        ],
+        type: 'bar',
+        groups: [
+          ['Positive', 'Negative']
         ]
       }
     });
