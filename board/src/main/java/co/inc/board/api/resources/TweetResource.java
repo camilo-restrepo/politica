@@ -3,7 +3,9 @@ package co.inc.board.api.resources;
 import co.inc.board.domain.business.TargetBusiness;
 import co.inc.board.domain.business.TweetBusiness;
 import co.inc.board.domain.entities.*;
+import org.hibernate.validator.constraints.NotEmpty;
 
+import javax.validation.Valid;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;

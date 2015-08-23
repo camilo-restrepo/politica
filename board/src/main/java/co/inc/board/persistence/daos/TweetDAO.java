@@ -18,29 +18,12 @@ import java.util.List;
 
 public class TweetDAO {
 
-	public static final String TWEETS_COLLECTION = "tweets";
+	public static final String TWEETS_COLLECTION = "minimumTweets";
 
 	private final MongoDatabase mongoDatabase;
 
 	public TweetDAO(MongoDatabase mongoDatabase) {
 		this.mongoDatabase = mongoDatabase;
-	}
-
-	public void insertTweet(long targetTwitterId, String stringTweet) {
-		MongoCollection<Document> collection = mongoDatabase.getCollection(TWEETS_COLLECTION);
-		Document documentTweet = Document.parse(stringTweet);
-		documentTweet.put("targetTwitterId", targetTwitterId);
-		collection.insertOne(documentTweet);
-	}
-
-	public void insertTweet(String stringTweet) {
-		Document documentTweet = Document.parse(stringTweet);
-		insertTweet(documentTweet);
-	}
-	
-	public void insertTweet(Document documentTweet) {
-		MongoCollection<Document> collection = mongoDatabase.getCollection(TWEETS_COLLECTION);
-		collection.insertOne(documentTweet);
 	}
 
 	public List<MapCoordinate> getMapFromTweetsLastMonth(String twitterId) {
