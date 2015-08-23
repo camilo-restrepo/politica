@@ -9,8 +9,7 @@ function tweetsService($resource) {
   var defaultParams = {};
 
   var actions = {
-    getAllCandidatesImageToday: { method: 'GET', url: url + '/polarity?time=today', isArray: true },
-    getAllCandidatesImageMonth : { method: 'GET', url: url + '/polarity?time=month', isArray: true }
+    getAllCandidatesPolarity: { method: 'GET', url: url + '/polarity?time=:time', isArray: true }
   };
 
   return $resource(url, defaultParams, actions);

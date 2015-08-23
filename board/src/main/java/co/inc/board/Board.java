@@ -3,13 +3,16 @@ package co.inc.board;
 import co.inc.board.api.resources.BroadcasterResource;
 import co.inc.board.api.resources.TargetResource;
 import co.inc.board.api.resources.TweetResource;
+import co.inc.board.api.resources.WordResource;
 import co.inc.board.api.ws.BroadcastServlet;
 import co.inc.board.domain.business.TargetBusiness;
 import co.inc.board.domain.business.TweetBusiness;
+import co.inc.board.domain.business.WordBusiness;
 import co.inc.board.infrastructure.config.BoardConfig;
 import co.inc.board.infrastructure.config.MongoConfig;
 import co.inc.board.persistence.daos.TargetDAO;
 import co.inc.board.persistence.daos.TweetDAO;
+import co.inc.board.persistence.daos.WordDAO;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
@@ -84,6 +87,11 @@ public class Board extends Application<BoardConfig> {
         TweetBusiness tweetBusiness = new TweetBusiness(tweetDAO);
         TweetResource tweetResource = new TweetResource(tweetBusiness, targetBusiness);
         environment.jersey().register(tweetResource);
+
+        WordDAO wordDAO = new WordDAO(mongoDatabase);
+        WordBusiness wordBusiness = new WordBusiness(wordDAO);
+        WordResource wordResource = new WordResource(wordBusiness, targetBusiness);
+        environment.jersey().register(wordResource);
 
         // webSockets
 

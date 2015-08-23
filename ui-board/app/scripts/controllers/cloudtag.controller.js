@@ -1,9 +1,9 @@
 'use strict';
 
 boardModule.controller('cloudtagController', cloudtagController);
-cloudtagController.$inject = ['$scope'];
+cloudtagController.$inject = ['$scope', 'cloudtagService'];
 
-function cloudtagController($scope) {
+function cloudtagController($scope, cloudtagService) {
 
   function getTreeMap() {
 
@@ -123,7 +123,18 @@ function cloudtagController($scope) {
 
   }
 
+  function success(response) {
+
+    console.debug(response);
+  }
+
+  function error(response) {
+    console.error(response);
+  }
+
   $scope.init = function() {
+
+    cloudtagService.getAllCandidatesCloudTags(success, error);
     $scope.chart = getTreeMap();
   }
 }
