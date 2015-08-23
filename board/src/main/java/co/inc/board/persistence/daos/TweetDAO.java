@@ -11,12 +11,17 @@ import org.bson.Document;
 
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
+import org.bson.conversions.Bson;
 import org.joda.time.DateTime;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class TweetDAO {
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(TweetDAO.class);
 
 	public static final String TWEETS_COLLECTION = "minimumTweets";
 
@@ -33,7 +38,7 @@ public class TweetDAO {
 		MongoCollection<Document> collection = mongoDatabase.getCollection(TWEETS_COLLECTION);
 
         MongoCursor<Document> iterator = collection
-                .find(Filters.and(Filters.ne("geo", null), Filters.in("targetTwitterIds", twitterId)))
+                .find(Filters.and(Filters.ne("geo", null), Filters.eq("targetTwitterId", twitterId)))
                 .projection(Projections.include("geo")).iterator();
 
         while (iterator.hasNext()) {
@@ -62,12 +67,11 @@ public class TweetDAO {
 
             DateTime oneDay = now.minusDays(1);
 
-            long count = collection.count((Filters.and(Filters.in("targetTwitterIds", twitterId),
-                    Filters.gte("timestamp_ms", oneDay.getMillis()), Filters.lte("timestamp_ms", now.getMillis()))));
+            Bson bson = Filters.and(Filters.eq("targetTwitterId", twitterId),
+                    Filters.gte("timestamp_ms", oneDay.getMillis()),
+                    Filters.lte("timestamp_ms", now.getMillis()));
 
-//             MongoCursor<Document> iterator = collection.find().
-//                    filter(Filters.and(Filters.in("targetTwitterIds", twitterId),
-//                    Filters.gte("timestamp_ms", oneDay), Filters.lte("timestamp_ms", now))).iterator();
+            long count = collection.count(bson);
 
             TweetPerDay tweetPerDay = new TweetPerDay(now, count);
             tweetPerDayList.add(tweetPerDay);
@@ -81,9 +85,12 @@ public class TweetDAO {
 
         MongoCollection<Document> collection = mongoDatabase.getCollection(TWEETS_COLLECTION);
 
-        long tweetCountByPolarity = collection.count((Filters.and(Filters.in("targetTwitterIds", twitterId),
-                Filters.eq("polarity", polarityValue.getValue()), Filters.gte("timestamp_ms", initialDate.getMillis()),
-                Filters.lte("timestamp_ms", DateTime.now().getMillis()))));
+        Bson bson = Filters.and(Filters.eq("targetTwitterId", twitterId),
+                Filters.eq("polarity", polarityValue.getValue()),
+                Filters.gte("timestamp_ms", initialDate.getMillis()),
+                Filters.lte("timestamp_ms", DateTime.now().getMillis()));
+
+        long tweetCountByPolarity = collection.count(bson);
 
         return tweetCountByPolarity;
     }
