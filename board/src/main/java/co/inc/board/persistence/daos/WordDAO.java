@@ -39,7 +39,7 @@ public class WordDAO {
 
             Document document = documentsIterator.next();
             String word = document.getString("word");
-            long count = document.getLong("count");
+            int count = document.getLong("count").intValue();
             WordCount wordCount = new WordCount(word, count);
             wordCountList.add(wordCount);
         }

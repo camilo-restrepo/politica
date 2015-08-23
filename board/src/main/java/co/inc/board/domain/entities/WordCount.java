@@ -3,9 +3,9 @@ package co.inc.board.domain.entities;
 public class WordCount {
 
     private final String word;
-    private final long count;
+    private final int count;
 
-    public WordCount(String word, long count) {
+    public WordCount(String word, int count) {
         this.word = word;
         this.count = count;
     }
