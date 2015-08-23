@@ -1,10 +1,9 @@
 package co.inc.board.persistence.daos;
 
 import co.inc.board.domain.entities.MapCoordinate;
-import co.inc.board.domain.entities.PolarityPerDay;
+import co.inc.board.domain.entities.Polarity;
+import co.inc.board.domain.entities.PolarityEnum;
 import co.inc.board.domain.entities.TweetPerDay;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.mongodb.client.FindIterable;
 import com.mongodb.client.MongoCursor;
 import com.mongodb.client.model.Filters;
 import com.mongodb.client.model.Projections;
@@ -95,29 +94,14 @@ public class TweetDAO {
         return tweetPerDayList;
 	}
 
-	public List<PolarityPerDay> getPolarityLastMonth(String twitterId) {
+    public long getCandidateTweetsCountByPolarityDateToDay(String twitterId, PolarityEnum polarityValue, DateTime initialDate) {
 
-        List<PolarityPerDay> polarityPerDayList = new ArrayList<>();
-
-        int limit = 30;
-        DateTime now = DateTime.now().withHourOfDay(23).withMinuteOfHour(59).withSecondOfMinute(59);
         MongoCollection<Document> collection = mongoDatabase.getCollection(TWEETS_COLLECTION);
 
-        for (int i = 0; i < limit; i++) {
+        long tweetCountByPolarity = collection.count((Filters.and(Filters.in("targetTwitterIds", twitterId),
+                Filters.eq("polarity", polarityValue.getValue()), Filters.gte("timestamp_ms", initialDate.getMillis()),
+                Filters.lte("timestamp_ms", DateTime.now().getMillis()))));
 
-            DateTime oneDay = now.minusDays(1);
-
-            long positivePolarity = collection.count((Filters.and(Filters.in("targetTwitterIds", twitterId),
-                    Filters.eq("polarity", 1), Filters.gte("timestamp_ms", oneDay.getMillis()), Filters.lte("timestamp_ms", now.getMillis()))));
-
-            long negativePolarity = collection.count((Filters.and(Filters.in("targetTwitterIds", twitterId),
-                    Filters.eq("polarity", -1), Filters.gte("timestamp_ms", oneDay.getMillis()), Filters.lte("timestamp_ms", now.getMillis()))));
-
-            PolarityPerDay polarityPerDay = new PolarityPerDay(now, positivePolarity, negativePolarity);
-            polarityPerDayList.add(polarityPerDay);
-            now = oneDay;
-        }
-
-        return polarityPerDayList;
-	}
+        return tweetCountByPolarity;
+    }
 }

@@ -1,13 +1,13 @@
 package co.inc.board.api.resources;
 
+import co.inc.board.domain.business.TargetBusiness;
 import co.inc.board.domain.business.TweetBusiness;
-import co.inc.board.domain.entities.MapCoordinate;
-import co.inc.board.domain.entities.PolarityPerDay;
-import co.inc.board.domain.entities.TweetPerDay;
+import co.inc.board.domain.entities.*;
 
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import java.util.ArrayList;
 import java.util.List;
 
 @Path("/tweets")
@@ -16,9 +16,11 @@ import java.util.List;
 public class TweetResource {
 
     private final TweetBusiness tweetBusiness;
+    private final TargetBusiness targetBusiness;
 
-    public TweetResource(TweetBusiness tweetBusiness) {
+    public TweetResource(TweetBusiness tweetBusiness, TargetBusiness targetBusiness) {
         this.tweetBusiness = tweetBusiness;
+        this.targetBusiness = targetBusiness;
     }
 
     @GET
@@ -39,9 +41,35 @@ public class TweetResource {
 
     @GET
     @Path("{twitterId}/polarity")
-    public Response getPolarityLastMonth(@PathParam("twitterId") String twitterId) {
+    public Response getCandidatePolarity(@PathParam("twitterId") String twitterId, @QueryParam("time") String time) {
 
-        List<PolarityPerDay> polarityPerDayList = tweetBusiness.getPolarityLastMonth(twitterId);
-        return Response.status(Response.Status.OK).entity(polarityPerDayList).build();
+        Polarity candidatePolarity = null;
+
+        if (time.equalsIgnoreCase(TimeEnum.DAY.getValue())) {
+            candidatePolarity = tweetBusiness.getCandidatePolarityToday(twitterId);
+        } else {
+            // return monthly polarity by default
+            candidatePolarity = tweetBusiness.getCandidatePolarityMonth(twitterId);
+        }
+
+        return Response.status(Response.Status.OK).entity(candidatePolarity).build();
+    }
+
+    @GET
+    @Path("/polarity")
+    public Response getAllTargetsPolarity(@QueryParam("time") String time) {
+
+        List<Polarity> polarityList = new ArrayList<Polarity>();
+
+        List<TwitterTarget> allTargets = targetBusiness.getAllTargets();
+
+        if (time.equalsIgnoreCase(TimeEnum.DAY.getValue())) {
+            polarityList = tweetBusiness.getAllTargetsPolarityToday(allTargets);
+        } else {
+            // return monthly polarity by default
+            polarityList = tweetBusiness.getAllTargetsPolarityLastMonth(allTargets);
+        }
+
+        return Response.status(Response.Status.OK).entity(polarityList).build();
     }
 }

@@ -86,7 +86,7 @@ public class Board extends Application<BoardConfig> {
 		
 		TweetDAO tweetDAO = new TweetDAO(mongoDatabase);
 		TweetBusiness tweetBusiness = new TweetBusiness(tweetDAO);
-		TweetResource tweetResource = new TweetResource(tweetBusiness);
+		TweetResource tweetResource = new TweetResource(tweetBusiness, targetBusiness);
 		environment.jersey().register(tweetResource);
 		
 		// webSockets
