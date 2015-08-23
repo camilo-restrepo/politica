@@ -87,7 +87,6 @@ public final class WordCount {
 						bson.put("word", tuple._1.getWord());
 						bson.put("target", tuple._1.getCandidate());
 						bson.put("count", tuple._2);
-						// System.out.println(tuple._1 + " " + tuple._2);
 						return new Tuple2<Object, BSONObject>(null, bson);
 					}
 				});
