@@ -43,7 +43,7 @@ public class StopwordsSpanish {
 				"alo", "mas", "lópez", "peñalosa", "enrique", "años", "quieren", "únicas", "ud", "bogotá", "alcalde",
 				"alcaldía", "alcaldia", "candidato", "carlos", "ciudad", "ht", "bogota", "btá", "bta", "estan",
 				"mañana", "toma", "necesita", "día", "dia", "fm", "campaña", "clara", "lopez", "htt", "h", "santos",
-				"pacho", "francisco", "-" };
+				"pacho", "francisco", "-" , "http", "rt"};
 
 		if (m_Stopwords == null) {
 			m_Stopwords = new HashSet<String>();
