@@ -6,7 +6,7 @@ public class Polarity {
 	private final double probability;
 	private final String category;
 
-	public Polarity(String word, double probability, String category) {
+	public Polarity(final String word, final double probability, final String category) {
 		this.word = word;
 		this.probability = probability;
 		this.category = category;

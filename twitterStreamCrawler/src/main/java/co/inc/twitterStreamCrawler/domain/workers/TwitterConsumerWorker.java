@@ -12,47 +12,61 @@ import com.sun.jersey.api.client.WebResource;
 import co.inc.twitterStreamCrawler.persistence.daos.TargetDAO;
 import co.inc.twitterStreamCrawler.persistence.daos.TweetDAO;
 import co.inc.twitterStreamCrawler.utils.PolarityClassifier;
+import co.inc.twitterStreamCrawler.utils.constants.GlobalConstants;
+import co.inc.twitterStreamCrawler.utils.stopwords.classification.StopwordsSpanish;
 
 public class TwitterConsumerWorker implements Runnable {
 
-	private final static String BOARD_URL = "http://localhost:9001/board/api/broadcast";
-
+	
 	private final String stringTweet;
 	private final TweetDAO tweetDAO;
 	private final TargetDAO targetsDAO;
 	private final PolarityClassifier polarityClassifier;
+	private final StopwordsSpanish stopwords;
 
 	private final List<Document> targetsList;
 
 	public TwitterConsumerWorker(TargetDAO targetsDAO, TweetDAO tweetDAO, String stringTweet,
-			PolarityClassifier polarityClassifier) {
+			PolarityClassifier polarityClassifier, StopwordsSpanish stopwords) {
 		this.tweetDAO = tweetDAO;
 		this.stringTweet = stringTweet;
 		this.targetsDAO = targetsDAO;
 		this.polarityClassifier = polarityClassifier;
+		this.stopwords = stopwords;
 		targetsList = this.targetsDAO.getAllTargetsIds();
 	}
 
 	@Override
 	public void run() {
-		//Persist Tweet as is
+		// Persist Tweet as is
 		Document tweetDocument = getTweetDocumentFormnString();
 		tweetDAO.insertTweet(tweetDocument);
-		//Remove junk from tweet
-		try {			
+		// Remove junk from tweet
+		try {
 			Document cleanTweet = cleanTweet(tweetDocument);
 			List<String> targets = getTargets(cleanTweet.getString("text"), targetsList);
-			for(String target : targets){
+			for (String target : targets) {
 				Document minTweet = new Document(cleanTweet);
 				minTweet.append("targetTwitterId", target);
 				tweetDAO.insertCleanTweet(minTweet);
+				updateWordCount(cleanTweet.getString("text"), target);
 				sendTweetToBoard(minTweet);
 			}
 		} catch (Exception e) {
 		}
 	}
-	
-	private Document cleanTweet(Document tweet) {
+
+	private void updateWordCount(final String text, final String target) {
+		String cleanText = GlobalConstants.UNDESIRABLES.matcher(text).replaceAll("");
+		String[] tokens = GlobalConstants.SPACE.split(cleanText);
+		for (String token : tokens) {
+			if (!token.startsWith("@") && !token.startsWith("#") && !stopwords.isStopword(token)) {
+				tweetDAO.incrementWordCount(token, target);
+			}
+		}
+	}
+
+	private Document cleanTweet(final Document tweet) {
 		Document newTweet = new Document();
 		newTweet.append("id", tweet.get("id"));
 		newTweet.append("text", tweet.get("text"));
@@ -62,8 +76,8 @@ public class TwitterConsumerWorker implements Runnable {
 		newTweet.append("polarity", polarity);
 		return newTweet;
 	}
-	
-	private List<String> getTargets(String text, List<Document> targetsList) {
+
+	private List<String> getTargets(final String text, final List<Document> targetsList) {
 		List<String> targets = new ArrayList<String>();
 		for (Document target : targetsList) {
 			List<String> relatedWords = (List<String>) target.get("relatedWords");
@@ -81,13 +95,13 @@ public class TwitterConsumerWorker implements Runnable {
 		Document tweetDocument = Document.parse(stringTweet);
 		return tweetDocument;
 	}
-	
+
 	private int getTweetPolarity(String text) {
 		int polarity = polarityClassifier.getTweetPolarity(text);
 		return polarity;
 	}
 
-	private void sendTweetToBoard(Document documentTweet) {
+	private void sendTweetToBoard(final Document documentTweet) {
 		try {
 			sendTweet(documentTweet);
 		} catch (IOException e) {
@@ -95,9 +109,9 @@ public class TwitterConsumerWorker implements Runnable {
 		}
 	}
 
-	private void sendTweet(Document documentTweet) throws IOException {
+	private void sendTweet(final Document documentTweet) throws IOException {
 		Client client = Client.create();
-		WebResource webResource = client.resource(BOARD_URL);
+		WebResource webResource = client.resource(GlobalConstants.BOARD_URL);
 		webResource.type("application/json").post(documentTweet.toJson());
 		client.destroy();
 	}

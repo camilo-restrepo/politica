@@ -22,6 +22,7 @@ import co.inc.twitterStreamCrawler.domain.workers.TwitterConsumerWorker;
 import co.inc.twitterStreamCrawler.persistence.daos.TargetDAO;
 import co.inc.twitterStreamCrawler.persistence.daos.TweetDAO;
 import co.inc.twitterStreamCrawler.utils.PolarityClassifier;
+import co.inc.twitterStreamCrawler.utils.stopwords.classification.StopwordsSpanish;
 
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -47,17 +48,17 @@ public class TwitterStreamCrawler {
 	public final static String CONSUMER_SECRET = "FVc5dgZ05j288pf0mKUQuvqeJsP550nnVvxUqINdI";
 	public final static String ACCESS_TOKEN = "263623229-NEcwbcSBdDnYxtnoFFdbi4VOPCtdTjBpwnSc5a8b";
 	public final static String ACCESS_TOKEN_SECRET = "eWXxlbezHqQN4NFyPZe5TGxwinhOVEeERDhU9irT5cXTc";
-	
+
 	public final static String MONGO_IP = "";
 	public final static String MONGO_DB = "boarddb";
-	
+
 	private final BlockingQueue<String> msgQueue = new LinkedBlockingQueue<String>(100000);
 	private final BlockingQueue<Event> eventQueue = new LinkedBlockingQueue<Event>(1000);
 
 	private final TargetDAO targetsDAO;
 	private final TweetDAO tweetDAO;
 	private final PolarityClassifier polarityClassifier;
-	
+
 	public TwitterStreamCrawler(String nrcFile, String translateFile) {
 		MongoClient mongoClient = new MongoClient(MONGO_IP);
 		MongoDatabase mongoDatabase = mongoClient.getDatabase(MONGO_DB);
@@ -102,24 +103,26 @@ public class TwitterStreamCrawler {
 		Twitter twitter = tf.getInstance();
 		return twitter;
 	}
-	
-	private Client getTwitterClient(){
+
+	private Client getTwitterClient() {
 		Hosts hosebirdHosts = new HttpHosts(Constants.STREAM_HOST);
 		StatusesFilterEndpoint hosebirdEndpoint = new StatusesFilterEndpoint();
 		hosebirdEndpoint.trackTerms(getTerms());
-		Authentication hosebirdAuth = new OAuth1(TwitterStreamCrawler.CONSUMER_KEY, TwitterStreamCrawler.CONSUMER_SECRET,
-				TwitterStreamCrawler.ACCESS_TOKEN, TwitterStreamCrawler.ACCESS_TOKEN_SECRET);
+		Authentication hosebirdAuth = new OAuth1(TwitterStreamCrawler.CONSUMER_KEY,
+				TwitterStreamCrawler.CONSUMER_SECRET, TwitterStreamCrawler.ACCESS_TOKEN,
+				TwitterStreamCrawler.ACCESS_TOKEN_SECRET);
 
-		ClientBuilder builder = new ClientBuilder().name("Hosebird-Client-01").hosts(hosebirdHosts).authentication(hosebirdAuth)
-				.endpoint(hosebirdEndpoint).processor(new StringDelimitedProcessor(msgQueue)).eventMessageQueue(eventQueue);
+		ClientBuilder builder = new ClientBuilder().name("Hosebird-Client-01").hosts(hosebirdHosts)
+				.authentication(hosebirdAuth).endpoint(hosebirdEndpoint)
+				.processor(new StringDelimitedProcessor(msgQueue)).eventMessageQueue(eventQueue);
 		Client hosebirdClient = builder.build();
 		return hosebirdClient;
 	}
-	
-	private List<String> getTerms(){
+
+	private List<String> getTerms() {
 		List<TwitterId> ids = targetsDAO.getAllIds();
 		List<String> relatedWords = new ArrayList<String>();
-		for(TwitterId id : ids){
+		for (TwitterId id : ids) {
 			relatedWords.addAll(id.getRelatedWords());
 		}
 		return relatedWords;
@@ -129,10 +132,12 @@ public class TwitterStreamCrawler {
 		Client hosebirdClient = getTwitterClient();
 		hosebirdClient.connect();
 		ExecutorService threadPool = Executors.newCachedThreadPool();
+		StopwordsSpanish stopwordsSpanish = new StopwordsSpanish();
 		while (!hosebirdClient.isDone()) {
 			try {
 				String stringTweet = msgQueue.take();
-				TwitterConsumerWorker worker = new TwitterConsumerWorker(targetsDAO, tweetDAO, stringTweet, polarityClassifier);
+				TwitterConsumerWorker worker = new TwitterConsumerWorker(targetsDAO, tweetDAO, stringTweet,
+						polarityClassifier, stopwordsSpanish);
 				threadPool.submit(worker);
 			} catch (InterruptedException e) {
 				LOGGER.error("run", e);
