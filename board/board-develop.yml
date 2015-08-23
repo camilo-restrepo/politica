@@ -14,8 +14,8 @@ logging:
       target: stdout
     - type: file
       timeZone: UTC
-      currentLogFilename: ./logs/borad.log
-      archivedLogFilenamePattern: ./logs/borad-%d.log
+      currentLogFilename: ./logs/board.log
+      archivedLogFilenamePattern: ./logs/board-%d.log
       archivedFileCount: 5
 
 mongoConfig:
