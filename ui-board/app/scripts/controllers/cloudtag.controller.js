@@ -5,7 +5,39 @@ cloudtagController.$inject = ['$scope', 'cloudtagService'];
 
 function cloudtagController($scope, cloudtagService) {
 
-  function getTreeMap() {
+  function getResponseAsTree(response) {
+
+    var treeRoot = {
+
+      name: "Alcaldía Bogotá 2015",
+      children: []
+    };
+
+    for (var i = 0; i < response.length; i++) {
+      
+      var candidateNode = response[i];
+      var name = candidateNode.twitterId;
+      var children = [];
+
+      for (var j = 0; j < candidateNode.wordCountList.length; j++) {
+
+        var wordCountNode = candidateNode.wordCountList[j];
+        var child = { name: wordCountNode.word, size: wordCountNode.count };
+        children.push(child);
+      }
+
+      var childNode = {
+        name: name,
+        children: children
+      };
+
+      treeRoot.children.push(childNode);
+    }
+
+    return treeRoot;
+  }
+
+  function getTreeMap(treeRoot) {
 
     var margin = {top: 40, right: 10, bottom: 10, left: 10},
       width = 960 - margin.left - margin.right,
@@ -25,81 +57,14 @@ function cloudtagController($scope, cloudtagService) {
     .style("left", margin.left + "px")
     .style("top", margin.top + "px");
 
-    var root = {
-      "name": "Alcaldia Bogota 2015",
-      "children": [
-        {
-          "name": "Enrique Penalosa",
-          "children": [
-            {
-              "name": "Urbanismo",
-              "size": 3938
-            },
-            {
-              "name": "Bicicleta",
-              "size": 3812
-            },
-            {
-              "name": "Movilidad",
-              "size": 6714
-            },
-            {
-              "name": "Seguridad",
-              "size": 743
-            }
-          ]
-        },
-        {
-          "name": "Rafael Pardo",
-          "children": [
-            {
-              "name": "Seguridad",
-              "size": 3938
-            },
-            {
-              "name": "Movilidad",
-              "size": 3812
-            },
-            {
-              "name": "Metro",
-              "size": 6714
-            },
-            {
-              "name": "Empleo",
-              "size": 743
-            }
-          ]
-        },
-        {
-          "name": "Carlos Vicente de Roux",
-          "children": [
-            {
-              "name": "Honestidad",
-              "size": 3938
-            },
-            {
-              "name": "Transparencia",
-              "size": 3812
-            },
-            {
-              "name": "Metro",
-              "size": 6714
-            },
-            {
-              "name": "Movilidad",
-              "size": 743
-            }
-          ]
-        }
-      ]
-    };
-
-    var node = div.datum(root).selectAll(".node")
+    var node = div.datum(treeRoot).selectAll(".node")
     .data(treemap.nodes)
     .enter().append("div")
     .attr("class", "node")
     .call(position)
-    .style("background", function(d) { return d.children ? color(d.name) : null; })
+    .style("background", function(d) { 
+      console.debug('');
+      return d.children ? color(d.name) : null; })
     .text(function(d) { return d.children ? null : d.name; });
 
     d3.selectAll("input").on("change", function change() {
@@ -124,8 +89,8 @@ function cloudtagController($scope, cloudtagService) {
   }
 
   function success(response) {
-
-    console.debug(response);
+    var treeRoot = getResponseAsTree(response);
+    $scope.chart = getTreeMap(treeRoot);
   }
 
   function error(response) {
@@ -135,6 +100,5 @@ function cloudtagController($scope, cloudtagService) {
   $scope.init = function() {
 
     cloudtagService.getAllCandidatesCloudTags(success, error);
-    $scope.chart = getTreeMap();
   }
 }
