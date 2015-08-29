@@ -39,8 +39,8 @@ function cloudtagController($scope, cloudtagService) {
 
   function getTreeMap(treeRoot) {
 
-    var margin = {top: 40, right: 10, bottom: 10, left: 10},
-      width = 960 - margin.left - margin.right,
+    var margin = {top: 10, right: 10, bottom: 10, left: 10},
+      width = 1000 - margin.left - margin.right,
       height = 500 - margin.top - margin.bottom;
 
     var color = d3.scale.category20c();
@@ -50,12 +50,11 @@ function cloudtagController($scope, cloudtagService) {
     .sticky(true)
     .value(function(d) { return d.size; });
 
-    var div = d3.select("body").append("div")
-    .style("position", "relative")
-    .style("width", (width + margin.left + margin.right) + "px")
+    var div = d3.select("#cloudtagChart")
     .style("height", (height + margin.top + margin.bottom) + "px")
-    .style("left", margin.left + "px")
-    .style("top", margin.top + "px");
+    .style("margin-top", "25px")
+    .style("margin-left", "45px")
+    .attr("class", "col-md-12");
 
     var node = div.datum(treeRoot).selectAll(".node")
     .data(treemap.nodes)
@@ -63,21 +62,8 @@ function cloudtagController($scope, cloudtagService) {
     .attr("class", "node")
     .call(position)
     .style("background", function(d) { 
-      console.debug('');
       return d.children ? color(d.name) : null; })
     .text(function(d) { return d.children ? null : d.name; });
-
-    d3.selectAll("input").on("change", function change() {
-      var value = this.value === "count"
-        ? function() { return 1; }
-        : function(d) { return d.size; };
-
-        node
-        .data(treemap.value(value).nodes)
-        .transition()
-        .duration(1500)
-        .call(position);
-    });
 
     function position() {
       this.style("left", function(d) { return d.x + "px"; })
