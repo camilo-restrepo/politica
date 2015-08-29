@@ -24,6 +24,15 @@ public class WordResource {
     }
 
     @GET
+    @Path("/{twitterId}")
+    public Response getTargetCloudTag(@PathParam("twitterId") String twitterId,
+                                      @QueryParam("limit") @DefaultValue("10") int limit) {
+
+        CloudTag cloudTag = wordBusiness.getTargetCloudTag(twitterId, limit);
+        return Response.status(Response.Status.OK).entity(cloudTag).build();
+    }
+
+    @GET
     public Response getAllTargetsCloudTags(@QueryParam("limit") @DefaultValue("10") int limit) {
 
         List<TwitterTarget> allTargets = targetBusiness.getAllTargets();

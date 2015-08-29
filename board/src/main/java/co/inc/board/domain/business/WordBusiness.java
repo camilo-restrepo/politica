@@ -15,6 +15,11 @@ public class WordBusiness {
         this.wordDAO = wordDAO;
     }
 
+    public CloudTag getTargetCloudTag(String twitterId, int limit) {
+
+        return wordDAO.getTargetCloudTag(twitterId, limit);
+    }
+
     public List<CloudTag> getAllTargetsCloudTags(List<TwitterTarget> allTargets, int limit) {
 
         List<CloudTag> cloudTagList = new ArrayList<CloudTag>();
