@@ -42,6 +42,14 @@ public class TweetResource {
     }
 
     @GET
+    @Path("{twitterId}/stats")
+    public Response getTweetStats(@PathParam("twitterId") String twitterId) {
+
+        TweetStats tweetStats = tweetBusiness.getTweetStats(twitterId);
+        return Response.status(Response.Status.OK).entity(tweetStats).build();
+    }
+
+    @GET
     @Path("{twitterId}/polarity")
     public Response getCandidatePolarity(@PathParam("twitterId") String twitterId, @QueryParam("time") String time) {
 

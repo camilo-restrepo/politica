@@ -94,4 +94,28 @@ public class TweetDAO {
 
         return tweetCountByPolarity;
     }
+
+    public long getTargetTotalTweets(String twitterId) {
+
+        MongoCollection<Document> collection = mongoDatabase.getCollection(TWEETS_COLLECTION);
+        return collection.count(Filters.eq("targetTwitterId", twitterId));
+    }
+
+    /**
+     * Get the number of tweets from a target since a given date to today.
+     *
+     * @param twitterId The Twitter ID of the target.
+     * @param dateTime The initial date to query the tweets.
+     *
+     * @return the number of tweets from a target since a given date to today.
+     */
+    public long getTargetTweetsDateToday(String twitterId, DateTime dateTime) {
+
+        MongoCollection<Document> collection = mongoDatabase.getCollection(TWEETS_COLLECTION);
+        Bson bson = Filters.and(Filters.eq("targetTwitterId", twitterId),
+                Filters.gte("timestamp_ms", dateTime.getMillis()),
+                Filters.lte("timestamp_ms", DateTime.now().getMillis()));
+
+        return collection.count(bson);
+    }
 }

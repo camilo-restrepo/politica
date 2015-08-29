@@ -72,4 +72,17 @@ public class TweetBusiness {
 
         return polarityListMonth;
     }
+
+    public TweetStats getTweetStats(String twitterId) {
+
+        long totalTweets = tweetDAO.getTargetTotalTweets(twitterId);
+
+        DateTime todayAtZeroZero = DateTime.now().withHourOfDay(0).withMinuteOfHour(0).withSecondOfMinute(0);
+        long tweetsToday = tweetDAO.getTargetTweetsDateToday(twitterId, todayAtZeroZero);
+
+        DateTime todayOneHourBefore = DateTime.now().minusHours(1);
+        long tweetsLastHour = tweetDAO.getTargetTweetsDateToday(twitterId, todayOneHourBefore);
+
+        return new TweetStats(twitterId, totalTweets, tweetsToday, tweetsLastHour);
+    }
 }
