@@ -31,8 +31,8 @@ public class TweetBusiness {
     public Polarity getCandidatePolarityToday(String twitterId) {
 
         DateTime todayAtZeroZero = DateTime.now().withHourOfDay(0).withMinuteOfHour(0).withMinuteOfHour(0);
-        long positiveTweets = tweetDAO.getCandidateTweetsCountByPolarityDateToDay(twitterId, PolarityEnum.POSITIVE, todayAtZeroZero);
-        long negativeTweets = tweetDAO.getCandidateTweetsCountByPolarityDateToDay(twitterId, PolarityEnum.NEGATIVE, todayAtZeroZero);
+        long positiveTweets = tweetDAO.getCandidateTweetsCountByPolarityDateToDay(twitterId, PredictionEnum.POSITIVE, todayAtZeroZero);
+        long negativeTweets = tweetDAO.getCandidateTweetsCountByPolarityDateToDay(twitterId, PredictionEnum.NEGATIVE, todayAtZeroZero);
 
         return new Polarity(twitterId, positiveTweets, negativeTweets);
     }
@@ -41,8 +41,8 @@ public class TweetBusiness {
 
         DateTime todayAtZeroZero = DateTime.now().withHourOfDay(0).withMinuteOfHour(0).withMinuteOfHour(0);
         DateTime lastMonth = todayAtZeroZero.minusDays(30);
-        long positiveTweets = tweetDAO.getCandidateTweetsCountByPolarityDateToDay(twitterId, PolarityEnum.POSITIVE, lastMonth);
-        long negativeTweets = tweetDAO.getCandidateTweetsCountByPolarityDateToDay(twitterId, PolarityEnum.NEGATIVE, lastMonth);
+        long positiveTweets = tweetDAO.getCandidateTweetsCountByPolarityDateToDay(twitterId, PredictionEnum.POSITIVE, lastMonth);
+        long negativeTweets = tweetDAO.getCandidateTweetsCountByPolarityDateToDay(twitterId, PredictionEnum.NEGATIVE, lastMonth);
 
         return new Polarity(twitterId, positiveTweets, negativeTweets);
     }

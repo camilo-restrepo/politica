@@ -1,8 +1,7 @@
 package co.inc.board.persistence.daos;
 
 import co.inc.board.domain.entities.MapCoordinate;
-import co.inc.board.domain.entities.Polarity;
-import co.inc.board.domain.entities.PolarityEnum;
+import co.inc.board.domain.entities.PredictionEnum;
 import co.inc.board.domain.entities.TweetPerDay;
 import com.mongodb.client.MongoCursor;
 import com.mongodb.client.model.Filters;
@@ -81,12 +80,12 @@ public class TweetDAO {
         return tweetPerDayList;
 	}
 
-    public long getCandidateTweetsCountByPolarityDateToDay(String twitterId, PolarityEnum polarityValue, DateTime initialDate) {
+    public long getCandidateTweetsCountByPolarityDateToDay(String twitterId, PredictionEnum predictionValue, DateTime initialDate) {
 
         MongoCollection<Document> collection = mongoDatabase.getCollection(TWEETS_COLLECTION);
 
         Bson bson = Filters.and(Filters.eq("targetTwitterId", twitterId),
-                Filters.eq("polarity", polarityValue.getValue()),
+                Filters.eq("prediction", predictionValue.getValue()),
                 Filters.gte("timestamp_ms", initialDate.getMillis()),
                 Filters.lte("timestamp_ms", DateTime.now().getMillis()));
 
