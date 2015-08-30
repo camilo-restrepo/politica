@@ -77,6 +77,10 @@ body {
   height: 180px;
 }
 
+.list-group {
+  padding-left: 15px;
+}
+
 .list-title {
 
   background-color: #221F1F;
@@ -100,6 +104,18 @@ body {
 
 .text-md {
   font-size: 18px;
+}
+
+.text-sm {
+  font-size: 14px;
+}
+
+.to-right {
+  float: right;
+}
+
+.chart-title {
+  padding-left: 10px;
 }
 
 /* charts styles */

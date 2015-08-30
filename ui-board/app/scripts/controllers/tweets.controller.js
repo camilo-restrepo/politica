@@ -62,7 +62,7 @@ function tweetsController($scope, $websocket, environment, targetsService) {
 
   $scope.getTweetLabelClass = function(predictionValue) {
 
-    var labelClass = 'label-default';
+    var labelClass = 'label-warning';
 
     if (predictionValue === 'negative') {
       labelClass = 'label-danger';
@@ -75,12 +75,12 @@ function tweetsController($scope, $websocket, environment, targetsService) {
 
   $scope.getTweetLabelText = function(predictionValue) {
 
-    var labelText = 'Neutro';
+    var labelText = 'Neutro ::';
 
     if (predictionValue === 'negative') {
-      labelText = 'Negativo';
+      labelText = 'Negativo >:(';
     } else if (predictionValue === 'positive') {
-      labelText = 'Positivo';
+      labelText = 'Positivo :)';
     }
 
     return labelText;

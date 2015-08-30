@@ -7,20 +7,33 @@ function scoreController($scope, scoreService) {
 
   function getCandidateScore(listOfCandidatesLists) {
 
+    var colors = {
+      RicardoAriasM: '#D66F13',
+      MMMaldonadoC: '#FBD103',
+      danielraisbeck: '#FF5C01',
+      ClaraLopezObre: '#FFDF00',
+      RafaelPardo: '#ED0A03',
+      PachoSantosC: '#3C68B7',
+      EnriquePenalosa: '#12ADE5',
+      AlexVernot: '#0A5C6D',
+      CVderoux: '#088543'
+    };
+
     var chart = c3.generate({
       bindto: '#scoreChart',
       data: {
-        // x: 'x',
-        columns: listOfCandidatesLists
-      }/*,
-      axis: {
-        x: {
-          type: 'timeseries',
-          tick: {
-            format: '%m-%d'
+        x: 'x',
+        columns: listOfCandidatesLists,
+        colors: colors
+      },
+        axis: {
+          x: {
+            type: 'timeseries',
+            tick: {
+              format: '%m-%d'
+            }
           }
         }
-      }*/
     });
 
     return chart;
@@ -45,21 +58,21 @@ function scoreController($scope, scoreService) {
 
         var scoreNode = candidateScoreList[j];
 
-        if (j == 0) {
+        if (i == 0) {
           var dateInMillis = scoreNode.date;
-          var date = new Date(dateInMillis)
-          var dayAndMonth = date.getDate() + '-' + date.getMonth();
           xAxis.push(dateInMillis);
         }
 
         var scoreValue = scoreNode.value;
-        innerList.push(scoreValue);
+        if (!isNaN(scoreValue)) {
+          innerList.push(scoreValue);
+        }
       }
 
       listOfCandidatesLists.push(innerList);
     }
 
-    // listOfCandidatesLists.unshift(xAxis);
+    listOfCandidatesLists.unshift(xAxis);
     return listOfCandidatesLists;
   }
 
@@ -67,7 +80,7 @@ function scoreController($scope, scoreService) {
 
     var listOfCandidatesLists = getListOfCandidatesLists(response);
     console.debug('****************************************** 1');
-    console.debug(listOfCandidatesLists);
+    console.debug(JSON.stringify(listOfCandidatesLists));
     console.debug('****************************************** 2');
     $scope.chart = getCandidateScore(listOfCandidatesLists);
   }

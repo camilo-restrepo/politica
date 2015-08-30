@@ -14,7 +14,7 @@ function cloudtagController($scope, cloudtagService) {
     };
 
     for (var i = 0; i < response.length; i++) {
-      
+
       var candidateNode = response[i];
       var name = candidateNode.twitterId;
       var children = [];
@@ -37,6 +37,23 @@ function cloudtagController($scope, cloudtagService) {
     return treeRoot;
   }
 
+  function getCandidateColor(candidateTwitterId) {
+
+    var colors = {
+      RicardoAriasM: '#D66F13',
+      MMMaldonadoC: '#FBD103',
+      danielraisbeck: '#FF5C01',
+      ClaraLopezObre: '#FFDF00',
+      RafaelPardo: '#ED0A03',
+      PachoSantosC: '#3C68B7',
+      EnriquePenalosa: '#12ADE5',
+      AlexVernot: '#0A5C6D',
+      CVderoux: '#088543'
+    };
+
+    return colors[candidateTwitterId];
+  }
+
   function getTreeMap(treeRoot) {
 
     var margin = {top: 10, right: 10, bottom: 10, left: 10},
@@ -56,21 +73,23 @@ function cloudtagController($scope, cloudtagService) {
     .style("margin-left", "45px")
     .attr("class", "col-md-12");
 
+    var legendDiv = d3.select("#cloudtagLegend");
+
     var node = div.datum(treeRoot).selectAll(".node")
     .data(treemap.nodes)
     .enter().append("div")
     .attr("class", "node")
     .call(position)
     .style("background", function(d) { 
-      return d.children ? color(d.name) : null; })
-    .text(function(d) { return d.children ? null : d.name; });
+      return d.children ? getCandidateColor(d.name) : null; })
+      .text(function(d) { return d.children ? null : d.name; });
 
-    function position() {
-      this.style("left", function(d) { return d.x + "px"; })
-      .style("top", function(d) { return d.y + "px"; })
-      .style("width", function(d) { return Math.max(0, d.dx - 1) + "px"; })
-      .style("height", function(d) { return Math.max(0, d.dy - 1) + "px"; });
-    }
+      function position() {
+        this.style("left", function(d) { return d.x + "px"; })
+        .style("top", function(d) { return d.y + "px"; })
+        .style("width", function(d) { return Math.max(0, d.dx - 1) + "px"; })
+        .style("height", function(d) { return Math.max(0, d.dy - 1) + "px"; });
+      }
   }
 
   function success(response) {

@@ -7,6 +7,18 @@ function polarityController($scope, tweetsService, ngDialog) {
 
   function getAllCandidatesPolarity(columnNamesArray, positiveArray, negativeArray) {
 
+    var colors = {
+      RicardoAriasM: '#D66F13',
+      MMMaldonadoC: '#FBD103',
+      danielraisbeck: '#FF5C01',
+      ClaraLopezObre: '#FFDF00',
+      RafaelPardo: '#ED0A03',
+      PachoSantosC: '#3C68B7',
+      EnriquePenalosa: '#12ADE5',
+      AlexVernot: '#0A5C6D',
+      CVderoux: '#088543'
+    };
+
     var chart = c3.generate({
       bindto: '#polarityChart',
       data: {
