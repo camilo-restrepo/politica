@@ -1,6 +1,8 @@
 package co.inc.twitterStreamCrawler;
 
-import java.io.FileNotFoundException;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.BlockingQueue;
@@ -10,18 +12,6 @@ import java.util.concurrent.LinkedBlockingQueue;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import twitter4j.Twitter;
-import twitter4j.TwitterException;
-import twitter4j.TwitterFactory;
-import twitter4j.User;
-import twitter4j.conf.ConfigurationBuilder;
-import co.inc.twitterStreamCrawler.domain.entities.TwitterId;
-import co.inc.twitterStreamCrawler.domain.entities.TwitterTarget;
-import co.inc.twitterStreamCrawler.domain.workers.TwitterConsumerWorker;
-import co.inc.twitterStreamCrawler.persistence.daos.TargetDAO;
-import co.inc.twitterStreamCrawler.persistence.daos.TweetDAO;
-import co.inc.twitterStreamCrawler.utils.PolarityClassifier;
 
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -39,6 +29,20 @@ import com.twitter.hbc.core.processor.StringDelimitedProcessor;
 import com.twitter.hbc.httpclient.auth.Authentication;
 import com.twitter.hbc.httpclient.auth.OAuth1;
 
+import co.inc.twitterStreamCrawler.domain.entities.TwitterId;
+import co.inc.twitterStreamCrawler.domain.entities.TwitterTarget;
+import co.inc.twitterStreamCrawler.domain.workers.TwitterConsumerWorker;
+import co.inc.twitterStreamCrawler.persistence.daos.TargetDAO;
+import co.inc.twitterStreamCrawler.persistence.daos.TweetDAO;
+import co.inc.twitterStreamCrawler.utils.PolarityClassifier;
+import co.inc.twitterStreamCrawler.utils.stopwords.classification.StopwordsSpanish;
+import twitter4j.Twitter;
+import twitter4j.TwitterException;
+import twitter4j.TwitterFactory;
+import twitter4j.User;
+import twitter4j.conf.ConfigurationBuilder;
+import weka.classifiers.meta.FilteredClassifier;
+
 public class TwitterStreamCrawler {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(TwitterStreamCrawler.class);
@@ -47,18 +51,19 @@ public class TwitterStreamCrawler {
 	public final static String CONSUMER_SECRET = "FVc5dgZ05j288pf0mKUQuvqeJsP550nnVvxUqINdI";
 	public final static String ACCESS_TOKEN = "263623229-NEcwbcSBdDnYxtnoFFdbi4VOPCtdTjBpwnSc5a8b";
 	public final static String ACCESS_TOKEN_SECRET = "eWXxlbezHqQN4NFyPZe5TGxwinhOVEeERDhU9irT5cXTc";
-	
+
 	public final static String MONGO_IP = "";
 	public final static String MONGO_DB = "boarddb";
-	
+
 	private final BlockingQueue<String> msgQueue = new LinkedBlockingQueue<String>(100000);
 	private final BlockingQueue<Event> eventQueue = new LinkedBlockingQueue<Event>(1000);
 
 	private final TargetDAO targetsDAO;
 	private final TweetDAO tweetDAO;
 	private final PolarityClassifier polarityClassifier;
-	
-	public TwitterStreamCrawler(String nrcFile, String translateFile) {
+	private final FilteredClassifier classifier;
+
+	public TwitterStreamCrawler(String nrcFile, String translateFile, String twitterModel) throws ClassNotFoundException, IOException {
 		MongoClient mongoClient = new MongoClient(MONGO_IP);
 		MongoDatabase mongoDatabase = mongoClient.getDatabase(MONGO_DB);
 		ObjectMapper objectMapper = new ObjectMapper();
@@ -70,6 +75,7 @@ public class TwitterStreamCrawler {
 		targetsDAO = new TargetDAO(mongoDatabase, objectMapper);
 		tweetDAO = new TweetDAO(mongoDatabase);
 		polarityClassifier = new PolarityClassifier(nrcFile, translateFile);
+		classifier = loadClassifier(twitterModel);
 		init();
 	}
 
@@ -88,7 +94,7 @@ public class TwitterStreamCrawler {
 					TwitterTarget target = new TwitterTarget(id, user.getScreenName(), user.getProfileImageURL());
 					targetsDAO.insertTwitterTarget(target);
 				} catch (TwitterException e) {
-					// TODO Auto-generated catch block
+					e.printStackTrace();
 				}
 			}
 		}
@@ -102,37 +108,48 @@ public class TwitterStreamCrawler {
 		Twitter twitter = tf.getInstance();
 		return twitter;
 	}
-	
-	private Client getTwitterClient(){
+
+	private Client getTwitterClient() {
 		Hosts hosebirdHosts = new HttpHosts(Constants.STREAM_HOST);
 		StatusesFilterEndpoint hosebirdEndpoint = new StatusesFilterEndpoint();
 		hosebirdEndpoint.trackTerms(getTerms());
-		Authentication hosebirdAuth = new OAuth1(TwitterStreamCrawler.CONSUMER_KEY, TwitterStreamCrawler.CONSUMER_SECRET,
-				TwitterStreamCrawler.ACCESS_TOKEN, TwitterStreamCrawler.ACCESS_TOKEN_SECRET);
+		Authentication hosebirdAuth = new OAuth1(TwitterStreamCrawler.CONSUMER_KEY,
+				TwitterStreamCrawler.CONSUMER_SECRET, TwitterStreamCrawler.ACCESS_TOKEN,
+				TwitterStreamCrawler.ACCESS_TOKEN_SECRET);
 
-		ClientBuilder builder = new ClientBuilder().name("Hosebird-Client-01").hosts(hosebirdHosts).authentication(hosebirdAuth)
-				.endpoint(hosebirdEndpoint).processor(new StringDelimitedProcessor(msgQueue)).eventMessageQueue(eventQueue);
+		ClientBuilder builder = new ClientBuilder().name("Hosebird-Client-01").hosts(hosebirdHosts)
+				.authentication(hosebirdAuth).endpoint(hosebirdEndpoint)
+				.processor(new StringDelimitedProcessor(msgQueue)).eventMessageQueue(eventQueue);
 		Client hosebirdClient = builder.build();
 		return hosebirdClient;
 	}
-	
-	private List<String> getTerms(){
+
+	private List<String> getTerms() {
 		List<TwitterId> ids = targetsDAO.getAllIds();
 		List<String> relatedWords = new ArrayList<String>();
-		for(TwitterId id : ids){
+		for (TwitterId id : ids) {
 			relatedWords.addAll(id.getRelatedWords());
 		}
 		return relatedWords;
+	}
+	
+	private FilteredClassifier loadClassifier(String filename) throws ClassNotFoundException, IOException{
+		ObjectInputStream in = new ObjectInputStream(new FileInputStream(filename));
+		Object tmp = in.readObject();
+		in.close();
+		return (FilteredClassifier) tmp;
 	}
 
 	public void crawl() {
 		Client hosebirdClient = getTwitterClient();
 		hosebirdClient.connect();
 		ExecutorService threadPool = Executors.newCachedThreadPool();
+		StopwordsSpanish stopwordsSpanish = new StopwordsSpanish();
 		while (!hosebirdClient.isDone()) {
 			try {
 				String stringTweet = msgQueue.take();
-				TwitterConsumerWorker worker = new TwitterConsumerWorker(targetsDAO, tweetDAO, stringTweet, polarityClassifier);
+				TwitterConsumerWorker worker = new TwitterConsumerWorker(targetsDAO, tweetDAO, stringTweet,
+						polarityClassifier, stopwordsSpanish, classifier);
 				threadPool.submit(worker);
 			} catch (InterruptedException e) {
 				LOGGER.error("run", e);
@@ -140,8 +157,8 @@ public class TwitterStreamCrawler {
 		}
 	}
 
-	public static void main(String[] args) throws InterruptedException, FileNotFoundException {
-		TwitterStreamCrawler crawler = new TwitterStreamCrawler(args[0], args[1]);
+	public static void main(String[] args) throws InterruptedException, ClassNotFoundException, IOException {
+		TwitterStreamCrawler crawler = new TwitterStreamCrawler(args[0], args[1], args[2]);
 		crawler.crawl();
 	}
 }

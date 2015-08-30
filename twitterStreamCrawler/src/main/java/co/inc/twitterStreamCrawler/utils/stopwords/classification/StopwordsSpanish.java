@@ -1,3 +1,5 @@
+package co.inc.twitterStreamCrawler.utils.stopwords.classification;
+
 import java.util.Arrays;
 import java.util.HashSet;
 
@@ -6,7 +8,6 @@ public class StopwordsSpanish {
 	private static HashSet<String> m_Stopwords = null;
 
 	public StopwordsSpanish() {
-
 		String[] words = { "él", "ésta", "éstas", "éste", "éstos", "última", "últimas", "último", "últimos", "a",
 				"añadió", "aún", "actualmente", "adelante", "además", "afirmó", "agregó", "ahí", "ahora", "al", "algún",
 				"algo", "alguna", "algunas", "alguno", "algunos", "alrededor", "ambos", "ante", "anterior", "antes",
@@ -43,7 +44,9 @@ public class StopwordsSpanish {
 				"alo", "mas", "lópez", "peñalosa", "enrique", "años", "quieren", "únicas", "ud", "bogotá", "alcalde",
 				"alcaldía", "alcaldia", "candidato", "carlos", "ciudad", "ht", "bogota", "btá", "bta", "estan",
 				"mañana", "toma", "necesita", "día", "dia", "fm", "campaña", "clara", "lopez", "htt", "h", "santos",
-				"pacho", "francisco", "-", "http", "rt", "daniel", "raisbeck", "am", "pm", "debate"};
+				"pacho", "francisco", "-", "http", "rt", "daniel", "raisbeck", "am", "pm", "debate", "hollman",
+				"propuesta", "propuestas", "encuesta", "encuestas", "sabe", "gracias", "candidata", "foro", "tema",
+				"expresado", "localidad", "seguimos", "señor", "retiran", "vernot", "x" };
 
 		if (m_Stopwords == null) {
 			m_Stopwords = new HashSet<String>();

@@ -9,24 +9,13 @@ import java.util.HashSet;
 import java.util.Hashtable;
 import java.util.List;
 import java.util.Set;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
-import org.bson.Document;
-
-import com.mongodb.MongoClient;
-import com.mongodb.client.MongoDatabase;
-
-import co.inc.twitterStreamCrawler.persistence.daos.TweetDAO;
-import co.inc.twitterStreamCrawler.utils.stopwords.classification.ClassificationStopwordsSpanish;
+import co.inc.twitterStreamCrawler.utils.constants.GlobalConstants;
+import co.inc.twitterStreamCrawler.utils.stopwords.classification.StopwordsSpanish;
 
 public class PolarityClassifier {
 
-	private static final Pattern UNDESIRABLES = Pattern.compile("[\\d+\\]\\[\\+(){},.;¡!¿?<>%]");
-	private static final Pattern SPACE = Pattern.compile(" +");
-	
 	private Hashtable<String, List<String>> englishDictionary;
 	private Hashtable<String, List<Polarity>> englishPolarities;
 	private Set<String> spanishWords;
@@ -46,7 +35,7 @@ public class PolarityClassifier {
 		}
 	}
 
-	private void loadEnglishPolarities(String nrcFile) throws IOException {
+	private void loadEnglishPolarities(final String nrcFile) throws IOException {
 		BufferedReader bf = new BufferedReader(new FileReader(new File(nrcFile)));
 		String str = bf.readLine();
 		str = bf.readLine();
@@ -70,7 +59,7 @@ public class PolarityClassifier {
 		bf.close();
 	}
 
-	private void loadEnglishTranslation(String translateFile) throws IOException {
+	private void loadEnglishTranslation(final String translateFile) throws IOException {
 		BufferedReader bf = new BufferedReader(new FileReader(new File(translateFile)));
 		String str = bf.readLine();
 		str = bf.readLine();
@@ -94,18 +83,17 @@ public class PolarityClassifier {
 		bf.close();
 	}
 
-	private List<Token> getTweetTokens(String tweet) {
+	private List<Token> getTweetTokens(final String tweet) {
 		List<Token> tokens = new ArrayList<Token>();
 		if (tweet != null) {
-			tweet = removeSpanishAccent(tweet);
-			tweet = tweet.replace(".", "").replace("\u2026", "").replace(",", "").replace(":", "").replace("\r", "")
-					.replace("\n", "").replace("\"", "").replace("|", "").trim().toLowerCase();
-			tweet = UNDESIRABLES.matcher(tweet).replaceAll("");
-			String[] tweetTokens = SPACE.split(tweet);
-			ClassificationStopwordsSpanish stopwords = new ClassificationStopwordsSpanish();
+			String nTweet = removeSpanishAccent(tweet);
+			nTweet = nTweet.trim().toLowerCase();
+			nTweet = GlobalConstants.UNDESIRABLES.matcher(tweet).replaceAll("");
+			String[] tweetTokens = GlobalConstants.SPACE.split(tweet);
+			StopwordsSpanish stopwords = new StopwordsSpanish();
 			for (String token : tweetTokens) {
-				if (!token.startsWith("@") && !token.startsWith("#") && !token.startsWith("http")
-						&& !stopwords.isStopword(token) && !token.isEmpty()) {
+				if (!token.startsWith("@") && !token.startsWith("#") && !stopwords.isStopword(token)
+						&& !token.isEmpty()) {
 					tokens.add(new Token(token, 1.0));
 					List<String> similarities = getSimilarities(token);
 					for (int j = 0; j < similarities.size(); j++) {
@@ -117,18 +105,17 @@ public class PolarityClassifier {
 		return tokens;
 	}
 
-	private List<String> getSimilarities(String token) {
+	private List<String> getSimilarities(final String token) {
 		Set<String> similarities = new HashSet<String>();
 		for (String word : spanishWords) {
 			if (FuzzyMatch.getRatio(word, token, false) > 80) {
 				similarities.add(word);
 			}
 		}
-		// System.out.println(token + ": " + similarities.toString());
 		return new ArrayList<String>(similarities);
 	}
 
-	private ArrayList<Token> translateTokens(String tweet) {
+	private ArrayList<Token> translateTokens(final String tweet) {
 		Set<Token> translatedTokens = new HashSet<Token>();
 		List<Token> tokens = getTweetTokens(tweet);
 		for (Token token : tokens) {
@@ -142,7 +129,7 @@ public class PolarityClassifier {
 		return new ArrayList<Token>(translatedTokens);
 	}
 
-	private List<Polarity> getTweetPolarities(String tweet) {
+	private List<Polarity> getTweetPolarities(final String tweet) {
 		List<Token> translatedTokens = translateTokens(tweet);
 		List<Polarity> polarities = new ArrayList<Polarity>();
 		for (Token token : translatedTokens) {
@@ -162,13 +149,11 @@ public class PolarityClassifier {
 		return polarities;
 	}
 
-	public int getTweetPolarity(String tweet) {
+	public synchronized int getTweetPolarity(final String tweet) {
 		List<Polarity> polarities = getTweetPolarities(tweet);
-
 		double positiveCount = 0;
 		double negativeCount = 0;
 		for (Polarity polarity : polarities) {
-			// System.out.println(polarity);
 			if (polarity.getCategory().equals("joy") || polarity.getCategory().equals("positive")) {
 				positiveCount += polarity.getProbability();
 			} else if (polarity.getCategory().equals("anger") || polarity.getCategory().equals("fear")
@@ -177,7 +162,6 @@ public class PolarityClassifier {
 				negativeCount += polarity.getProbability();
 			}
 		}
-		// System.out.println(negativeCount + " - " + positiveCount);
 		if (negativeCount > positiveCount) {
 			return -1;
 		} else if (positiveCount > negativeCount) {
@@ -187,7 +171,7 @@ public class PolarityClassifier {
 		}
 	}
 
-	public static String removeSpanishAccent(String word) {
+	private String removeSpanishAccent(String word) {
 		if (word != null) {
 			word = word.replaceAll("à|á|â|ä", "a");
 			word = word.replaceAll("ò|ó|ô|ö", "o");
@@ -196,26 +180,5 @@ public class PolarityClassifier {
 			word = word.replaceAll("ì|í|î|ï", "i");
 		}
 		return word;
-	}
-
-	public static void classifyAllTweets() {
-		MongoClient mongoClient = new MongoClient("");
-		String databaseName = "boarddb";
-		
-		MongoDatabase mongoDatabase = mongoClient.getDatabase(databaseName);
-		PolarityClassifier p = new PolarityClassifier("./data/NRC.txt", "./data/Translate.csv");
-
-		TweetDAO tweetDAO = new TweetDAO(mongoDatabase);
-		List<Document> documents = tweetDAO.getAllTweets();
-		int i = 0;
-		ExecutorService threadPool = Executors.newFixedThreadPool(2);
-		for (Document doc : documents) {
-			// PolarityWorker worker = new PolarityWorker(p, tweetDAO, doc, i);
-			// threadPool.submit(worker);
-			if (!doc.containsKey("polarity")) {
-				System.out.println("picho");
-			}
-			i++;
-		}
 	}
 }

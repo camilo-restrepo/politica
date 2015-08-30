@@ -1,9 +1,7 @@
 package webClassifier.resources;
 
 import java.util.List;
-import java.util.Random;
 
-import javax.validation.Valid;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.DefaultValue;
@@ -33,7 +31,7 @@ public class TweetResource {
 	}
 
 	@GET
-	public Response getTweets(@QueryParam("offset") @DefaultValue("0") int offset,
+	public synchronized Response getTweets(@QueryParam("offset") @DefaultValue("0") int offset,
 			@QueryParam("limit") @DefaultValue("10") int limit) {
 		List<Tweet> tweets = dao.getTweets(offset, limit);
 		return Response.status(Status.OK).entity(tweets).build();
@@ -41,14 +39,14 @@ public class TweetResource {
 	
 	@PUT
 	@Path("/{id}")
-	public Response updateTweet(@PathParam("id") String id, ClassifiedTweet classifiedTweet){
+	public synchronized Response updateTweet(@PathParam("id") String id, ClassifiedTweet classifiedTweet){
 		dao.updateTweet(classifiedTweet);
 		return Response.status(Status.OK).build();
 	}
 	
 	@DELETE
 	@Path("/{id}")
-	public Response deleteTweet(@PathParam("id") String id){
+	public synchronized Response deleteTweet(@PathParam("id") String id){
 		dao.deleteTweet(id);
 		return Response.status(Status.OK).build();
 	}
