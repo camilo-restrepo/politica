@@ -4,6 +4,9 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import co.inc.board.infrastructure.mongo.MongoUtils;
+import com.fasterxml.jackson.databind.MappingIterator;
+import com.mongodb.client.model.Filters;
 import org.bson.Document;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -18,9 +21,9 @@ import com.mongodb.client.MongoCursor;
 import com.mongodb.client.MongoDatabase;
 
 public class TargetDAO {
-	
+
 	private static final Logger LOGGER = LoggerFactory.getLogger(TargetDAO.class);
-	
+
 	public static final String IDS_COLLECTION = "twitterIds";
 	public static final String TARGETS_COLLECTION = "twitterTargets";
 
@@ -46,8 +49,28 @@ public class TargetDAO {
 		}
 		return ids;
 	}
-	
+
+	public TwitterTarget getSingleTarget(String twitterId) {
+
+		TwitterTarget twitterTarget = null;
+
+		try {
+
+			MongoCollection<Document> collection = mongoDatabase.getCollection(TARGETS_COLLECTION);
+			Document targetDocument = collection.find(Filters.eq("twitterId", twitterId)).first();
+			twitterTarget = (!MongoUtils.documentIsBlank(targetDocument)) ?
+					objectMapper.readValue(targetDocument.toJson(), TwitterTarget.class) : twitterTarget;
+
+		} catch (IOException e) {
+
+			LOGGER.error("getSingleTarget", e);
+		}
+
+		return twitterTarget;
+	}
+
 	public List<TwitterTarget> getAllTargets() {
+
 		MongoCollection<Document> collection = mongoDatabase.getCollection(TARGETS_COLLECTION);
 		MongoCursor<Document> it = collection.find().iterator();
 		List<TwitterTarget> targets = new ArrayList<TwitterTarget>();
@@ -61,7 +84,7 @@ public class TargetDAO {
 		}
 		return targets;
 	}
-	
+
 	public void insertTwitterTarget(TwitterTarget target) {
 		MongoCollection<Document> collection = mongoDatabase.getCollection(TARGETS_COLLECTION);
 		try {

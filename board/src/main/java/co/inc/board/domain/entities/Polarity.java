@@ -4,22 +4,23 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import org.joda.time.DateTime;
 
-public class PolarityPerDay {
+public class Polarity {
 
-    private final DateTime date;
+    private final String twitterId;
     private final long positivePolarity;
     private final long negativePolarity;
 
     @JsonCreator
-    public PolarityPerDay(@JsonProperty("date") DateTime date, @JsonProperty("positivePolarity") long positivePolarity,
-                          @JsonProperty("negativePolarity")long negativePolarity) {
-        this.date = date;
+    public Polarity(@JsonProperty("twitterId") String twitterId, @JsonProperty("positivePolarity") long positivePolarity,
+                    @JsonProperty("negativePolarity") long negativePolarity) {
+
+        this.twitterId = twitterId;
         this.positivePolarity = positivePolarity;
         this.negativePolarity = negativePolarity;
     }
 
-    public DateTime getDate() {
-        return date;
+    public String getTwitterId() {
+        return twitterId;
     }
 
     public long getPositivePolarity() {

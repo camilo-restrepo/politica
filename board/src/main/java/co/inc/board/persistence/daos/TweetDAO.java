@@ -1,10 +1,8 @@
 package co.inc.board.persistence.daos;
 
 import co.inc.board.domain.entities.MapCoordinate;
-import co.inc.board.domain.entities.PolarityPerDay;
+import co.inc.board.domain.entities.PredictionEnum;
 import co.inc.board.domain.entities.TweetPerDay;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.mongodb.client.FindIterable;
 import com.mongodb.client.MongoCursor;
 import com.mongodb.client.model.Filters;
 import com.mongodb.client.model.Projections;
@@ -12,36 +10,24 @@ import org.bson.Document;
 
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
+import org.bson.conversions.Bson;
 import org.joda.time.DateTime;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class TweetDAO {
 
-	public static final String TWEETS_COLLECTION = "tweets";
+    private static final Logger LOGGER = LoggerFactory.getLogger(TweetDAO.class);
+
+	public static final String TWEETS_COLLECTION = "minimumTweets";
 
 	private final MongoDatabase mongoDatabase;
 
 	public TweetDAO(MongoDatabase mongoDatabase) {
 		this.mongoDatabase = mongoDatabase;
-	}
-
-	public void insertTweet(long targetTwitterId, String stringTweet) {
-		MongoCollection<Document> collection = mongoDatabase.getCollection(TWEETS_COLLECTION);
-		Document documentTweet = Document.parse(stringTweet);
-		documentTweet.put("targetTwitterId", targetTwitterId);
-		collection.insertOne(documentTweet);
-	}
-
-	public void insertTweet(String stringTweet) {
-		Document documentTweet = Document.parse(stringTweet);
-		insertTweet(documentTweet);
-	}
-	
-	public void insertTweet(Document documentTweet) {
-		MongoCollection<Document> collection = mongoDatabase.getCollection(TWEETS_COLLECTION);
-		collection.insertOne(documentTweet);
 	}
 
 	public List<MapCoordinate> getMapFromTweetsLastMonth(String twitterId) {
@@ -51,7 +37,7 @@ public class TweetDAO {
 		MongoCollection<Document> collection = mongoDatabase.getCollection(TWEETS_COLLECTION);
 
         MongoCursor<Document> iterator = collection
-                .find(Filters.and(Filters.ne("geo", null), Filters.in("targetTwitterIds", twitterId)))
+                .find(Filters.and(Filters.ne("geo", null), Filters.eq("targetTwitterId", twitterId)))
                 .projection(Projections.include("geo")).iterator();
 
         while (iterator.hasNext()) {
@@ -80,12 +66,11 @@ public class TweetDAO {
 
             DateTime oneDay = now.minusDays(1);
 
-            long count = collection.count((Filters.and(Filters.in("targetTwitterIds", twitterId),
-                    Filters.gte("timestamp_ms", oneDay.getMillis()), Filters.lte("timestamp_ms", now.getMillis()))));
+            Bson bson = Filters.and(Filters.eq("targetTwitterId", twitterId),
+                    Filters.gte("timestamp_ms", oneDay.getMillis()),
+                    Filters.lte("timestamp_ms", now.getMillis()));
 
-//             MongoCursor<Document> iterator = collection.find().
-//                    filter(Filters.and(Filters.in("targetTwitterIds", twitterId),
-//                    Filters.gte("timestamp_ms", oneDay), Filters.lte("timestamp_ms", now))).iterator();
+            long count = collection.count(bson);
 
             TweetPerDay tweetPerDay = new TweetPerDay(now, count);
             tweetPerDayList.add(tweetPerDay);
@@ -95,29 +80,41 @@ public class TweetDAO {
         return tweetPerDayList;
 	}
 
-	public List<PolarityPerDay> getPolarityLastMonth(String twitterId) {
+    public long getCandidateTweetsCountByPolarityDateToDay(String twitterId, PredictionEnum predictionValue, DateTime initialDate) {
 
-        List<PolarityPerDay> polarityPerDayList = new ArrayList<>();
-
-        int limit = 30;
-        DateTime now = DateTime.now().withHourOfDay(23).withMinuteOfHour(59).withSecondOfMinute(59);
         MongoCollection<Document> collection = mongoDatabase.getCollection(TWEETS_COLLECTION);
 
-        for (int i = 0; i < limit; i++) {
+        Bson bson = Filters.and(Filters.eq("targetTwitterId", twitterId),
+                Filters.eq("prediction", predictionValue.getValue()),
+                Filters.gte("timestamp_ms", initialDate.getMillis()),
+                Filters.lte("timestamp_ms", DateTime.now().getMillis()));
 
-            DateTime oneDay = now.minusDays(1);
+        long tweetCountByPolarity = collection.count(bson);
 
-            long positivePolarity = collection.count((Filters.and(Filters.in("targetTwitterIds", twitterId),
-                    Filters.eq("polarity", 1), Filters.gte("timestamp_ms", oneDay.getMillis()), Filters.lte("timestamp_ms", now.getMillis()))));
+        return tweetCountByPolarity;
+    }
 
-            long negativePolarity = collection.count((Filters.and(Filters.in("targetTwitterIds", twitterId),
-                    Filters.eq("polarity", -1), Filters.gte("timestamp_ms", oneDay.getMillis()), Filters.lte("timestamp_ms", now.getMillis()))));
+    public long getTargetTotalTweets(String twitterId) {
 
-            PolarityPerDay polarityPerDay = new PolarityPerDay(now, positivePolarity, negativePolarity);
-            polarityPerDayList.add(polarityPerDay);
-            now = oneDay;
-        }
+        MongoCollection<Document> collection = mongoDatabase.getCollection(TWEETS_COLLECTION);
+        return collection.count(Filters.eq("targetTwitterId", twitterId));
+    }
 
-        return polarityPerDayList;
-	}
+    /**
+     * Get the number of tweets from a target since a given date to today.
+     *
+     * @param twitterId The Twitter ID of the target.
+     * @param dateTime The initial date to query the tweets.
+     *
+     * @return the number of tweets from a target since a given date to today.
+     */
+    public long getTargetTweetsDateToday(String twitterId, DateTime dateTime) {
+
+        MongoCollection<Document> collection = mongoDatabase.getCollection(TWEETS_COLLECTION);
+        Bson bson = Filters.and(Filters.eq("targetTwitterId", twitterId),
+                Filters.gte("timestamp_ms", dateTime.getMillis()),
+                Filters.lte("timestamp_ms", DateTime.now().getMillis()));
+
+        return collection.count(bson);
+    }
 }

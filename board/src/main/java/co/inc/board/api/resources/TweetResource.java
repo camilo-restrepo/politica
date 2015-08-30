@@ -1,14 +1,25 @@
 package co.inc.board.api.resources;
 
-import co.inc.board.domain.business.TweetBusiness;
-import co.inc.board.domain.entities.MapCoordinate;
-import co.inc.board.domain.entities.PolarityPerDay;
-import co.inc.board.domain.entities.TweetPerDay;
+import java.util.ArrayList;
+import java.util.List;
 
-import javax.ws.rs.*;
+import javax.ws.rs.Consumes;
+import javax.ws.rs.GET;
+import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
+import javax.ws.rs.Produces;
+import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
-import java.util.List;
+
+import co.inc.board.domain.business.TargetBusiness;
+import co.inc.board.domain.business.TweetBusiness;
+import co.inc.board.domain.entities.MapCoordinate;
+import co.inc.board.domain.entities.Polarity;
+import co.inc.board.domain.entities.TimeEnum;
+import co.inc.board.domain.entities.TweetPerDay;
+import co.inc.board.domain.entities.TweetStats;
+import co.inc.board.domain.entities.TwitterTarget;
 
 @Path("/tweets")
 @Consumes(MediaType.APPLICATION_JSON)
@@ -16,9 +27,11 @@ import java.util.List;
 public class TweetResource {
 
     private final TweetBusiness tweetBusiness;
+    private final TargetBusiness targetBusiness;
 
-    public TweetResource(TweetBusiness tweetBusiness) {
+    public TweetResource(TweetBusiness tweetBusiness, TargetBusiness targetBusiness) {
         this.tweetBusiness = tweetBusiness;
+        this.targetBusiness = targetBusiness;
     }
 
     @GET
@@ -38,10 +51,44 @@ public class TweetResource {
     }
 
     @GET
-    @Path("{twitterId}/polarity")
-    public Response getPolarityLastMonth(@PathParam("twitterId") String twitterId) {
+    @Path("{twitterId}/stats")
+    public Response getTweetStats(@PathParam("twitterId") String twitterId) {
 
-        List<PolarityPerDay> polarityPerDayList = tweetBusiness.getPolarityLastMonth(twitterId);
-        return Response.status(Response.Status.OK).entity(polarityPerDayList).build();
+        TweetStats tweetStats = tweetBusiness.getTweetStats(twitterId);
+        return Response.status(Response.Status.OK).entity(tweetStats).build();
+    }
+
+    @GET
+    @Path("{twitterId}/polarity")
+    public Response getCandidatePolarity(@PathParam("twitterId") String twitterId, @QueryParam("time") String time) {
+
+        Polarity candidatePolarity = null;
+
+        if (time.equalsIgnoreCase(TimeEnum.DAY.getValue())) {
+            candidatePolarity = tweetBusiness.getCandidatePolarityToday(twitterId);
+        } else {
+            // return monthly polarity by default
+            candidatePolarity = tweetBusiness.getCandidatePolarityMonth(twitterId);
+        }
+
+        return Response.status(Response.Status.OK).entity(candidatePolarity).build();
+    }
+
+    @GET
+    @Path("/polarity")
+    public Response getAllTargetsPolarity(@QueryParam("time") String time) {
+
+        List<Polarity> polarityList = new ArrayList<Polarity>();
+
+        List<TwitterTarget> allTargets = targetBusiness.getAllTargets();
+
+        if (time.equalsIgnoreCase(TimeEnum.DAY.getValue())) {
+            polarityList = tweetBusiness.getAllTargetsPolarityToday(allTargets);
+        } else {
+            // return monthly polarity by default
+            polarityList = tweetBusiness.getAllTargetsPolarityLastMonth(allTargets);
+        }
+
+        return Response.status(Response.Status.OK).entity(polarityList).build();
     }
 }

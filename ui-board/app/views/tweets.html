@@ -1,0 +1,28 @@
+<div ng-controller="tweetsController" ng-init="init()">
+  <div class="row">
+    <div class="col-md-12">
+      <div class="chart-title">
+        <h2>Tweets</h2>
+      </div>
+      <ul class="col-md-4 list-group" ng-repeat="candidato in candidatos">
+        <li class="list-group-item list-title">
+        <p class="line-height-sm">
+        <div class="text-md">{{ getTargetName(candidato.screenName) }}</div>
+        <small>
+          <a class="link-white" target="blank" href="http://twitter.com/{{candidato.twitterId.id}}">
+            @{{candidato.twitterId.id}}
+          </a>
+        </small>
+        </p>
+        </li>
+        <li class="list-group-item height-lg" ng-repeat="tw in candidato.tweets | orderBy:'-timestamp_ms'">
+        <p class="text-sm">{{tw.text}}</p>
+        <div class="padding-right-sm inline"><small>{{tw.timestamp_ms | date:'dd-MM-yyyy HH:mm:ss'}}</small></div>
+        <div class="padding-right-sm label text-sm to-right" ng-class="getTweetLabelClass(tw.prediction)">
+          <span>{{ getTweetLabelText(tw.prediction) }}</span>
+        </div>
+        </li>
+      </ul>
+    </div>
+  </div>
+</div>
