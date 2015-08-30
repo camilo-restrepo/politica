@@ -1,11 +1,11 @@
 'use strict';
 
 boardModule.factory('scoreService', scoreService);
-scoreService.$inject = ['$resource'];
+scoreService.$inject = ['$resource', 'environment'];
 
-function scoreService($resource) {
+function scoreService($resource, environment) {
 
-  var url = 'http://104.236.26.163:9001/board/api/tweets';
+  var url = environment.board + '/board/api/scores';
   var defaultParams = {};
 
   var actions = {

@@ -7,8 +7,6 @@ function polarityController($scope, tweetsService, ngDialog) {
 
   function getAllCandidatesPolarity(columnNamesArray, positiveArray, negativeArray) {
 
-    console.debug(positiveArray);
-
     var chart = c3.generate({
       bindto: '#polarityChart',
       data: {
@@ -30,8 +28,6 @@ function polarityController($scope, tweetsService, ngDialog) {
   }
 
   function success(response) {
-
-    console.debug(response);
 
     var polarityArray = response;
     var columnNamesArray = [];

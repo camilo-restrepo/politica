@@ -1,9 +1,9 @@
 'use strict';
 
 boardModule.controller('candidateTweetsController', candidateTweetsController);
-candidateTweetsController.$inject = ['$scope', '$stateParams', '$websocket', 'targetsService', 'tweetsService'];
+candidateTweetsController.$inject = ['$scope', '$stateParams', '$websocket', 'environment', 'targetsService', 'tweetsService'];
 
-function candidateTweetsController($scope, $stateParams, $websocket, targetsService, tweetsService) {
+function candidateTweetsController($scope, $stateParams, $websocket, environment, targetsService, tweetsService) {
 
   function compareTweets(tweet1, tweet2) {
     return (tweet1.text === tweet2.text) && (tweet1.userId === tweet2.userId); 
@@ -45,7 +45,7 @@ function candidateTweetsController($scope, $stateParams, $websocket, targetsServ
   function initializeWebsocket() {
 
     var ws = $websocket.$new({
-      url: 'ws://104.236.26.163:9001/board/api/ws',
+      url: environment.boardWS + '/board/api/ws',
       protocols: []
     }); 
 

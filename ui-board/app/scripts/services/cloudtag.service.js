@@ -1,11 +1,11 @@
 'use strict';
 
 boardModule.factory('cloudtagService', cloudtagService);
-cloudtagService.$inject = ['$resource'];
+cloudtagService.$inject = ['$resource', 'environment'];
 
-function cloudtagService($resource) {
+function cloudtagService($resource, environment) {
 
-  var url = 'http://104.236.26.163:9001/board/api/words';
+  var url = environment.board + '/board/api/words';
   var defaultParams = {};
 
   var actions = {

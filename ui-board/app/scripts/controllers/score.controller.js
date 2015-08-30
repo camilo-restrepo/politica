@@ -10,9 +10,9 @@ function scoreController($scope, scoreService) {
     var chart = c3.generate({
       bindto: '#scoreChart',
       data: {
-        x: 'x',
+        // x: 'x',
         columns: listOfCandidatesLists
-      },
+      }/*,
       axis: {
         x: {
           type: 'timeseries',
@@ -20,7 +20,7 @@ function scoreController($scope, scoreService) {
             format: '%m-%d'
           }
         }
-      }
+      }*/
     });
 
     return chart;
@@ -49,7 +49,7 @@ function scoreController($scope, scoreService) {
           var dateInMillis = scoreNode.date;
           var date = new Date(dateInMillis)
           var dayAndMonth = date.getDate() + '-' + date.getMonth();
-          xAxis.push(dayAndMonth);
+          xAxis.push(dateInMillis);
         }
 
         var scoreValue = scoreNode.value;
@@ -59,13 +59,17 @@ function scoreController($scope, scoreService) {
       listOfCandidatesLists.push(innerList);
     }
 
-    return listOfCandidatesLists.unshift(xAxis);
+    // listOfCandidatesLists.unshift(xAxis);
+    return listOfCandidatesLists;
   }
 
   function getAllTargetsScoreSuccess(response) {
 
     var listOfCandidatesLists = getListOfCandidatesLists(response);
-    $scope.chart = getCandidateScore(xAxis, listOfCandidatesLists);
+    console.debug('****************************************** 1');
+    console.debug(listOfCandidatesLists);
+    console.debug('****************************************** 2');
+    $scope.chart = getCandidateScore(listOfCandidatesLists);
   }
 
   function logError(response) {
