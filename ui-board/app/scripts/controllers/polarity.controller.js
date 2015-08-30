@@ -7,13 +7,15 @@ function polarityController($scope, tweetsService, ngDialog) {
 
   function getAllCandidatesPolarity(columnNamesArray, positiveArray, negativeArray) {
 
+    console.debug(positiveArray);
+
     var chart = c3.generate({
       bindto: '#polarityChart',
       data: {
         columns: [ positiveArray, negativeArray ],
         type: 'bar',
         groups: [
-          ['Positive', 'Negative']
+          ['Positivo', 'Negativo']
         ]
       },
       axis: {
@@ -28,6 +30,8 @@ function polarityController($scope, tweetsService, ngDialog) {
   }
 
   function success(response) {
+
+    console.debug(response);
 
     var polarityArray = response;
     var columnNamesArray = [];

@@ -9,6 +9,8 @@ function cloudtagService($resource) {
   var defaultParams = {};
 
   var actions = {
+
+    getCandidateCloudTag: { method: 'GET', url: url + '/:twitterId', isArray: false },
     getAllCandidatesCloudTags: { method: 'GET', url: url, isArray: true }
   };
 
