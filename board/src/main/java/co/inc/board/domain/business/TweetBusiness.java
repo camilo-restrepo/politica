@@ -1,10 +1,10 @@
 package co.inc.board.domain.business;
 
-import co.inc.board.domain.entities.MapCoordinate;
-import co.inc.board.domain.entities.PolarityPerDay;
-import co.inc.board.domain.entities.TweetPerDay;
+import co.inc.board.domain.entities.*;
 import co.inc.board.persistence.daos.TweetDAO;
+import org.joda.time.DateTime;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -28,8 +28,61 @@ public class TweetBusiness {
         return tweetDAO.getTweetsPerDayLastMonth(twitterId);
     }
 
-    public List<PolarityPerDay> getPolarityLastMonth(String twitterId) {
+    public Polarity getCandidatePolarityToday(String twitterId) {
 
-        return tweetDAO.getPolarityLastMonth(twitterId);
+        DateTime todayAtZeroZero = DateTime.now().withHourOfDay(0).withMinuteOfHour(0).withMinuteOfHour(0);
+        long positiveTweets = tweetDAO.getCandidateTweetsCountByPolarityDateToDay(twitterId, PredictionEnum.POSITIVE, todayAtZeroZero);
+        long negativeTweets = tweetDAO.getCandidateTweetsCountByPolarityDateToDay(twitterId, PredictionEnum.NEGATIVE, todayAtZeroZero);
+
+        return new Polarity(twitterId, positiveTweets, negativeTweets);
+    }
+
+    public Polarity getCandidatePolarityMonth(String twitterId) {
+
+        DateTime todayAtZeroZero = DateTime.now().withHourOfDay(0).withMinuteOfHour(0).withMinuteOfHour(0);
+        DateTime lastMonth = todayAtZeroZero.minusDays(30);
+        long positiveTweets = tweetDAO.getCandidateTweetsCountByPolarityDateToDay(twitterId, PredictionEnum.POSITIVE, lastMonth);
+        long negativeTweets = tweetDAO.getCandidateTweetsCountByPolarityDateToDay(twitterId, PredictionEnum.NEGATIVE, lastMonth);
+
+        return new Polarity(twitterId, positiveTweets, negativeTweets);
+    }
+
+    public List<Polarity> getAllTargetsPolarityToday(List<TwitterTarget> allTargets) {
+
+        List<Polarity> polarityListToday = new ArrayList<Polarity>();
+
+        for (TwitterTarget target : allTargets) {
+
+            Polarity candidatePolarityToday = getCandidatePolarityToday(target.getTwitterId().getId());
+            polarityListToday.add(candidatePolarityToday);
+        }
+
+        return polarityListToday;
+    }
+
+    public List<Polarity> getAllTargetsPolarityLastMonth(List<TwitterTarget> allTargets) {
+
+        List<Polarity> polarityListMonth = new ArrayList<Polarity>();
+
+        for (TwitterTarget target : allTargets) {
+
+            Polarity candidatePolarityMonth = getCandidatePolarityMonth(target.getTwitterId().getId());
+            polarityListMonth.add(candidatePolarityMonth);
+        }
+
+        return polarityListMonth;
+    }
+
+    public TweetStats getTweetStats(String twitterId) {
+
+        long totalTweets = tweetDAO.getTargetTotalTweets(twitterId);
+
+        DateTime todayAtZeroZero = DateTime.now().withHourOfDay(0).withMinuteOfHour(0).withSecondOfMinute(0);
+        long tweetsToday = tweetDAO.getTargetTweetsDateToday(twitterId, todayAtZeroZero);
+
+        DateTime todayOneHourBefore = DateTime.now().minusHours(1);
+        long tweetsLastHour = tweetDAO.getTargetTweetsDateToday(twitterId, todayOneHourBefore);
+
+        return new TweetStats(twitterId, totalTweets, tweetsToday, tweetsLastHour);
     }
 }

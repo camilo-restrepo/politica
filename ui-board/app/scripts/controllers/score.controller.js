@@ -1,0 +1,96 @@
+'use strict';
+
+boardModule.controller('scoreController', scoreController);
+scoreController.$inject = ['$scope', 'scoreService'];
+
+function scoreController($scope, scoreService) {
+
+  function getCandidateScore(listOfCandidatesLists) {
+
+    var colors = {
+      RicardoAriasM: '#D66F13',
+      MMMaldonadoC: '#FBD103',
+      danielraisbeck: '#FF5C01',
+      ClaraLopezObre: '#FFDF00',
+      RafaelPardo: '#ED0A03',
+      PachoSantosC: '#3C68B7',
+      EnriquePenalosa: '#12ADE5',
+      AlexVernot: '#0A5C6D',
+      CVderoux: '#088543'
+    };
+
+    var chart = c3.generate({
+      bindto: '#scoreChart',
+      data: {
+        x: 'x',
+        columns: listOfCandidatesLists,
+        colors: colors
+      },
+        axis: {
+          x: {
+            type: 'timeseries',
+            tick: {
+              format: '%m-%d'
+            }
+          }
+        }
+    });
+
+    return chart;
+  }
+
+  function getListOfCandidatesLists(response) {
+
+    var xAxis = ['x'];
+    var listOfCandidatesLists = [];
+
+    var candidatesList = response;
+
+    for (var i = 0; i < candidatesList.length; i++) {
+
+      var candidate = candidatesList[i];
+      var candidateTwitterId = candidate.target;
+      var candidateScoreList = candidate.scores;
+
+      var innerList = [candidateTwitterId];
+
+      for (var j = 0; j < candidateScoreList.length; j++) {
+
+        var scoreNode = candidateScoreList[j];
+
+        if (i == 0) {
+          var dateInMillis = scoreNode.date;
+          xAxis.push(dateInMillis);
+        }
+
+        var scoreValue = scoreNode.value;
+        if (!isNaN(scoreValue)) {
+          innerList.push(scoreValue);
+        }
+      }
+
+      listOfCandidatesLists.push(innerList);
+    }
+
+    listOfCandidatesLists.unshift(xAxis);
+    return listOfCandidatesLists;
+  }
+
+  function getAllTargetsScoreSuccess(response) {
+
+    var listOfCandidatesLists = getListOfCandidatesLists(response);
+    console.debug('****************************************** 1');
+    console.debug(JSON.stringify(listOfCandidatesLists));
+    console.debug('****************************************** 2');
+    $scope.chart = getCandidateScore(listOfCandidatesLists);
+  }
+
+  function logError(response) {
+    console.error(response);
+  }
+
+  $scope.init = function() {
+
+    scoreService.getAllTargetsScore(getAllTargetsScoreSuccess, logError);
+  }
+}

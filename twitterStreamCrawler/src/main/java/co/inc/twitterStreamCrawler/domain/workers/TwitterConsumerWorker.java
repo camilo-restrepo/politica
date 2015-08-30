@@ -66,6 +66,7 @@ public class TwitterConsumerWorker implements Runnable {
 				sendTweetToBoard(minTweet);
 			}
 		} catch (Exception e) {
+			e.printStackTrace();
 		}
 	}
 
