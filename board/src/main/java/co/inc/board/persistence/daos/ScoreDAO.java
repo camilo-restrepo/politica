@@ -40,7 +40,7 @@ public class ScoreDAO {
 					Filters.gte("timestamp_ms", oneDay.getMillis()), Filters.lte("timestamp_ms", now.getMillis()));
 			long countNegative = collection.count(bson);
 
-			bson = Filters.and(Filters.eq("targetTwitterId", targetId), Filters.gte("timestamp_ms", oneDay.getMillis()),
+			bson = Filters.and(Filters.gte("timestamp_ms", oneDay.getMillis()),
 					Filters.lte("timestamp_ms", now.getMillis()));
 			long count = collection.count(bson);
 
