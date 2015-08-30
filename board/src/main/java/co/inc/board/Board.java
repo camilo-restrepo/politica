@@ -1,15 +1,18 @@
 package co.inc.board;
 
 import co.inc.board.api.resources.BroadcasterResource;
+import co.inc.board.api.resources.ScoreResource;
 import co.inc.board.api.resources.TargetResource;
 import co.inc.board.api.resources.TweetResource;
 import co.inc.board.api.resources.WordResource;
 import co.inc.board.api.ws.BroadcastServlet;
+import co.inc.board.domain.business.ScoreBusiness;
 import co.inc.board.domain.business.TargetBusiness;
 import co.inc.board.domain.business.TweetBusiness;
 import co.inc.board.domain.business.WordBusiness;
 import co.inc.board.infrastructure.config.BoardConfig;
 import co.inc.board.infrastructure.config.MongoConfig;
+import co.inc.board.persistence.daos.ScoreDAO;
 import co.inc.board.persistence.daos.TargetDAO;
 import co.inc.board.persistence.daos.TweetDAO;
 import co.inc.board.persistence.daos.WordDAO;
@@ -92,7 +95,12 @@ public class Board extends Application<BoardConfig> {
         WordBusiness wordBusiness = new WordBusiness(wordDAO);
         WordResource wordResource = new WordResource(wordBusiness, targetBusiness);
         environment.jersey().register(wordResource);
-
+        
+        ScoreDAO scoreDAO = new ScoreDAO(mongoDatabase);
+        ScoreBusiness scoreBusiness = new ScoreBusiness(scoreDAO, targetBusiness);
+        ScoreResource scoreResource = new ScoreResource(scoreBusiness);
+        environment.jersey().register(scoreResource);
+        
         // webSockets
 
         environment.jersey().register(new BroadcasterResource(objectMapper));

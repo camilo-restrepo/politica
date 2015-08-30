@@ -2,7 +2,6 @@ package co.inc.board.domain.business;
 
 import java.util.List;
 
-import co.inc.board.domain.entities.CloudTag;
 import co.inc.board.domain.entities.TwitterTarget;
 import co.inc.board.persistence.daos.TargetDAO;
 
