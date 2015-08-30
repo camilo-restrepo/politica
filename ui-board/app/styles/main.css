@@ -118,6 +118,21 @@ body {
   padding-left: 10px;
 }
 
+.label-warning {
+  background-color: #F5E6A8;
+  color: #ADAA4D;
+}
+
+.label-danger {
+  background-color: #F4A8AF;
+  color: #EB3E54;
+}
+
+.label-success {
+  background-color: #BDDA9B;
+  color: #739E4D;
+}
+
 /* charts styles */
 
 .node {

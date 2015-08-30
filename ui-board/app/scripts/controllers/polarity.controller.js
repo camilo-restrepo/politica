@@ -23,6 +23,10 @@ function polarityController($scope, tweetsService, ngDialog) {
       bindto: '#polarityChart',
       data: {
         columns: [ positiveArray, negativeArray ],
+        colors: { 
+          Positivo: '#BDDA9B', 
+          Negativo: '#F4A8AF'
+        },
         type: 'bar',
         groups: [
           ['Positivo', 'Negativo']
