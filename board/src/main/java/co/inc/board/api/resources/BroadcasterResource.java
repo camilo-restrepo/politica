@@ -22,7 +22,6 @@ public class BroadcasterResource {
 	public void broadcast(Object data) throws Exception {
 
 		String jsonData = objectMapper.writeValueAsString(data);
-		System.out.println("Received json: " + jsonData);
 		BroadcastSocket.broadcast(jsonData);
 	}
 
