@@ -7,5 +7,10 @@ app.config(function($stateProvider, $urlRouterProvider) {
     $stateProvider.state('home', {
         url: '/home',
         templateUrl: 'views/board.html'
+    })
+    
+    .state('candidate', {
+      url: '/candidatos/:twitterId',
+      templateUrl: 'views/candidate.html'
     });
 });

@@ -5,12 +5,12 @@ html {
 }
 
 body {
-  background-color: rgb(211, 211, 213);
+  background-image: url("../images/fondo_nocreo_small.svg");
 }
 
 .box-main {
   z-index: 0;
-  opacity: 0.8;
+  opacity: 0.7;
   background-color: #FFF;
   padding: 16px;
   margin: 10px;
@@ -42,6 +42,64 @@ body {
   color: #E6E6E6;
   background-color: #929497;
 
+}
+
+#candidate-square {
+  margin: 5px;
+  width: 245px; 
+  height: 245px;
+  background: red;
+}
+
+#candidate-rectangle {
+  width: 195px;
+  height: 115px;
+  background: black;
+  position: relative;
+  top: 71px;
+  left: 140px;
+}
+
+#go-back-rectangle {
+  float: right;
+  width: 195px;
+  height: 45px;
+  background: black;
+  position: relative;
+}
+
+.black-area {
+  color: #FFF;
+  font-size: 18px;
+}
+
+.height-lg {
+  height: 180px;
+}
+
+.list-title {
+
+  background-color: #221F1F;
+  color: #FFF;
+  font-size: 16px;
+  padding: 0;
+  padding-top: 5px;
+  padding-left: 10px;
+  margin: 0;
+}
+
+.link-white {
+  text-decoration: none;
+  color: #FFF;
+}
+
+.line-height-sm {
+  line-height: 15px;
+  margin: 0;
+}
+
+.text-md {
+  font-size: 18px;
 }
 
 /* charts styles */

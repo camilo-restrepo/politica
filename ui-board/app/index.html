@@ -12,6 +12,7 @@
     <link rel="stylesheet" href="bower_components/c3/c3.css" />
     <link rel="stylesheet" href="bower_components/ngDialog/css/ngDialog.css" />
     <link rel="stylesheet" href="bower_components/ngDialog/css/ngDialog-theme-default.css" />
+    <link rel="stylesheet" href="bower_components/components-font-awesome/css/font-awesome.css" />
     <!-- endbower -->
     <!-- endbuild -->
     <!-- build:css(.tmp) styles/main.css -->
@@ -38,10 +39,10 @@
         </div>
         <div id="navbar" class="navbar-collapse collapse">
           <ul class="margin-top-md nav navbar-nav">
+            <li><a href="#tweets" offset="92" du-smooth-scroll du-scrollspy>Tweets</a></li>
             <li><a href="#polarity" offset="92" du-smooth-scroll du-scrollspy>Polaridad</a></li>
             <li><a href="#score" offset="92" du-smooth-scroll du-scrollspy>Puntaje</a></li>
             <li><a href="#cloudtag" offset="92" du-smooth-scroll du-scrollspy>CloudTag</a></li>
-            <li><a href="#tweets" offset="92" du-smooth-scroll du-scrollspy>Tweets</a></li>
         </div>
       </div>
     </nav>
@@ -84,10 +85,15 @@ ga('send', 'pageview');
     <script src="scripts/app.js"></script>
     <script src="scripts/router.js"></script>
     <script src="bower_components/ng-websocket/ng-websocket.js"></script>
+
     <script src="scripts/controllers/polarity.controller.js"></script>
     <script src="scripts/controllers/score.controller.js"></script>
     <script src="scripts/controllers/cloudtag.controller.js"></script>
-    <script src="scripts/controllers/candidates.controller.js"></script>
+    <script src="scripts/controllers/tweets.controller.js"></script>
+
+    <script src="scripts/controllers/candidate.tweets.controller.js"></script>
+    <script src="scripts/controllers/candidate.cloudtag.controller.js"></script>
+
     <script src="scripts/services/targets.service.js"></script>
     <script src="scripts/services/tweets.service.js"></script>
     <script src="scripts/services/cloudtag.service.js"></script>
