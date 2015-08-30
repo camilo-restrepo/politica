@@ -23,7 +23,7 @@ function candidateTweetsController($scope, $stateParams, $websocket, environment
 
     var tweet = data;
     var tweetsLimit = 5;
-    tweet.timestamp_ms = tweet.timestamp_ms.$numberLong;
+    tweet.timestamp_ms = tweet.timestamp_ms;
     var tweetBelongsToCandidate = ($scope.candidate.twitterId.id === tweet.targetTwitterId);
 
     if (tweetBelongsToCandidate && (!tweetIsInList(tweet, $scope.candidate.tweets))) {
