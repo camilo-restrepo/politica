@@ -14,6 +14,10 @@ public class TargetBusiness {
 		this.targetDAO = targetDAO;
 	}
 
+	public TwitterTarget getSingleTarget(String twitterId) {
+		return targetDAO.getSingleTarget(twitterId);
+	}
+
 	public List<TwitterTarget> getAllTargets() {
 		
 		return targetDAO.getAllTargets();
