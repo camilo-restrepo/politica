@@ -1,14 +1,14 @@
 'use strict';
 
 boardModule.controller('tweetsController', tweetsController);
-tweetsController.$inject = ['$scope', '$websocket', 'targetsService'];
+tweetsController.$inject = ['$scope', '$websocket', 'environment', 'targetsService'];
 
-function tweetsController($scope, $websocket, targetsService) {
+function tweetsController($scope, $websocket, environment, targetsService) {
 
   $scope.candidatos = [];
 
   var ws = $websocket.$new({
-    url: 'ws://104.236.26.163:9001/board/api/ws',
+    url: environment.boardWS + '/board/api/ws',
     protocols: []
   }); 
 

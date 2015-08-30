@@ -1,25 +1,28 @@
 'use strict';
 
 boardModule.controller('candidateTweetsController', candidateTweetsController);
-candidateTweetsController.$inject = ['$scope', '$stateParams', '$websocket', 'targetsService', 'tweetsService'];
+candidateTweetsController.$inject = ['$scope', '$stateParams', '$websocket', 'environment', 'targetsService', 'tweetsService'];
 
-function candidateTweetsController($scope, $stateParams, $websocket, targetsService, tweetsService) {
+function candidateTweetsController($scope, $stateParams, $websocket, environment, targetsService, tweetsService) {
 
   function compareTweets(tweet1, tweet2) {
     return (tweet1.text === tweet2.text) && (tweet1.userId === tweet2.userId); 
   }
 
   function tweetIsInList(tweet, tweetList) {
+
     var isInList = false;
     for (var i = 0; i < tweetList.length && !isInList; i++) {
       isInList = compareTweets(tweet, tweetList[i]);
     }
+
     return isInList;
   }
 
   function pushData(data) {
 
     var tweet = data;
+    var tweetsLimit = 5;
     tweet.timestamp_ms = tweet.timestamp_ms.$numberLong;
     var tweetBelongsToCandidate = ($scope.candidate.twitterId.id === tweet.targetTwitterId);
 
@@ -31,7 +34,7 @@ function candidateTweetsController($scope, $stateParams, $websocket, targetsServ
 
       $scope.candidate.tweets.push(tweet);
 
-      if($scope.candidatos[i].tweets.length > 5) {
+      if($scope.candidatos[i].tweets.length > tweetsLimit) {
         $scope.candidatos[i].tweets.shift();
       }
     }
@@ -42,7 +45,7 @@ function candidateTweetsController($scope, $stateParams, $websocket, targetsServ
   function initializeWebsocket() {
 
     var ws = $websocket.$new({
-      url: 'ws://104.236.26.163:9001/board/api/ws',
+      url: environment.boardWS + '/board/api/ws',
       protocols: []
     }); 
 

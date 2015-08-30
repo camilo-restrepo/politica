@@ -1,28 +1,83 @@
 'use strict';
 
 boardModule.controller('scoreController', scoreController);
-scoreController.$inject = ['$scope'];
+scoreController.$inject = ['$scope', 'scoreService'];
 
-function scoreController($scope) {
+function scoreController($scope, scoreService) {
 
-  function getCandidateScore(candidateName) {
+  function getCandidateScore(listOfCandidatesLists) {
 
     var chart = c3.generate({
       bindto: '#scoreChart',
       data: {
-        columns: [
-          [candidateName, 30, 200, 100, 400, 150, 250, 30, 200, 100, 400, 150, 250],
-          ['Rafael Pardo', 80, 150, 30, 300, 320, 125, 80, 150, 30, 300, 320, 125],
-          ['Clara Lopez', 40, 190, 230, 80, 20, 300, 40, 190, 230, 80, 20, 300]
-        ]
-      }
+        // x: 'x',
+        columns: listOfCandidatesLists
+      }/*,
+      axis: {
+        x: {
+          type: 'timeseries',
+          tick: {
+            format: '%m-%d'
+          }
+        }
+      }*/
     });
 
     return chart;
   }
 
+  function getListOfCandidatesLists(response) {
+
+    var xAxis = ['x'];
+    var listOfCandidatesLists = [];
+
+    var candidatesList = response;
+
+    for (var i = 0; i < candidatesList.length; i++) {
+
+      var candidate = candidatesList[i];
+      var candidateTwitterId = candidate.target;
+      var candidateScoreList = candidate.scores;
+
+      var innerList = [candidateTwitterId];
+
+      for (var j = 0; j < candidateScoreList.length; j++) {
+
+        var scoreNode = candidateScoreList[j];
+
+        if (j == 0) {
+          var dateInMillis = scoreNode.date;
+          var date = new Date(dateInMillis)
+          var dayAndMonth = date.getDate() + '-' + date.getMonth();
+          xAxis.push(dateInMillis);
+        }
+
+        var scoreValue = scoreNode.value;
+        innerList.push(scoreValue);
+      }
+
+      listOfCandidatesLists.push(innerList);
+    }
+
+    // listOfCandidatesLists.unshift(xAxis);
+    return listOfCandidatesLists;
+  }
+
+  function getAllTargetsScoreSuccess(response) {
+
+    var listOfCandidatesLists = getListOfCandidatesLists(response);
+    console.debug('****************************************** 1');
+    console.debug(listOfCandidatesLists);
+    console.debug('****************************************** 2');
+    $scope.chart = getCandidateScore(listOfCandidatesLists);
+  }
+
+  function logError(response) {
+    console.error(response);
+  }
+
   $scope.init = function() {
 
-    $scope.chart = getCandidateScore('Enrique Penalosa');
+    scoreService.getAllTargetsScore(getAllTargetsScoreSuccess, logError);
   }
 }

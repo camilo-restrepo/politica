@@ -1,11 +1,11 @@
 'use strict';
 
 boardModule.factory('tweetsService', tweetsService);
-tweetsService.$inject = ['$resource'];
+tweetsService.$inject = ['$resource', 'environment'];
 
-function tweetsService($resource) {
+function tweetsService($resource, environment) {
 
-  var url = 'http://104.236.26.163:9001/board/api/tweets';
+  var url = environment.board + '/board/api/tweets';
   var defaultParams = {};
 
   var actions = {
