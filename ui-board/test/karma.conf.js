@@ -26,7 +26,7 @@ module.exports = function(config) {
       'bower_components/angular/angular.js',
       'bower_components/angular-resource/angular-resource.js',
       'bower_components/angular-ui-router/release/angular-ui-router.js',
-      'bower_components/ng-websocket/ng-websocket.js',
+      'bower_components/angular-websocket/angular-websocket.min.js',
       'bower_components/bootstrap/dist/js/bootstrap.js',
       'bower_components/d3/d3.js',
       'bower_components/c3/c3.js',

@@ -5,7 +5,7 @@
     "angular": "^1.4.0",
     "angular-resource": "^1.4.0",
     "angular-ui-router": "^0.2.15",
-    "ng-websocket": "^0.2.1",
+    "angular-websocket": "^1.0.13",
     "bootstrap": "^3.3.5",
     "c3": "^0.4.10",
     "ngDialog": "^0.4.0",

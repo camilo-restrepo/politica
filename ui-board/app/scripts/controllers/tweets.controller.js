@@ -7,25 +7,26 @@ function tweetsController($scope, $websocket, environment, targetsService) {
 
   $scope.candidatos = [];
 
-  var ws = $websocket.$new({
-    url: environment.boardWS + '/board/api/ws',
-    protocols: []
-  }); 
+  var ws = $websocket(environment.boardWS + '/board/api/ws'); 
 
+  /*
   ws.$on('$open', function () {
     //console.log('open');
   });
+ */
 
-  ws.$on('$message', function (data) {
+  ws.onMessage(function(data) {
     pushData(data);
     //ws.$close();
   });
 
+  /*
   ws.$on('$close', function () {
     //console.log('close');
   });
 
   ws.$open();
+ */
 
   function compareTweets(tweet1, tweet2) {
     return (tweet1.text === tweet2.text) && (tweet1.userId === tweet2.userId); 
@@ -138,7 +139,6 @@ function tweetsController($scope, $websocket, environment, targetsService) {
   }
 
   $scope.init = function() {
-    console.debug('************************************ tweetsController');
     targetsService.getTargets(getTargetsSuccess, onError);
   };
 }
