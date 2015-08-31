@@ -44,7 +44,7 @@ function tweetsController($scope, $websocket, environment, targetsService) {
 
     var tweet = data;
     var tweetsLimit = 1;
-    tweet.timestamp_ms = tweet.timestamp_ms.$numberLong;
+    tweet.timestamp_ms = tweet.timestamp_ms;
 
     for(var i = 0; i < $scope.candidatos.length; i++) {
 
