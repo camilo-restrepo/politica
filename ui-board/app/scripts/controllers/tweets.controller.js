@@ -15,8 +15,8 @@ function tweetsController($scope, $websocket, environment, targetsService) {
   });
  */
 
-  ws.onMessage(function(data) {
-    pushData(data);
+  ws.onMessage(function(message) {
+    pushData(JSON.parse(message.data));
     //ws.$close();
   });
 
@@ -44,12 +44,10 @@ function tweetsController($scope, $websocket, environment, targetsService) {
 
     var tweet = data;
     var tweetsLimit = 1;
-    tweet.timestamp_ms = tweet.timestamp_ms;
+    tweet.timestamp_ms = tweet.timestamp_ms.$numberLong;
 
     for(var i = 0; i < $scope.candidatos.length; i++) {
-
       if($scope.candidatos[i].twitterId.id === tweet.targetTwitterId) {
-
         if (!tweetIsInList(tweet, $scope.candidatos[i].tweets)) {
           $scope.candidatos[i].tweets.push(tweet);
           if($scope.candidatos[i].tweets.length > tweetsLimit) {
@@ -58,6 +56,7 @@ function tweetsController($scope, $websocket, environment, targetsService) {
         }
       }
     }
+
     $scope.$apply();
   }
 
