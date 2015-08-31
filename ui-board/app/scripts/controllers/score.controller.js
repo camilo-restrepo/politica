@@ -79,9 +79,6 @@ function scoreController($scope, scoreService) {
   function getAllTargetsScoreSuccess(response) {
 
     var listOfCandidatesLists = getListOfCandidatesLists(response);
-    console.debug('****************************************** 1');
-    console.debug(JSON.stringify(listOfCandidatesLists));
-    console.debug('****************************************** 2');
     $scope.chart = getCandidateScore(listOfCandidatesLists);
   }
 
