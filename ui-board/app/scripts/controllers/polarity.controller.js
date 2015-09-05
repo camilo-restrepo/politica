@@ -73,8 +73,15 @@ function polarityController($scope, tweetsService, ngDialog) {
     });
   }
 
+  $scope.changeMessageBoxState = function() {
+    $scope.boxIsFull = !$scope.boxIsFull;
+    $scope.showOrHide = $scope.boxIsFull ? 'Ocultar' : "Mostrar";
+  }
+
   $scope.init = function() {
 
+    $scope.boxIsFull = true;
+    $scope.showOrHide = 'Ocultar';
     showInitialDialog();
     tweetsService.getAllCandidatesPolarity({time: 'day'}, success, error);
   }

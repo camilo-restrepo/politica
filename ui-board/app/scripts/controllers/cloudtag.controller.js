@@ -101,8 +101,15 @@ function cloudtagController($scope, cloudtagService) {
     console.error(response);
   }
 
+  $scope.changeMessageBoxState = function() {
+    $scope.boxIsFull = !$scope.boxIsFull;
+    $scope.showOrHide = $scope.boxIsFull ? 'Ocultar' : "Mostrar";
+  }
+
   $scope.init = function() {
 
+    $scope.boxIsFull = true;
+    $scope.showOrHide = 'Ocultar';
     cloudtagService.getAllCandidatesCloudTags(success, error);
   }
 }
