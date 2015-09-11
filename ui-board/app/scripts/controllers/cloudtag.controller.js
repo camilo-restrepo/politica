@@ -4,6 +4,9 @@ boardModule.controller('cloudtagController', cloudtagController);
 cloudtagController.$inject = ['$scope', 'cloudtagService'];
 
 function cloudtagController($scope, cloudtagService) {
+    var self = this;
+    this.max = 0;
+    this.min = 1231231231;
 
   function getResponseAsTree(response) {
 
@@ -19,10 +22,17 @@ function cloudtagController($scope, cloudtagService) {
       var name = candidateNode.twitterId;
       var children = [];
 
-      for (var j = 0; j < candidateNode.wordCountList.length; j++) {
+      // Limit to maximum 5 tags
+      for (var j = 0; j < Math.min(candidateNode.wordCountList.length, 5); j++) {
 
         var wordCountNode = candidateNode.wordCountList[j];
         var child = { name: wordCountNode.word, size: wordCountNode.count };
+        if (self.max < wordCountNode.count) {
+            self.max = wordCountNode.count;
+        }
+        if (self.min > wordCountNode.count) {
+            self.min = wordCountNode.count;
+        }
         children.push(child);
       }
 
@@ -65,7 +75,12 @@ function cloudtagController($scope, cloudtagService) {
     var treemap = d3.layout.treemap()
     .size([width, height])
     .sticky(true)
-    .value(function(d) { return d.size; });
+    // Max value is 28
+    .value(function(d) {
+        // Logistic function
+        var v = 34 / ( 1 + (Math.exp(-10*parseInt((d.size-self.min)/(self.max-self.min)*100 - 0.5)))) ;
+        return v;
+    });
 
     var div = d3.select("#cloudtagChart")
     .style("height", (height + margin.top + margin.bottom) + "px")
@@ -80,9 +95,12 @@ function cloudtagController($scope, cloudtagService) {
     .enter().append("div")
     .attr("class", "node")
     .call(position)
-    .style("background", function(d) { 
-      return d.children ? getCandidateColor(d.name) : null; })
-      .text(function(d) { return d.children ? null : d.name; });
+    .style("font-size", function(d) { return d.value + "px"; })
+    .style("padding", function (d) {
+        return d.dy*Math.random()/2 + "px 0px 0px "+d.dx*Math.random()/4 + "px";
+    })
+    .style("color", function (d) { return getCandidateColor(d.name) || getCandidateColor(d.parent && d.parent.name); })
+     .text(function(d) { return d.children ? null : d.name; });
 
       function position() {
         this.style("left", function(d) { return d.x + "px"; })

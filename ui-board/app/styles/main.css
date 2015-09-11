@@ -248,14 +248,14 @@ body {
 /* charts styles */
 
 .node {
-  border: solid 1px white;
+  border: none;
   font: 14px sans-serif;
   line-height: 12px;
-  overflow: hidden;
   position: absolute;
   text-indent: 2px;
   text-align: center;
   text-anchor: middle;
+  padding-top: 10px;
 }
 
 /* modal styles */
