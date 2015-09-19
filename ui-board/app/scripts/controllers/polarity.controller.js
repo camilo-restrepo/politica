@@ -36,7 +36,16 @@ function polarityController($scope, tweetsService, ngDialog) {
         x: {
           type: 'category',
           categories: columnNamesArray
+        },
+        y: {
+          label: {
+            text: 'Tweets',
+            position: 'outer-middle'
+          }
         }
+      },
+      legend: {
+        position: 'right'
       }
     });
 
