@@ -26,14 +26,23 @@ function scoreController($scope, scoreService) {
         columns: listOfCandidatesLists,
         colors: colors
       },
-        axis: {
-          x: {
-            type: 'timeseries',
-            tick: {
-              format: '%m-%d'
-            }
+      axis: {
+        x: {
+          type: 'timeseries',
+          tick: {
+            format: '%m-%d'
+          }
+        },
+        y: {
+          label: {
+            text: 'Tweets',
+            position: 'outer-middle'
           }
         }
+      },
+      legend: {
+        position: 'right'
+      }
     });
 
     return chart;

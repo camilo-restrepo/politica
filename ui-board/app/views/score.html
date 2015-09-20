@@ -3,14 +3,11 @@
     <div class="col-md-12">
       <div ng-class="{ 'full-message-box': boxIsFull, 'min-message-box': !boxIsFull }">
         <p class="white-text text-md padding-top-lg col-md-12" ng-show="boxIsFull">
-        La gráfica de tendencia muestra la cantidad de tweets que mencionan a los candidatos en los últimos 30 días.
+        Tendencia: cantidad de Tweets relacionados con cada uno de los candidatos a la alcaldía de Bogotá en los últimos 30 días.
         </p>
         <div class="hide-box">
           <button class="btn btn-link fa white-text text-md no-change-link capitalize" ng-class="{ 'fa-chevron-up': boxIsFull, 'fa-chevron-down': !boxIsFull }" ng-click="changeMessageBoxState()"> {{ showOrHide }}</button>
         </div>
-      </div>
-      <div class="chart-title">
-        <h2>Tendencia</h2>
       </div>
       <div id="scoreChart">
       </div>

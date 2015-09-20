@@ -3,14 +3,11 @@
     <div class="col-md-12">
       <div ng-class="{ 'full-message-box': boxIsFull, 'min-message-box': !boxIsFull }">
         <p class="white-text text-md padding-top-lg col-md-12" ng-show="boxIsFull">
-        La gráfica de Cloud Tag muestra los temas por los que más se menciona a cada candidato.
+        Cloud Tag: muestra las palabras más mencionadas en Twitter para cada candidato a la alcaldía.
         </p>
         <div class="hide-box">
           <button class="btn btn-link fa white-text text-md no-change-link" ng-class="{ 'fa-chevron-up': boxIsFull, 'fa-chevron-down': !boxIsFull }" ng-click="changeMessageBoxState()"> {{ showOrHide }}</button>
         </div>
-      </div>
-      <div class="chart-title">
-        <h2>Cloud Tag</h2>
       </div>
       <div id="cloudtagChart">
       </div>
