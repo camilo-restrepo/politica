@@ -1,9 +1,9 @@
 'use strict';
 
 boardModule.controller('polarityController', polarityController);
-polarityController.$inject = ['$scope', 'tweetsService', 'ngDialog'];
+polarityController.$inject = ['$scope', 'tweetsService'];
 
-function polarityController($scope, tweetsService, ngDialog) {
+function polarityController($scope, tweetsService) {
 
   function getAllCandidatesPolarity(columnNamesArray, positiveArray, negativeArray) {
 
@@ -77,14 +77,6 @@ function polarityController($scope, tweetsService, ngDialog) {
     console.error(response);
   }
 
-  function showInitialDialog() {
-
-    ngDialog.open({
-      template: 'views/initial-dialog.html',
-      scope: $scope
-    });
-  }
-
   $scope.changeMessageBoxState = function() {
     $scope.boxIsFull = !$scope.boxIsFull;
     $scope.showOrHide = $scope.boxIsFull ? 'Ocultar' : "Mostrar";
@@ -94,7 +86,6 @@ function polarityController($scope, tweetsService, ngDialog) {
 
     $scope.boxIsFull = true;
     $scope.showOrHide = 'Ocultar';
-    showInitialDialog();
     tweetsService.getAllCandidatesPolarity({time: 'day'}, success, error);
   }
 }
