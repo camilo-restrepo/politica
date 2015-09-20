@@ -21,10 +21,14 @@ function scoreController($scope, scoreService) {
 
     var chart = c3.generate({
       bindto: '#scoreChart',
+      size: {
+        height: 530
+      },
       data: {
         x: 'x',
         columns: listOfCandidatesLists,
-        colors: colors
+        colors: colors,
+        type: 'spline'
       },
       axis: {
         x: {
@@ -46,6 +50,14 @@ function scoreController($scope, scoreService) {
     });
 
     return chart;
+  }
+
+  $scope.showAllCandidates = function() {
+    $scope.chart.show(['CVderoux', 'MMMaldonadoC', 'RicardoAriasM', 'AlexVernot', 'danielraisbeck']);
+  }
+
+  $scope.showPopularCandidatesOnly = function() {
+    $scope.chart.hide(['CVderoux', 'MMMaldonadoC', 'RicardoAriasM', 'AlexVernot', 'danielraisbeck']);
   }
 
   function getListOfCandidatesLists(response) {
