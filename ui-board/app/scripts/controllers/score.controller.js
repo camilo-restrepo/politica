@@ -101,6 +101,7 @@ function scoreController($scope, scoreService) {
 
     var listOfCandidatesLists = getListOfCandidatesLists(response);
     $scope.chart = getCandidateScore(listOfCandidatesLists);
+    $scope.showPopularCandidatesOnly();
   }
 
   function logError(response) {
