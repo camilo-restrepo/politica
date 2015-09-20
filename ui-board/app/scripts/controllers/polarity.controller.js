@@ -21,6 +21,9 @@ function polarityController($scope, tweetsService, ngDialog) {
 
     var chart = c3.generate({
       bindto: '#polarityChart',
+      size: {
+        height: 530
+      },
       data: {
         columns: [ positiveArray, negativeArray ],
         colors: { 
