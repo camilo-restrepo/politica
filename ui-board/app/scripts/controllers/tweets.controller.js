@@ -112,7 +112,7 @@ function tweetsController($scope, $websocket, environment, targetsService) {
       return 'Rafael Pardo';
     }else if(targetId === 'MMMaldonadoC'){
       return 'María Mercedes Maldonado';
-    }else if(targetId === 'danielraisbeck'){
+    }else if(targetId === 'DanielRaisbeck'){
       return 'Daniel Raisbeck';
     }
 
