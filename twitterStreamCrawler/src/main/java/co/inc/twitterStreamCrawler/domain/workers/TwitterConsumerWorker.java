@@ -191,14 +191,10 @@ public class TwitterConsumerWorker implements Runnable {
 	}
 
 	private void sendTweetToBoard(final Document documentTweet) {
-		try {
-			sendTweet(documentTweet);
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
+		sendTweet(documentTweet);
 	}
 
-	private void sendTweet(final Document documentTweet) throws IOException {
+	private void sendTweet(final Document documentTweet)  {
 		Client client = Client.create();
 		WebResource webResource = client.resource(GlobalConstants.BOARD_URL);
 		webResource.type("application/json").post(documentTweet.toJson());

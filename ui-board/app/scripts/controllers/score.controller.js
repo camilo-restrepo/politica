@@ -54,11 +54,35 @@ function scoreController($scope, scoreService) {
 
   $scope.showAllCandidates = function() {
     $scope.chart.show(['CVderoux', 'MMMaldonadoC', 'RicardoAriasM', 'AlexVernot', 'danielraisbeck']);
-  }
+  };
 
   $scope.showPopularCandidatesOnly = function() {
     $scope.chart.hide(['CVderoux', 'MMMaldonadoC', 'RicardoAriasM', 'AlexVernot', 'danielraisbeck']);
-  }
+  };
+
+  function getTargetName(targetId){
+    if(targetId === 'CVderoux'){
+      return 'Carlos Vicente de Roux';
+    }else if(targetId === 'EnriquePenalosa'){
+      return 'Enrique Peñalosa';
+    }else if(targetId === 'PachoSantosC'){
+      return 'Francisco Santos';
+    }else if(targetId === 'ClaraLopezObre'){
+      return 'Clara López Obregon';
+    }else if(targetId === 'AlexVernot'){
+      return 'Alex Vernot';
+    }else if(targetId === 'RicardoAriasM'){
+      return 'Ricardo Arias Mora';
+    }else if(targetId === 'RafaelPardo'){
+      return 'Rafael Pardo';
+    }else if(targetId === 'MMMaldonadoC'){
+      return 'María Mercedes Maldonado';
+    }else if(targetId === 'danielraisbeck'){
+      return 'Daniel Raisbeck';
+    }
+
+    return '';
+  };
 
   function getListOfCandidatesLists(response) {
 
@@ -79,7 +103,7 @@ function scoreController($scope, scoreService) {
 
         var scoreNode = candidateScoreList[j];
 
-        if (i == 0) {
+        if (i === 0) {
           var dateInMillis = scoreNode.date;
           xAxis.push(dateInMillis);
         }
@@ -111,12 +135,12 @@ function scoreController($scope, scoreService) {
   $scope.changeMessageBoxState = function() {
     $scope.boxIsFull = !$scope.boxIsFull;
     $scope.showOrHide = $scope.boxIsFull ? 'Ocultar' : "Mostrar";
-  }
+  };
 
   $scope.init = function() {
 
     $scope.boxIsFull = true;
     $scope.showOrHide = 'Ocultar';
     scoreService.getAllTargetsScore(getAllTargetsScoreSuccess, logError);
-  }
+  };
 }

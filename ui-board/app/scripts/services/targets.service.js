@@ -14,4 +14,4 @@ function targetsService($resource, environment) {
   };
 
   return $resource(url, defaultParams, actions);
-};
+}

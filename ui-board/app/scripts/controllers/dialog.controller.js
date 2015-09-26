@@ -17,5 +17,5 @@ function dialogController($scope, ngDialog) {
   $scope.init = function() {
 
     showInitialDialog();
-  }
+  };
 }

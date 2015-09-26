@@ -31,9 +31,7 @@ function polarityController($scope, tweetsService) {
           Negativo: '#F4A8AF'
         },
         type: 'bar',
-        groups: [
-          ['Positivo', 'Negativo']
-        ]
+        
       },
       axis: {
         x: {
@@ -55,6 +53,30 @@ function polarityController($scope, tweetsService) {
     return chart;
   }
 
+  function getTargetName(targetId){
+    if(targetId === 'CVderoux'){
+      return 'Carlos Vicente de Roux';
+    }else if(targetId === 'EnriquePenalosa'){
+      return 'Enrique Peñalosa';
+    }else if(targetId === 'PachoSantosC'){
+      return 'Francisco Santos';
+    }else if(targetId === 'ClaraLopezObre'){
+      return 'Clara López Obregon';
+    }else if(targetId === 'AlexVernot'){
+      return 'Alex Vernot';
+    }else if(targetId === 'RicardoAriasM'){
+      return 'Ricardo Arias Mora';
+    }else if(targetId === 'RafaelPardo'){
+      return 'Rafael Pardo';
+    }else if(targetId === 'MMMaldonadoC'){
+      return 'María Mercedes Maldonado';
+    }else if(targetId === 'danielraisbeck'){
+      return 'Daniel Raisbeck';
+    }
+
+    return '';
+  }
+
   function success(response) {
 
     var polarityArray = response;
@@ -65,7 +87,7 @@ function polarityController($scope, tweetsService) {
     for (var i = 0; i < polarityArray.length; i++) {
 
       var candidatePolarity = polarityArray[i];
-      columnNamesArray.push(candidatePolarity.twitterId);
+      columnNamesArray.push(getTargetName(candidatePolarity.twitterId));
       positiveArray.push(candidatePolarity.positivePolarity);
       negativeArray.push(candidatePolarity.negativePolarity);
     }
@@ -80,12 +102,12 @@ function polarityController($scope, tweetsService) {
   $scope.changeMessageBoxState = function() {
     $scope.boxIsFull = !$scope.boxIsFull;
     $scope.showOrHide = $scope.boxIsFull ? 'Ocultar' : "Mostrar";
-  }
+  };
 
   $scope.init = function() {
 
     $scope.boxIsFull = true;
     $scope.showOrHide = 'Ocultar';
     tweetsService.getAllCandidatesPolarity({time: 'day'}, success, error);
-  }
+  };
 }
