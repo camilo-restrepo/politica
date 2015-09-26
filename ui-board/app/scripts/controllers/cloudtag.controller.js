@@ -4,6 +4,9 @@ boardModule.controller('cloudtagController', cloudtagController);
 cloudtagController.$inject = ['$scope', 'cloudtagService'];
 
 function cloudtagController($scope, cloudtagService) {
+  var popularCandidateWords = [];
+  var allWords = [];
+
 
   function getCandidateColor(candidateTwitterId) {
     var colors = {
@@ -32,9 +35,9 @@ function cloudtagController($scope, cloudtagService) {
   }
 
   function success(response) {
-    var words = [];
     var minSize = 1000000;
     var maxSize = 0;
+    var candidatosNoPopulares = ['CVderoux', 'MMMaldonadoC', 'RicardoAriasM', 'AlexVernot', 'danielraisbeck'];
 
     for(var i = 0 ; i < response.length ; i++){
       var element = response[i];
@@ -48,22 +51,43 @@ function cloudtagController($scope, cloudtagService) {
         };
         minSize = Math.min(minSize, wordCount.count);
         maxSize = Math.max(maxSize, wordCount.count);
-        words.push(word);
+        allWords.push(word);
+        if(candidatosNoPopulares.indexOf(element.twitterId) === -1){
+          popularCandidateWords.push(word);
+        }
       }
     }
 
-    for(var i = 0 ; i < words.length ; i++){
-      var w = words[i];
+    for(var i = 0 ; i < popularCandidateWords.length ; i++){
+      var w = popularCandidateWords[i];
       w.size = scale(w.size, minSize, maxSize);
     }
-    $scope.words = shuffleArray(words);
+
+    $scope.words = shuffleArray(popularCandidateWords);
   }
+
+  $scope.showAllCandidates = function() {
+    $scope.words = shuffleArray(allWords);
+    //$scope.$apply()
+  };
+
+  $scope.showPopularCandidatesOnly = function() {
+    $scope.words = shuffleArray(popularCandidateWords);
+    //$scope.$apply()
+  };
 
   function error(response) {
     console.error(response);
   }
 
+  $scope.changeMessageBoxState = function() {
+    $scope.boxIsFull = !$scope.boxIsFull;
+    $scope.showOrHide = $scope.boxIsFull ? 'Ocultar' : "Mostrar";
+  };
+
   $scope.init = function() {
+    $scope.boxIsFull = true;
+    $scope.showOrHide = 'Ocultar';
     cloudtagService.getAllCandidatesCloudTags(success, error);
   };
 }

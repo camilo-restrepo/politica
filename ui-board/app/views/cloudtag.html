@@ -1,6 +1,20 @@
 <div ng-controller="cloudtagController" ng-init="init()">
   <div class="row">
     <div class="col-md-12">
+    <div ng-class="{ 'full-message-box': boxIsFull, 'min-message-box': !boxIsFull }">
+        <p class="white-text text-md2 padding-top-lg col-md-12" ng-show="boxIsFull">
+        Palabras Relevantes: palabras más mencionadas en Twitter para cada uno de los candidatos a la alcaldía de Bogotá.
+        </p>
+        <div class="hide-box">
+          <button class="btn btn-link fa white-text text-md no-change-link" ng-class="{ 'fa-chevron-up': boxIsFull, 'fa-chevron-down': !boxIsFull }" ng-click="changeMessageBoxState()"> {{ showOrHide }}</button>
+        </div>
+      </div>
+      <div class="chart-options">
+        <button type="button" class="btn btn-outline" ng-click="showAllCandidates()">Todos</button>
+        <button type="button" class="btn btn-outline" ng-click="showPopularCandidatesOnly()">Populares</button>
+      </div>
+      <br>
+      <br>
       <span ng-repeat="word in words" ng-style="{'color': word.color}" class="tangcloud-item-{{ word.size }}">
         {{ word.word }}</span>
     </div>
