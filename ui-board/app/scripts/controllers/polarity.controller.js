@@ -5,6 +5,18 @@ polarityController.$inject = ['$scope', 'tweetsService'];
 
 function polarityController($scope, tweetsService) {
 
+    var todosLosCandidatos = {
+      columnNamesArray: [],
+      positiveArray: ['Positivo'],
+      negativeArray : ['Negativo']
+    };
+
+    var candidatosPopulares = {
+      columnNamesArray: [],
+      positiveArray: ['Positivo'],
+      negativeArray : ['Negativo']
+    };
+
   function getAllCandidatesPolarity(columnNamesArray, positiveArray, negativeArray) {
 
     var colors = {
@@ -31,7 +43,6 @@ function polarityController($scope, tweetsService) {
           Negativo: '#F4A8AF'
         },
         type: 'bar',
-        
       },
       axis: {
         x: {
@@ -82,22 +93,34 @@ function polarityController($scope, tweetsService) {
     return o;
   }
 
-  function success(response) {
+  $scope.showAllCandidates = function() {
+    $scope.chart = getAllCandidatesPolarity(todosLosCandidatos.columnNamesArray, todosLosCandidatos.positiveArray, 
+      todosLosCandidatos.negativeArray);
+  };
 
+  $scope.showPopularCandidatesOnly = function() {
+    $scope.chart = getAllCandidatesPolarity(candidatosPopulares.columnNamesArray, candidatosPopulares.positiveArray, 
+      candidatosPopulares.negativeArray);
+  };
+
+  function success(response) {
+    var candidatosNoPopulares = ['CVderoux', 'MMMaldonadoC', 'RicardoAriasM', 'AlexVernot', 'danielraisbeck'];
     var polarityArray = shuffleArray(response);
-    var columnNamesArray = [];
-    var positiveArray = ['Positivo'];
-    var negativeArray = ['Negativo'];
 
     for (var i = 0; i < polarityArray.length; i++) {
 
       var candidatePolarity = polarityArray[i];
-      columnNamesArray.push(getTargetName(candidatePolarity.twitterId));
-      positiveArray.push(candidatePolarity.positivePolarity);
-      negativeArray.push(candidatePolarity.negativePolarity);
-    }
+      todosLosCandidatos.columnNamesArray.push(candidatePolarity.twitterId);
+      todosLosCandidatos.positiveArray.push(candidatePolarity.positivePolarity);
+      todosLosCandidatos.negativeArray.push(candidatePolarity.negativePolarity);
 
-    $scope.chart = getAllCandidatesPolarity(columnNamesArray, positiveArray, negativeArray);
+      if(candidatosNoPopulares.indexOf(candidatePolarity.twitterId) === -1){
+        candidatosPopulares.columnNamesArray.push(candidatePolarity.twitterId);
+        candidatosPopulares.positiveArray.push(candidatePolarity.positivePolarity);
+        candidatosPopulares.negativeArray.push(candidatePolarity.negativePolarity);
+      }
+    }
+    $scope.showPopularCandidatesOnly();
   }
 
   function error(response) {

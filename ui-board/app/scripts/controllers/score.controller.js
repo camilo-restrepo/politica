@@ -32,6 +32,10 @@ function scoreController($scope, scoreService) {
       },
       axis: {
         x: {
+          label: {
+            text: 'Fecha',
+            position: 'outer-center'
+          },
           type: 'timeseries',
           tick: {
             format: '%m-%d'
