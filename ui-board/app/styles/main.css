@@ -227,6 +227,14 @@ body {
   padding-top: 20px;
 }
 
+.padding-top-xlg {
+  padding-top: 40px;
+}
+
+.padding-left-lg {
+  padding-left: 40px;
+}
+
 .btn-link:hover, .btn-link:focus {
   color: #FFF;
   text-decoration: underline;
@@ -271,6 +279,20 @@ body {
   text-align: center;
   vertical-align: middle;
   padding-top: 35px;
+}
+
+/* candidate styles */
+
+.stat-item {
+  padding-bottom: 60px;
+}
+
+.sm-text {
+  font-size: small;
+}
+
+.lg-text {
+  font-size: x-large;
 }
 
 /* charts styles */
