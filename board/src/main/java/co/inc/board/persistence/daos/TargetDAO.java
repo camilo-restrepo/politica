@@ -57,7 +57,7 @@ public class TargetDAO {
 		try {
 
 			MongoCollection<Document> collection = mongoDatabase.getCollection(TARGETS_COLLECTION);
-			Document targetDocument = collection.find(Filters.eq("twitterId", twitterId)).first();
+			Document targetDocument = collection.find(Filters.eq("twitterId.id", twitterId)).first();
 			twitterTarget = (!MongoUtils.documentIsBlank(targetDocument)) ?
 					objectMapper.readValue(targetDocument.toJson(), TwitterTarget.class) : twitterTarget;
 

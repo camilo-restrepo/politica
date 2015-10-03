@@ -5,6 +5,30 @@ candidateTweetsController.$inject = ['$scope', '$stateParams', '$websocket', 'en
 
 function candidateTweetsController($scope, $stateParams, $websocket, environment, targetsService, tweetsService) {
 
+  $scope.getTargetName = function(targetId){
+    if(targetId === 'CVderoux'){
+      return 'Carlos Vicente de Roux';
+    }else if(targetId === 'EnriquePenalosa'){
+      return 'Enrique Peñalosa';
+    }else if(targetId === 'PachoSantosC'){
+      return 'Francisco Santos';
+    }else if(targetId === 'ClaraLopezObre'){
+      return 'Clara López Obregon';
+    }else if(targetId === 'AlexVernot'){
+      return 'Alex Vernot';
+    }else if(targetId === 'RicardoAriasM'){
+      return 'Ricardo Arias Mora';
+    }else if(targetId === 'RafaelPardo'){
+      return 'Rafael Pardo';
+    }else if(targetId === 'MMMaldonadoC'){
+      return 'María Mercedes Maldonado';
+    }else if(targetId === 'DanielRaisbeck'){
+      return 'Daniel Raisbeck';
+    }
+
+    return '';
+  };
+
   function compareTweets(tweet1, tweet2) {
     return (tweet1.text === tweet2.text) && (tweet1.userId === tweet2.userId); 
   }

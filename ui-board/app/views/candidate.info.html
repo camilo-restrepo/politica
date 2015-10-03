@@ -1,34 +1,43 @@
 <div class="row">
   <div class="col-md-12">
     <div id="go-back-rectangle" class="black-area glyphicon glyphicon-chevron-left">
-      <a ui-sref="home">Ver todos los candidatos</a>
+      <a class="link-white" ui-sref="home">Ver todos los candidatos</a>
     </div>
   </div>
   <div class="col-md-5">
     <div id="candidate-square">
       <div id="candidate-rectangle" class="black-area">
-        {{ candidate.name }}
+        {{ getTargetName(candidate.screenName) }}
       </div>
     </div>
   </div>
-  <div class="col-md-7">
-  </div>
-  <div class="stat-item">
-    <h3>
-      <i class="fa fa-twitter fa-3"></i>
-      Menciones de campaña<small>{{tweetStats.totalTweets}}</small>
-    </h3>
-  </div>
-  <div class="stat-item">
-    <h3>
-      <i class="fa fa-twitter fa-3"></i>
-      Menciones hoy<small>{{tweetStats.tweetsToday}}</small>
-    </h3>
-  </div>
-  <div class="stat-item">
-    <h3>
-      <i class="fa fa-twitter fa-3"></i>
-      Menciones en la última hora<small>{{tweetStats.tweetsLastHour}}</small>
-    </h3>
+  <div class="col-md-7 padding-top-xlg">
+    <div class="stat-item">
+      <div class="col-md-1">
+        <i class="fa fa-twitter fa-3x"></i>
+      </div>
+      <div class="col-md-11 padding-left-lg">
+        <small class="sm-text">Tweets totales desde inicio de campaña</small><br>
+        <b class="lg-text">{{tweetStats.totalTweets}}</b>
+      </div>
+    </div>
+    <div class="stat-item">
+      <div class="col-md-1">
+        <i class="fa fa-twitter fa-3x"></i>
+      </div>
+      <div class="col-md-11 padding-left-lg">
+        <small class="sm-text">Tweets trinados por día</small><br>
+        <b class="lg-text">{{tweetStats.tweetsToday}}</b>
+      </div>
+    </div>
+    <div class="stat-item">
+      <div class="col-md-1">
+        <i class="fa fa-twitter fa-3x"></i>
+      </div>
+      <div class="col-md-11 padding-left-lg">
+        <small class="sm-text">Tweets trinados por hora</small><br>
+        <b class="lg-text">{{tweetStats.tweetsLastHour}}</b>
+      </div>
+    </div>
   </div>
 </div>
