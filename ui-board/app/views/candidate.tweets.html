@@ -1,22 +1,24 @@
 <div class="row">
   <div class="col-md-12">
-    <ul class="collection with-header">
-      <li class="collection-header">
-      <h6><b>{{candidate.screenName}}</b>
-        <a class="link-blue" target="blank" href="http://twitter.com/{{candidate.twitterId.id}}">@{{candidate.twitterId.id}}</a>
-      </h6>
-      </li>
-      <li class="collection-item" ng-repeat="tw in candidate.tweets | orderBy:'-timestamp_ms'">
-      <h6>
-        <span class="label" ng-class="{'label-danger' : tw.polarity == -1, 'label-success' : tw.polarity == 1, 'label-default' : tw.polarity==0}">
-          <span ng-if="tw.polarity == -1">Negativo</span>
-          <span ng-if="tw.polarity == 1">Positivo</span>
-          <span ng-if="tw.polarity == 0">Neutro</span>
-        </span>
-      </h6>
-      <p class="text-sm">{{tw.text}}</p>
-      <div class="padding-right-sm inline"><small>{{tw.timestamp_ms | date:'dd-MM-yyyy HH:mm:ss'}}</small></div>
-      </li>
-    </ul>
+    <ul class="col-md-4 list-group" ng-repeat="tw in candidate.tweets | orderBy:'-timestamp_ms'">
+        <li class="list-group-item list-title">
+            <div class="text-md">
+              <a class="link-white" ui-sref="candidate({ twitterId: candidate.twitterId.id })" analytics-on  analytics-category="Click">{{ getTargetName(candidate.screenName) }}</a>
+            </div>
+            <small>
+              <a class="link-white" target="blank" href="http://twitter.com/{{candidate.twitterId.id}}"
+                analytics-on  analytics-category="Click">
+                @{{candidate.twitterId.id}}
+              </a>
+            </small>
+        </li>
+        <li class="list-group-item height-lg tweet-content">
+            <p class="text-sm">{{tw.text}}</p>
+            <div class="padding-right-sm inline time-label"><small>{{tw.timestamp_ms | date:'dd-MM-yyyy HH:mm:ss'}}</small></div>
+            <div class="padding-right-sm label text-sm to-right tweet-sentiment" ng-class="getTweetLabelClass(tw.prediction)">
+              <span>{{ getTweetLabelText(tw.prediction) }}</span>
+            </div>
+        </li>
+      </ul>
   </div>
 </div>

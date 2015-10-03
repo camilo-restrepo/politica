@@ -29,6 +29,23 @@ function candidateTweetsController($scope, $stateParams, $websocket, environment
     return '';
   };
 
+  $scope.getCandidateColor = function(twitterId) {
+
+    var colors = {
+      RicardoAriasM: '#D66F13',
+      MMMaldonadoC: '#FBD103',
+      danielraisbeck: '#FF5C01',
+      ClaraLopezObre: '#FFDF00',
+      RafaelPardo: '#ED0A03',
+      PachoSantosC: '#3C68B7',
+      EnriquePenalosa: '#12ADE5',
+      AlexVernot: '#0A5C6D',
+      CVderoux: '#088543'
+    };
+
+    return colors[twitterId];
+  }
+
   function compareTweets(tweet1, tweet2) {
     return (tweet1.text === tweet2.text) && (tweet1.userId === tweet2.userId); 
   }
@@ -46,8 +63,8 @@ function candidateTweetsController($scope, $stateParams, $websocket, environment
   function pushData(data) {
 
     var tweet = data;
-    var tweetsLimit = 5;
-    tweet.timestamp_ms = tweet.timestamp_ms;
+    var tweetsLimit = 3;
+    tweet.timestamp_ms = tweet.timestamp_ms.$numberLong;
     var tweetBelongsToCandidate = ($scope.candidate.twitterId.id === tweet.targetTwitterId);
 
     if (tweetBelongsToCandidate && (!tweetIsInList(tweet, $scope.candidate.tweets))) {
@@ -58,35 +75,45 @@ function candidateTweetsController($scope, $stateParams, $websocket, environment
 
       $scope.candidate.tweets.push(tweet);
 
-      if($scope.candidatos[i].tweets.length > tweetsLimit) {
-        $scope.candidatos[i].tweets.shift();
+      if($scope.candidate.tweets.length > tweetsLimit) {
+        $scope.candidate.tweets.shift();
       }
     }
 
     $scope.$apply();
   }
 
+  $scope.getTweetLabelClass = function(predictionValue) {
+
+    var labelClass = 'label-warning';
+
+    if (predictionValue === 'negative') {
+      labelClass = 'label-danger';
+    } else if (predictionValue === 'positive') {
+      labelClass = 'label-success';
+    }
+
+    return labelClass;
+  };
+
+  $scope.getTweetLabelText = function(predictionValue) {
+
+    var labelText = 'Neutro ::';
+
+    if (predictionValue === 'negative') {
+      labelText = 'Negativo >:(';
+    } else if (predictionValue === 'positive') {
+      labelText = 'Positivo :)';
+    }
+
+    return labelText;
+  };
+
   function initializeWebsocket() {
-
-    var ws = $websocket.$new({
-      url: environment.boardWS + '/board/api/ws',
-      protocols: []
-    }); 
-
-    ws.$on('$open', function () {
-      //console.log('open');
+    var ws = $websocket(environment.boardWS + '/board/api/ws');
+    ws.onMessage(function(message) {
+      pushData(JSON.parse(message.data));
     });
-
-    ws.$on('$message', function (data) {
-      pushData(data);
-      //ws.$close();
-    });
-
-    ws.$on('$close', function () {
-      //console.log('close');
-    });
-
-    ws.$open();
   }
 
   function candidateTweetStatsSuccess(response) {
@@ -106,9 +133,7 @@ function candidateTweetsController($scope, $stateParams, $websocket, environment
   $scope.init = function() {
 
     var candidateTwitterId = $stateParams.twitterId;
-
     console.debug('candidateTweetsController, candidateTwitterId: ' + candidateTwitterId);
-
     tweetsService.getCandidateTweetStats({ twitterId: candidateTwitterId }, candidateTweetStatsSuccess, logError);
     targetsService.getSingleTarget({ twitterId: candidateTwitterId }, singleTargetSuccess, logError);
   }
