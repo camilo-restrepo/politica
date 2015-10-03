@@ -42,35 +42,6 @@ body {
 
 }
 
-#candidate-square {
-  margin: 5px;
-  width: 245px;
-  height: 245px;
-  background: red;
-}
-
-#candidate-rectangle {
-  width: 195px;
-  height: 115px;
-  background: black;
-  position: relative;
-  top: 71px;
-  left: 140px;
-}
-
-#go-back-rectangle {
-  float: right;
-  width: 195px;
-  height: 45px;
-  background: black;
-  position: relative;
-}
-
-.black-area {
-  color: #FFF;
-  font-size: 18px;
-}
-
 .height-lg {
   height: 180px;
 }
@@ -283,6 +254,35 @@ body {
 
 /* candidate styles */
 
+#candidate-square {
+  margin: 5px;
+  width: 245px;
+  height: 245px;
+}
+
+#candidate-rectangle {
+  padding: 9px;
+  width: 195px;
+  height: 115px;
+  background: black;
+  position: relative;
+  top: 71px;
+  left: 140px;
+}
+
+#go-back-rectangle {
+  float: right;
+  width: 195px;
+  height: 45px;
+  background: black;
+  position: relative;
+}
+
+.black-area {
+  color: #FFF;
+  font-size: 18px;
+}
+
 .stat-item {
   padding-bottom: 60px;
 }
@@ -293,6 +293,15 @@ body {
 
 .lg-text {
   font-size: x-large;
+}
+
+.candidate-name {
+  font-size: 20px;
+  text-transform: uppercase;
+}
+
+#candidate-info {
+  padding-bottom: 50px;
 }
 
 /* charts styles */
