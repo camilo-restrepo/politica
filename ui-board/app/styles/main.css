@@ -51,6 +51,7 @@ body {
   width: 30%;
   margin-left: 2.3em;
   height: 185px;
+  font-family: "Open Sans";
 }
 
 .list-title {
@@ -71,6 +72,7 @@ body {
   margin-left: 1em;
   margin-bottom: 25%;
   height: 100px;
+  font-family: "Open Sans";
 }
 
 .tweet-content-candidate {
@@ -541,8 +543,4 @@ body {
   border-bottom-left-radius: 0px !important;
   border-top-left-radius: 0px !important;
   border-top-right-radius: 0px !important;
-}
-
-.black-buttom{
-
 }
