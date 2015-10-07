@@ -139,8 +139,7 @@ function tweetsController($scope, $websocket, environment, targetsService, tweet
   }
 
   function getAllTweetsCountSuccess(data){
-    $scope.tweetsCount = data;
-    console.log(data);
+    $scope.tweetsCount = data.count;
   }
 
   $scope.init = function() {
