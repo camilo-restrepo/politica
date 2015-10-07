@@ -121,6 +121,10 @@ public class TweetDAO {
 
     public TweetsCount getAllTweetsCount(){
         MongoCollection<Document> collection = mongoDatabase.getCollection(TWEETS_COLLECTION);
-        return new TweetsCount(collection.count());
+        long count = collection.count();
+        Bson bson = Filters.and(Filters.gte("timestamp_ms", DateTime.now().minusMinutes(1).getMillis()),
+                Filters.lte("timestamp_ms", DateTime.now().getMillis()));
+        long perMinute = collection.count(bson);
+        return new TweetsCount(count, perMinute);
     }
 }

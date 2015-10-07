@@ -46,6 +46,7 @@ function tweetsController($scope, $websocket, environment, targetsService, tweet
     var tweetsLimit = 1;
     tweet.timestamp_ms = tweet.timestamp_ms.$numberLong;
     $scope.tweetsCount = $scope.tweetsCount + 1;
+    $scope.tweetsPerMinute = $scope.tweetsPerMinute + 1;
 
     for(var i = 0; i < $scope.candidatos.length; i++) {
       if($scope.candidatos[i].twitterId.id === tweet.targetTwitterId) {
@@ -140,6 +141,7 @@ function tweetsController($scope, $websocket, environment, targetsService, tweet
 
   function getAllTweetsCountSuccess(data){
     $scope.tweetsCount = data.count;
+    $scope.tweetsPerMinute = data.perMinute;
   }
 
   $scope.init = function() {

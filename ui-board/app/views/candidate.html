@@ -3,9 +3,12 @@
     <div class="row box-main">
       <div class="col-md-12 box-inner" ng-controller="candidateTweetsController" ng-init="init()">
         <div id="candidate-info" class="col-md-12" ng-include="'views/candidate.info.html'"></div>
-        <div id="candidate-tweets" class="col-md-5" ng-include="'views/candidate.tweets.html'"></div>
-        <div id="candidate-cloudtag" class="col-md-7" ng-controller="candidateCloudtagController" ng-init="init()" 
-          ng-include="'views/candidate.cloudtag.html'"></div>
+        <div id="candidate-tweets" class="col-md-4" ng-include="'views/candidate.tweets.html'"></div>
+        <div id="candidate-cloudtag" class="col-md-8" ng-controller="candidateCloudtagController" ng-init="init()" 
+        ng-include="'views/candidate.cloudtag.html'"></div>
+      </div>
+      <div class="row">
+        <center> *Las tablas y tweets presentados son dinámicos y se van actualizando a medida que van entrando nuevos datos.</center>
       </div>
     </div>
   </div>

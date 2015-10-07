@@ -44,7 +44,7 @@ function candidateTweetsController($scope, $stateParams, $websocket, environment
     };
 
     return colors[twitterId];
-  }
+  };
 
   function compareTweets(tweet1, tweet2) {
     return (tweet1.text === tweet2.text) && (tweet1.userId === tweet2.userId); 
@@ -131,10 +131,8 @@ function candidateTweetsController($scope, $stateParams, $websocket, environment
   }
 
   $scope.init = function() {
-
     var candidateTwitterId = $stateParams.twitterId;
-    console.debug('candidateTweetsController, candidateTwitterId: ' + candidateTwitterId);
     tweetsService.getCandidateTweetStats({ twitterId: candidateTwitterId }, candidateTweetStatsSuccess, logError);
     targetsService.getSingleTarget({ twitterId: candidateTwitterId }, singleTargetSuccess, logError);
-  }
+  };
 }

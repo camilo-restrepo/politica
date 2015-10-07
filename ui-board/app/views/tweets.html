@@ -4,7 +4,7 @@
       <div class="col-md-1">
         <i class="fa fa-twitter fa-3x"></i>
       </div>
-      <div class="col-md-2 tweets-title">Tweets por minuto: </div>
+      <div class="col-md-2 tweets-title">Tweets por minuto: {{ tweetsPerMinute }}</div>
       <div class="col-md-1"></div>
       <div class="col-md-1">
         <i class="fa fa-twitter fa-3x"></i>
@@ -28,10 +28,10 @@
           </a>
         </small>
       </li>
-      <li class="list-group-item height-lg tweet-content" ng-repeat="tw in candidato.tweets | orderBy:'-timestamp_ms'">
+      <li class="list-group-item height-lg tweet-content squared-box" ng-repeat="tw in candidato.tweets | orderBy:'-timestamp_ms'">
         <p class="text-sm">{{tw.text}}</p>
         <div class="padding-right-sm inline time-label"><small>{{tw.timestamp_ms | date:'dd-MM-yyyy HH:mm:ss'}}</small></div>
-        <div class="padding-right-sm label text-sm to-right tweet-sentiment" ng-class="getTweetLabelClass(tw.prediction)">
+        <div class="padding-right-sm label text-sm to-right tweet-sentiment squared-box" ng-class="getTweetLabelClass(tw.prediction)">
           <span>{{ getTweetLabelText(tw.prediction) }}</span>
         </div>
       </li>

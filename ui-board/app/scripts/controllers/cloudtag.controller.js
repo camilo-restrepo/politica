@@ -20,7 +20,7 @@ function cloudtagController($scope, cloudtagService) {
       AlexVernot: '#0A5C6D',
       CVderoux: '#088543'
     };
-    var col = colors[candidateTwitterId]
+    var col = colors[candidateTwitterId];
     return col;
   }
 
