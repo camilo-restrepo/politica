@@ -3,6 +3,7 @@ package co.inc.board.persistence.daos;
 import co.inc.board.domain.entities.MapCoordinate;
 import co.inc.board.domain.entities.PredictionEnum;
 import co.inc.board.domain.entities.TweetPerDay;
+import co.inc.board.domain.entities.TweetsCount;
 import com.mongodb.client.MongoCursor;
 import com.mongodb.client.model.Filters;
 import com.mongodb.client.model.Projections;
@@ -118,8 +119,8 @@ public class TweetDAO {
         return collection.count(bson);
     }
 
-    public long getAllTweetsCount(){
+    public TweetsCount getAllTweetsCount(){
         MongoCollection<Document> collection = mongoDatabase.getCollection(TWEETS_COLLECTION);
-        return collection.count();
+        return new TweetsCount(collection.count());
     }
 }

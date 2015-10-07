@@ -86,7 +86,7 @@ public class TweetBusiness {
         return new TweetStats(twitterId, totalTweets, tweetsToday, tweetsLastHour);
     }
 
-    public long getAllTweetsCount(){
+    public TweetsCount getAllTweetsCount(){
         return tweetDAO.getAllTweetsCount();
     }
 }
