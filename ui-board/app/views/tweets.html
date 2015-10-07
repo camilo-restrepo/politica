@@ -4,7 +4,7 @@
       <div class="col-md-1">
         <i class="fa fa-twitter fa-3x"></i>
       </div>
-      <div class="col-md-2 tweets-title">Tweets por minuto: {{ tweetsPerMinute }}</div>
+      <div class="col-md-3 tweets-title">Tweets por minuto: {{ tweetsPerMinute }}</div>
       <div class="col-md-1"></div>
       <div class="col-md-1">
         <i class="fa fa-twitter fa-3x"></i>
@@ -17,7 +17,7 @@
   <div class="row">
     <div class="col-md-12">
       <ul class="col-md-4 list-group" ng-repeat="candidato in candidatos">
-        <li class="list-group-item list-title">
+        <li class="list-group-item list-title squared-box">
           <div class="text-md">
             <a class="link-white" ui-sref="candidate({ twitterId: candidato.twitterId.id })" analytics-on  analytics-category="Click">{{ getTargetName(candidato.screenName) }}</a>
           </div>
