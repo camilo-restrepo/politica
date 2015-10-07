@@ -117,4 +117,9 @@ public class TweetDAO {
 
         return collection.count(bson);
     }
+
+    public long getAllTweetsCount(){
+        MongoCollection<Document> collection = mongoDatabase.getCollection(TWEETS_COLLECTION);
+        return collection.count();
+    }
 }

@@ -456,3 +456,29 @@ body {
 .tangcloud-item-hidden {
     visibility: hidden;
 }
+
+.initial-dialog-left {
+  float: left;
+  width: 30%;
+}
+
+.initial-dialog-right {
+  float: right;
+  width:70%;
+}
+
+.initial-dialog-rectangle {
+  background-color: rgba(0,0,0,1);
+  color: #FFF;
+  font-size: 14px;
+  padding: 0;
+  padding: 5px 15px;
+  margin: 0 0px -20px !important;
+  z-index: 2;
+  line-height: 1.1em;
+  width: 100%;
+}
+
+.tweets-title{
+  padding: 2%;
+}

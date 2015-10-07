@@ -1,25 +1,13 @@
 package co.inc.board.api.resources;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import javax.ws.rs.Consumes;
-import javax.ws.rs.GET;
-import javax.ws.rs.Path;
-import javax.ws.rs.PathParam;
-import javax.ws.rs.Produces;
-import javax.ws.rs.QueryParam;
-import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.Response;
-
 import co.inc.board.domain.business.TargetBusiness;
 import co.inc.board.domain.business.TweetBusiness;
-import co.inc.board.domain.entities.MapCoordinate;
-import co.inc.board.domain.entities.Polarity;
-import co.inc.board.domain.entities.TimeEnum;
-import co.inc.board.domain.entities.TweetPerDay;
-import co.inc.board.domain.entities.TweetStats;
-import co.inc.board.domain.entities.TwitterTarget;
+import co.inc.board.domain.entities.*;
+
+import javax.ws.rs.*;
+import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
+import java.util.List;
 
 @Path("/tweets")
 @Consumes(MediaType.APPLICATION_JSON)
@@ -62,7 +50,7 @@ public class TweetResource {
     @Path("{twitterId}/polarity")
     public Response getCandidatePolarity(@PathParam("twitterId") String twitterId, @QueryParam("time") String time) {
 
-        Polarity candidatePolarity = null;
+        Polarity candidatePolarity;
 
         if (time.equalsIgnoreCase(TimeEnum.DAY.getValue())) {
             candidatePolarity = tweetBusiness.getCandidatePolarityToday(twitterId);
@@ -78,7 +66,7 @@ public class TweetResource {
     @Path("/polarity")
     public Response getAllTargetsPolarity(@QueryParam("time") String time) {
 
-        List<Polarity> polarityList = new ArrayList<Polarity>();
+        List<Polarity> polarityList;
 
         List<TwitterTarget> allTargets = targetBusiness.getAllTargets();
 
@@ -90,5 +78,11 @@ public class TweetResource {
         }
 
         return Response.status(Response.Status.OK).entity(polarityList).build();
+    }
+
+    @GET
+    @Path("/count")
+    public Response getAllTweetsCount(){
+        return Response.status(Response.Status.OK).entity(tweetBusiness.getAllTweetsCount()).build();
     }
 }

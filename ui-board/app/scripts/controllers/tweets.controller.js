@@ -1,9 +1,9 @@
 'use strict';
 
 boardModule.controller('tweetsController', tweetsController);
-tweetsController.$inject = ['$scope', '$websocket', 'environment', 'targetsService'];
+tweetsController.$inject = ['$scope', '$websocket', 'environment', 'targetsService', 'tweetsService'];
 
-function tweetsController($scope, $websocket, environment, targetsService) {
+function tweetsController($scope, $websocket, environment, targetsService, tweetsService) {
 
   $scope.candidatos = [];
 
@@ -45,6 +45,7 @@ function tweetsController($scope, $websocket, environment, targetsService) {
     var tweet = data;
     var tweetsLimit = 1;
     tweet.timestamp_ms = tweet.timestamp_ms.$numberLong;
+    $scope.tweetsCount = $scope.tweetsCount + 1;
 
     for(var i = 0; i < $scope.candidatos.length; i++) {
       if($scope.candidatos[i].twitterId.id === tweet.targetTwitterId) {
@@ -137,7 +138,13 @@ function tweetsController($scope, $websocket, environment, targetsService) {
     $scope.candidatos = shuffleArray($scope.candidatos);
   }
 
+  function getAllTweetsCountSuccess(data){
+    $scope.tweetsCount = data;
+    console.log(data);
+  }
+
   $scope.init = function() {
     targetsService.getTargets(getTargetsSuccess, onError);
+    tweetsService.getAllTweetsCount(getAllTweetsCountSuccess, onError);
   };
 }

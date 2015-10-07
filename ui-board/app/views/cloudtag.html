@@ -3,7 +3,7 @@
     <div class="col-md-12">
     <div ng-class="{ 'full-message-box': boxIsFull, 'min-message-box': !boxIsFull }">
         <p class="white-text text-md2 padding-top-lg col-md-12" ng-show="boxIsFull">
-        Palabras Relevantes: palabras más mencionadas en Twitter para cada uno de los candidatos a la alcaldía de Bogotá.
+        El CloudTag presenta las palabras más repetidas o comunes en los tweets de cada uno de los candidatos. Los colores de las palabras representan el partido de los candidatos.
         </p>
         <div class="hide-box">
           <button class="btn btn-link fa white-text text-md no-change-link" ng-class="{ 'fa-chevron-up': boxIsFull, 'fa-chevron-down': !boxIsFull }" ng-click="changeMessageBoxState()"> {{ showOrHide }}</button>
