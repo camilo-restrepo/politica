@@ -514,6 +514,18 @@ body {
 .initial-dialog-rectangle {
   background-color: rgba(0,0,0,1);
   color: #FFF;
+  font-size: 34px;
+  padding: 0;
+  padding: 5px 15px;
+  margin: 0 0px -20px !important;
+  z-index: 2;
+  line-height: 1.1em;
+  width: 100%;
+}
+
+.tweets-header {
+  background-color: rgba(0,0,0,1);
+  color: #FFF;
   font-size: 14px;
   padding: 0;
   padding: 5px 15px;
@@ -524,7 +536,8 @@ body {
 }
 
 .tweets-title{
-  padding: 2%;
+  padding: 1%;
+  font-size: 20px;
 }
 
 .cloud-tag-title{
@@ -537,6 +550,14 @@ body {
   z-index: 2;
   line-height: 1.1em;
   width: 20%;
+}
+
+.cloud-tag {
+  padding-right: 0%;
+}
+
+.cloud-tag-info {
+  padding-top: 100%;
 }
 
 .squared-box{

@@ -1,15 +1,14 @@
 <div ng-controller="tweetsController" ng-init="init()">
-  <div class="initial-dialog-rectangle">
+  <div class="tweets-header">
     <div class="row">
       <div class="col-md-1">
         <i class="fa fa-twitter fa-3x"></i>
       </div>
-      <div class="col-md-3 tweets-title">Tweets por minuto: {{ tweetsPerMinute }}</div>
-      <div class="col-md-1"></div>
+      <div class="col-md-3 tweets-title">Tweets por minuto: <b>{{ tweetsPerMinute }}</b></div>
       <div class="col-md-1">
         <i class="fa fa-twitter fa-3x"></i>
       </div>
-      <div class="col-md-4 tweets-title">Tweets analizados desde 31/07/2015: {{ tweetsCount }}</div>
+      <div class="col-md-7 tweets-title">Tweets analizados desde el 31/07/2015: <b>{{ tweetsCount }}</b></div>
     </div>
   </div>
   <br>
@@ -37,5 +36,4 @@
       </li>
     </ul>
   </div>
-</div>
 </div>

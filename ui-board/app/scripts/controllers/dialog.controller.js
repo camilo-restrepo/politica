@@ -14,6 +14,10 @@ function dialogController($scope, ngDialog) {
     });
   }
 
+  $scope.closeDialog = function(){
+  	ngDialog.closeAll();
+  };
+
   $scope.init = function() {
 
     showInitialDialog();

@@ -1,9 +1,9 @@
 'use strict';
 
 boardModule.controller('tweetsController', tweetsController);
-tweetsController.$inject = ['$scope', '$websocket', 'environment', 'targetsService', 'tweetsService'];
+tweetsController.$inject = ['$scope', '$websocket' , '$interval', 'environment', 'targetsService', 'tweetsService'];
 
-function tweetsController($scope, $websocket, environment, targetsService, tweetsService) {
+function tweetsController($scope, $websocket, $interval, environment, targetsService, tweetsService) {
 
   $scope.candidatos = [];
 
@@ -27,6 +27,8 @@ function tweetsController($scope, $websocket, environment, targetsService, tweet
 
   ws.$open();
  */
+
+  var stop;
 
   function compareTweets(tweet1, tweet2) {
     return (tweet1.text === tweet2.text) && (tweet1.userId === tweet2.userId); 
@@ -147,5 +149,8 @@ function tweetsController($scope, $websocket, environment, targetsService, tweet
   $scope.init = function() {
     targetsService.getTargets(getTargetsSuccess, onError);
     tweetsService.getAllTweetsCount(getAllTweetsCountSuccess, onError);
+    stop = $interval(function() {
+      tweetsService.getAllTweetsCount(getAllTweetsCountSuccess, onError);
+    }, 30000);
   };
 }

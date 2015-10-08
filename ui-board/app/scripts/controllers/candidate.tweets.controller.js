@@ -4,7 +4,7 @@ boardModule.controller('candidateTweetsController', candidateTweetsController);
 candidateTweetsController.$inject = ['$scope', '$stateParams', '$websocket', 'environment', 'targetsService', 'tweetsService'];
 
 function candidateTweetsController($scope, $stateParams, $websocket, environment, targetsService, tweetsService) {
-
+  var tweetsLimit = 3;
   $scope.getTargetName = function(targetId){
     if(targetId === 'CVderoux'){
       return 'Carlos Vicente de Roux';
@@ -61,9 +61,7 @@ function candidateTweetsController($scope, $stateParams, $websocket, environment
   }
 
   function pushData(data) {
-
     var tweet = data;
-    var tweetsLimit = 3;
     tweet.timestamp_ms = tweet.timestamp_ms.$numberLong;
     var tweetBelongsToCandidate = ($scope.candidate.twitterId.id === tweet.targetTwitterId);
 
@@ -73,10 +71,10 @@ function candidateTweetsController($scope, $stateParams, $websocket, environment
       $scope.tweetStats.tweetsToday += 1;
       $scope.tweetStats.tweetsLastHour += 1;
 
-      $scope.candidate.tweets.push(tweet);
+      $scope.candidate.tweets.unshift(tweet);
 
       if($scope.candidate.tweets.length > tweetsLimit) {
-        $scope.candidate.tweets.shift();
+        $scope.candidate.tweets.pop();
       }
     }
 
@@ -123,6 +121,14 @@ function candidateTweetsController($scope, $stateParams, $websocket, environment
   function singleTargetSuccess(response) {
     $scope.candidate = response;
     $scope.candidate.tweets = [];
+    var emptyTweet = {
+      text: 'No hay tweets en este momento.',
+      prediction: 'neutral',
+      timestamp_ms: 0
+    };
+    while($scope.candidate.tweets.length < tweetsLimit){
+      $scope.candidate.tweets.push(emptyTweet);
+    }
     initializeWebsocket();
   }
 
