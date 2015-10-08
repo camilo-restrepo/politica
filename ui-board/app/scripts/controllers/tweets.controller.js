@@ -146,9 +146,16 @@ function tweetsController($scope, $websocket, $interval, environment, targetsSer
     $scope.tweetsPerMinute = data.perMinute;
   }
 
+  // function lastTweetsPolarity(data){
+  //   console.log('-------------Polarity');
+  //   console.log(data);
+  // }
+
   $scope.init = function() {
     targetsService.getTargets(getTargetsSuccess, onError);
     tweetsService.getAllTweetsCount(getAllTweetsCountSuccess, onError);
+    
+    //tweetsService.getLastTweetsPolarity({prediction: 'positive'}, lastTweetsPolarity, onError);
     stop = $interval(function() {
       tweetsService.getAllTweetsCount(getAllTweetsCountSuccess, onError);
     }, 30000);

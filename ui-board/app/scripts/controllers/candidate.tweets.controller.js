@@ -121,24 +121,29 @@ function candidateTweetsController($scope, $stateParams, $websocket, environment
   function singleTargetSuccess(response) {
     $scope.candidate = response;
     $scope.candidate.tweets = [];
-    var emptyTweet = {
-      text: 'No hay tweets en este momento.',
-      prediction: 'neutral',
-      timestamp_ms: 0
-    };
-    while($scope.candidate.tweets.length < tweetsLimit){
-      $scope.candidate.tweets.push(emptyTweet);
-    }
-    initializeWebsocket();
+    tweetsService.getLastTweetsCandidate({twitterId: $stateParams.twitterId}, lastTweetsCandidateSuccess, logError);
   }
 
   function logError(response) {
     console.error(response);
   }
 
+  function lastTweetsCandidateSuccess(data){
+    for(var i = 0 ; i < data.length ; i++){
+      var actual = JSON.parse(data[i]);
+      var tweet = {
+        text: actual.text,
+        prediction: actual.prediction,
+        timestamp_ms: actual.timestamp_ms.$numberLong
+      };
+      $scope.candidate.tweets.push(tweet);
+    }
+  }
+
   $scope.init = function() {
     var candidateTwitterId = $stateParams.twitterId;
     tweetsService.getCandidateTweetStats({ twitterId: candidateTwitterId }, candidateTweetStatsSuccess, logError);
     targetsService.getSingleTarget({ twitterId: candidateTwitterId }, singleTargetSuccess, logError);
+    initializeWebsocket();
   };
 }
