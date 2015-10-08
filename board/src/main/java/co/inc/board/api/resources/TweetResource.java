@@ -85,4 +85,18 @@ public class TweetResource {
     public Response getAllTweetsCount(){
         return Response.status(Response.Status.OK).entity(tweetBusiness.getAllTweetsCount()).build();
     }
+
+    @GET
+    @Path("{twitterId}/last")
+    public Response getLastTweetsCandidate(@PathParam("twitterId") String twitterId){
+        List<String> tweets = tweetBusiness.getLastTweetsCandidate(twitterId);
+        return Response.status(Response.Status.OK).entity(tweets).build();
+    }
+
+    @GET
+    @Path("{prediction}/last")
+    public Response getLastTweetsPolarity(@PathParam("prediction") String prediction){
+        List<String> tweets = tweetBusiness.getLastTweetsPolarity(prediction);
+        return Response.status(Response.Status.OK).entity(tweets).build();
+    }
 }

@@ -49,7 +49,7 @@ public class TweetBusiness {
 
     public List<Polarity> getAllTargetsPolarityToday(List<TwitterTarget> allTargets) {
 
-        List<Polarity> polarityListToday = new ArrayList<Polarity>();
+        List<Polarity> polarityListToday = new ArrayList<>();
 
         for (TwitterTarget target : allTargets) {
 
@@ -62,7 +62,7 @@ public class TweetBusiness {
 
     public List<Polarity> getAllTargetsPolarityLastMonth(List<TwitterTarget> allTargets) {
 
-        List<Polarity> polarityListMonth = new ArrayList<Polarity>();
+        List<Polarity> polarityListMonth = new ArrayList<>();
 
         for (TwitterTarget target : allTargets) {
 
@@ -88,5 +88,14 @@ public class TweetBusiness {
 
     public TweetsCount getAllTweetsCount(){
         return tweetDAO.getAllTweetsCount();
+    }
+
+    public List<String> getLastTweetsCandidate(String twitterId) {
+        return tweetDAO.getLastTweetsCandidate(twitterId);
+
+    }
+
+    public List<String> getLastTweetsPolarity(String prediction){
+        return tweetDAO.getLastTweetsPolarity(prediction);
     }
 }
