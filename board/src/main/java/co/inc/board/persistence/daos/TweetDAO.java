@@ -128,7 +128,8 @@ public class TweetDAO {
     public List<String> getLastTweetsCandidate(String twitterId) {
         MongoCollection<Document> collection = mongoDatabase.getCollection(TWEETS_COLLECTION);
         MongoCursor<Document> it = collection.find(Filters.eq("targetTwitterId", twitterId))
-                .projection(Projections.include("text", "timestamp_ms", "prediction" ))
+                .projection(Projections.include("text", "timestamp_ms", "prediction", "targetTwitterId"))
+                .projection(Projections.excludeId())
                 .sort(new Document("timestamp_ms", -1)).limit(3).iterator();
 
         List<String> latestTweets = new ArrayList<>(3);
