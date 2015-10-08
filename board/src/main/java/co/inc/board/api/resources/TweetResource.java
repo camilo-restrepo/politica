@@ -94,7 +94,7 @@ public class TweetResource {
     }
 
     @GET
-    @Path("{prediction}/last")
+    @Path("/prediction/{prediction}/last")
     public Response getLastTweetsPolarity(@PathParam("prediction") String prediction){
         List<String> tweets = tweetBusiness.getLastTweetsPolarity(prediction);
         return Response.status(Response.Status.OK).entity(tweets).build();
