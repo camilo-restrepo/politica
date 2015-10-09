@@ -599,7 +599,6 @@ body {
   background-color: rgba(0,0,0,1);
   color: #FFF;
   font-size: 26px;
-  padding: 0;
   padding: 5px 15px;
   margin: 0 0px -20px !important;
   z-index: 2;
@@ -705,9 +704,66 @@ body {
 
 .font-about{
   font-size: 20px;
-  text-align: justify;;
+  text-align: justify;
 }
 
 .about-input{
   background-color: #D1D2D3;
+  color: #FFF;
+  width: 88%;
+  margin-bottom: 20px;
+  border: none;
+  line-height: 2em;
+}
+
+.textarea-height{
+  height: 200px;
+  border: none;
+}
+
+.input-align{
+  margin-top: 30px;
+}
+
+.about-rectangle {
+  background-color: rgba(0,0,0,1);
+  color: #FFF;
+  font-size: 26px;
+  padding: 5px 15px;
+  margin: 0 0px 10px !important;
+  z-index: 2;
+  line-height: 1.1em;
+  width: 88%;
+  font-family: "Open Sans";
+  letter-spacing: 10px;
+}
+
+.about-rectangle:hover{
+  cursor: pointer; 
+  cursor: hand;
+}
+
+
+::-webkit-input-placeholder {
+   color: white;
+   font-family: "Open Sans";
+   font-size: 20px;
+}
+
+:-moz-placeholder { /* Firefox 18- */
+   color: white;
+   font-family: "Open Sans";
+   font-size: 20px;
+}
+
+::-moz-placeholder {  /* Firefox 19+ */
+   color: white;
+   font-family: "Open Sans";
+   font-size: 20px;
+}
+
+:-ms-input-placeholder {  
+   color: white;
+   font-family: "Open Sans";
+   font-size: 20px;
 }
