@@ -16,5 +16,8 @@ app.config(function($stateProvider, $urlRouterProvider) {
     .state('polarity', {
     	url: '/polaridad/:prediction',
     	templateUrl: 'views/polaridad.html'
+    }).state('about', {
+        url: '/about',
+        templateUrl: 'views/about.html'
     });
 });

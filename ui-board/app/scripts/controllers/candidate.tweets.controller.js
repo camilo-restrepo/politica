@@ -108,8 +108,8 @@ function candidateTweetsController($scope, $stateParams, $websocket, environment
     return labelText;
   };
 
-  function initializeWebsocket() {
-    var ws = $websocket(environment.boardWS + '/board/api/ws');
+  var ws = $websocket(environment.boardWS + '/board/api/ws');
+  function initializeWebsocket() {  
     ws.onMessage(function(message) {
       pushData(JSON.parse(message.data));
     });
@@ -140,6 +140,10 @@ function candidateTweetsController($scope, $stateParams, $websocket, environment
       $scope.candidate.tweets.push(tweet);
     }
   }
+
+  $scope.$on("$destroy", function() {
+    ws.close();
+  });
 
   $scope.init = function() {
     var candidateTwitterId = $stateParams.twitterId;

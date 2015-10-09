@@ -135,12 +135,17 @@ function tweetsController($scope, $websocket, $interval, environment, targetsSer
     $scope.tweetsPerMinute = data.perMinute;
   }
 
-  function initializeWebsocket() {
-    var ws = $websocket(environment.boardWS + '/board/api/ws');
+  var ws = $websocket(environment.boardWS + '/board/api/ws');
+
+  function initializeWebsocket() {  
     ws.onMessage(function(message) {
       pushData(JSON.parse(message.data));
     });
   }
+
+  $scope.$on("$destroy", function() {
+    ws.close();
+  });
 
   $scope.init = function() {
     targetsService.getTargets(getTargetsSuccess, onError);

@@ -659,4 +659,38 @@ body {
   height: 150px;
 }
 
+.about{
+  text-decoration: none !important;
+  color: #444;
+}
 
+.about:hover{
+  text-decoration: none !important;
+  color: #444;
+  cursor: pointer; 
+  cursor: hand;
+}
+
+.about-margin{
+  margin-left: 30px;
+  margin-right: 30px;
+  margin-top: 30px;
+  margin-bottom: 30px;
+}
+
+.about-margin-lg{
+  margin-left: 70px;
+  margin-right: 70px;
+  margin-top: 20px;
+}
+
+.font-about-lg{
+  font-family: "Open Sans";
+  text-decoration: none !important;
+  font-size: 26px;
+}
+
+.font-about{
+  font-size: 20px;
+  text-align: justify;;
+}

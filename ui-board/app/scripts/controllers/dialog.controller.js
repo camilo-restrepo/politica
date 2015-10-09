@@ -6,8 +6,9 @@ dialogController.$inject = ['$scope', 'ngDialog'];
 
 function dialogController($scope, ngDialog) {
 
-  function showInitialDialog() {
+  var opened = false;
 
+  function showInitialDialog() {
     ngDialog.open({
       template: 'views/initial-dialog.html',
       scope: $scope
@@ -15,11 +16,10 @@ function dialogController($scope, ngDialog) {
   }
 
   $scope.closeDialog = function(){
-  	ngDialog.closeAll();
+    ngDialog.closeAll();
   };
 
   $scope.init = function() {
-
     showInitialDialog();
   };
 }
