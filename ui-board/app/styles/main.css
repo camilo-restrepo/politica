@@ -525,6 +525,7 @@ body {
   z-index: 2;
   line-height: 1.1em;
   width: 100%;
+  font-family: "Open Sans";
 }
 
 .tweets-header {
