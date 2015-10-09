@@ -373,6 +373,18 @@ body {
   font-size: 18px;
 }
 
+.black-area-top {
+  color: #FFF;
+  font-size: 18px;
+  margin-top: 3px;
+}
+
+.black-area-top-tweets {
+  color: #FFF;
+  font-size: 18px;
+  margin-top: 5px;
+}
+
 .stat-item {
   padding-bottom: 60px;
 }
@@ -650,10 +662,11 @@ body {
 }
 
 .font-go-back{
-  font-size:0.9em; 
+  font-size:0.9em;
 }
 
 #polarity-square {
+  margin-top: 5px;
   margin-bottom: 15px;
   width: 350px;
   height: 150px;
@@ -693,4 +706,8 @@ body {
 .font-about{
   font-size: 20px;
   text-align: justify;;
+}
+
+.about-input{
+  background-color: #D1D2D3;
 }
