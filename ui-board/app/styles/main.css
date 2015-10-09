@@ -115,6 +115,11 @@ body {
     margin-top: -5%;
 }
 
+.tweet-sentiment:hover{
+
+}
+
+
 .tweet-sentiment span {
     text-transform: lowercase;
     opacity: 1 !important;
@@ -158,14 +163,35 @@ body {
   color: #A9A435;
 }
 
+.label-warning:hover {
+  background-color: #A9A435;
+  color: #F5E7A5;
+  cursor: pointer; 
+  cursor: hand;
+}
+
 .label-danger {
   background-color: #F6A7AE;
   color: #EE3C4D;
 }
 
+.label-danger:hover {
+  background-color: #EE3C4D;
+  color: #F6A7AE;
+  cursor: pointer; 
+  cursor: hand;
+}
+
 .label-success {
   background-color: #BCDB98;
   color: #729F46;
+}
+
+.label-success:hover {
+  background-color: #729F46;
+  color: #BCDB98;
+  cursor: pointer; 
+  cursor: hand;
 }
 
 .full-message-box {
@@ -591,4 +617,5 @@ body {
 
 .font{
   font-family: "Open Sans";
+  font-size:1.1em;
 }
