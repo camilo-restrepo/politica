@@ -67,6 +67,10 @@ body {
   width: 250px;
 }
 
+.list-title:hover{
+  background-color: #662F8F;
+}
+
 .list-group-candidate {
   padding-left: 1%;
   width: 100%;
