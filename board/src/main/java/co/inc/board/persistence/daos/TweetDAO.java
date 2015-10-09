@@ -146,7 +146,7 @@ public class TweetDAO {
                 .projection(Projections.excludeId())
                 .sort(new Document("timestamp_ms", -1)).limit(9).iterator();
 
-        List<String> latestTweets = new ArrayList<>(3);
+        List<String> latestTweets = new ArrayList<>(9);
         while(it.hasNext()){
             latestTweets.add(it.next().toJson());
         }

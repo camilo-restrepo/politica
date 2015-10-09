@@ -30,7 +30,7 @@
       <li class="list-group-item height-lg tweet-content squared-box" ng-repeat="tw in candidato.tweets | orderBy:'-timestamp_ms'">
         <p class="text-sm">{{tw.text}}</p>
         <div class="padding-right-sm inline time-label"><small>{{tw.timestamp_ms | date:'dd-MM-yyyy HH:mm:ss'}}</small></div>
-        <div class="padding-right-sm label text-sm to-right tweet-sentiment squared-box" ng-class="getTweetLabelClass(tw.prediction)" ng-mouseenter="hovering=true" ng-mouseleave="hovering=false">
+        <div class="padding-right-sm label text-sm to-right tweet-sentiment squared-box" ng-class="getTweetLabelClass(tw.prediction)" ng-mouseenter="hovering=true" ng-mouseleave="hovering=false" ui-sref="polarity({ prediction: tw.prediction })">
           <span>{{ getTweetLabelText(tw.prediction) }}</span>
         </div>
       </li>

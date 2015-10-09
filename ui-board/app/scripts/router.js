@@ -12,5 +12,9 @@ app.config(function($stateProvider, $urlRouterProvider) {
     .state('candidate', {
       url: '/candidatos/:twitterId',
       templateUrl: 'views/candidate.html'
+    })
+    .state('polarity', {
+    	url: '/polaridad/:prediction',
+    	templateUrl: 'views/polaridad.html'
     });
 });

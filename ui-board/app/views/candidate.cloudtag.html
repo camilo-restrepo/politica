@@ -1,8 +1,9 @@
 <div class="row">
-  <div class="col-md-12">
-    <div class="cloud-tag-title">Cloud Tag</div>
-    <br>
-    <span ng-repeat="word in words" ng-style="{'color': word.color}" class="tangcloud-item-{{ word.size }}">
-        {{ word.word }}</span>
-  </div>
+	<div class="cloud-tag-title">Cloud Tag</div>
+	<div class="col-md-12">
+		<br>
+		<span ng-repeat="word in words" ng-style="{'color': word.color}" class="tangcloud-item-{{ word.size }}">
+			{{ word.word }}
+		</span>
+	</div>
 </div>

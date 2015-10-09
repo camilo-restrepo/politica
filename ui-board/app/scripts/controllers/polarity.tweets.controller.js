@@ -1,10 +1,12 @@
 'use strict';
 
-boardModule.controller('candidateTweetsController', candidateTweetsController);
-candidateTweetsController.$inject = ['$scope', '$stateParams', '$websocket', 'environment', 'targetsService', 'tweetsService'];
+boardModule.controller('polarityTweetsController', polarityTweetsController);
+polarityTweetsController.$inject = ['$scope', '$stateParams', '$websocket', 'environment', 'tweetsService'];
 
-function candidateTweetsController($scope, $stateParams, $websocket, environment, targetsService, tweetsService) {
-  var tweetsLimit = 3;
+function polarityTweetsController($scope, $stateParams, $websocket, environment, tweetsService) {
+  var tweetsLimit = 9;
+  $scope.polarity = '';
+
   $scope.getTargetName = function(targetId){
     if(targetId === 'CVderoux'){
       return 'Carlos Vicente de Roux';
@@ -25,26 +27,7 @@ function candidateTweetsController($scope, $stateParams, $websocket, environment
     }else if(targetId === 'DanielRaisbeck'){
       return 'Daniel Raisbeck';
     }
-
     return '';
-  };
-
-  $scope.getCandidateColor = function(twitterId) {
-
-    var colors = {
-      RicardoAriasM: '#D66F13',
-      MMMaldonadoC: '#FBD103',
-      danielraisbeck: '#FF5C01',
-      DanielRaisbeck: '#FF5C01',
-      ClaraLopezObre: '#FFDF00',
-      RafaelPardo: '#ED0A03',
-      PachoSantosC: '#3C68B7',
-      EnriquePenalosa: '#12ADE5',
-      AlexVernot: '#0A5C6D',
-      CVderoux: '#088543'
-    };
-
-    return colors[twitterId];
   };
 
   function compareTweets(tweet1, tweet2) {
@@ -52,59 +35,66 @@ function candidateTweetsController($scope, $stateParams, $websocket, environment
   }
 
   function tweetIsInList(tweet, tweetList) {
-
     var isInList = false;
     for (var i = 0; i < tweetList.length && !isInList; i++) {
       isInList = compareTweets(tweet, tweetList[i]);
     }
-
     return isInList;
   }
 
+  function shuffleArray(o) {
+    for(var j, x, i = o.length; i; j = Math.floor(Math.random() * i), x = o[--i], o[i] = o[j], o[j] = x);
+    return o;
+  }
+
   function pushData(data) {
+    console.log(data);
     var tweet = data;
     tweet.timestamp_ms = tweet.timestamp_ms.$numberLong;
-    var tweetBelongsToCandidate = ($scope.candidate.twitterId.id === tweet.targetTwitterId);
+    var tweetBelongsToPolarity = ($scope.polarity === tweet.prediction);
 
-    if (tweetBelongsToCandidate && (!tweetIsInList(tweet, $scope.candidate.tweets))) {
-
-      $scope.tweetStats.totalTweets += 1;
-      $scope.tweetStats.tweetsToday += 1;
-      $scope.tweetStats.tweetsLastHour += 1;
-
-      $scope.candidate.tweets.unshift(tweet);
-
-      if($scope.candidate.tweets.length > tweetsLimit) {
-        $scope.candidate.tweets.pop();
+    if (tweetBelongsToPolarity && (!tweetIsInList(tweet, $scope.tweets))) {
+      var lastTweet = {
+        text: tweet.text,
+        prediction: tweet.prediction,
+        timestamp_ms: tweet.timestamp_ms,
+        twitterId: tweet.targetTwitterId
+      };
+      $scope.tweets.unshift(lastTweet);
+      if($scope.tweets.length > tweetsLimit) {
+        $scope.tweets.pop();
       }
     }
-
     $scope.$apply();
   }
 
   $scope.getTweetLabelClass = function(predictionValue) {
-
     var labelClass = 'label-warning';
-
     if (predictionValue === 'negative') {
       labelClass = 'label-danger';
     } else if (predictionValue === 'positive') {
       labelClass = 'label-success';
     }
+    return labelClass;
+  };
 
+  $scope.getTweetLabelClassNoHover = function(predictionValue) {
+    var labelClass = 'label-warning-no-hover';
+    if (predictionValue === 'negative') {
+      labelClass = 'label-danger-no-hover';
+    } else if (predictionValue === 'positive') {
+      labelClass = 'label-success-no-hover';
+    }
     return labelClass;
   };
 
   $scope.getTweetLabelText = function(predictionValue) {
-
     var labelText = 'Neutro ::';
-
     if (predictionValue === 'negative') {
       labelText = 'Negativo >:(';
     } else if (predictionValue === 'positive') {
       labelText = 'Positivo :)';
     }
-
     return labelText;
   };
 
@@ -115,36 +105,29 @@ function candidateTweetsController($scope, $stateParams, $websocket, environment
     });
   }
 
-  function candidateTweetStatsSuccess(response) {
-    $scope.tweetStats = response;
-  }
-
-  function singleTargetSuccess(response) {
-    $scope.candidate = response;
-    $scope.candidate.tweets = [];
-    tweetsService.getLastTweetsCandidate({twitterId: $stateParams.twitterId}, lastTweetsCandidateSuccess, logError);
-  }
-
   function logError(response) {
     console.error(response);
   }
 
-  function lastTweetsCandidateSuccess(data){
+  function lastTweetsPolarity(data){
+    $scope.tweets = [];
     for(var i = 0 ; i < data.length ; i++){
-      var actual = JSON.parse(data[i]);
+      var json = JSON.parse(data[i]);
       var tweet = {
-        text: actual.text,
-        prediction: actual.prediction,
-        timestamp_ms: actual.timestamp_ms.$numberLong
+        text: json.text,
+        prediction: json.prediction,
+        timestamp_ms: json.timestamp_ms.$numberLong,
+        twitterId: json.targetTwitterId
       };
-      $scope.candidate.tweets.push(tweet);
+
+      $scope.tweets.push(tweet);
     }
+    $scope.tweets = shuffleArray($scope.tweets);
   }
 
   $scope.init = function() {
-    var candidateTwitterId = $stateParams.twitterId;
-    tweetsService.getCandidateTweetStats({ twitterId: candidateTwitterId }, candidateTweetStatsSuccess, logError);
-    targetsService.getSingleTarget({ twitterId: candidateTwitterId }, singleTargetSuccess, logError);
+    $scope.polarity = $stateParams.prediction;
+    tweetsService.getLastTweetsPolarity({prediction: $scope.polarity}, lastTweetsPolarity, logError);
     initializeWebsocket();
   };
 }
