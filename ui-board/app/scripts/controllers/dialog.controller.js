@@ -1,18 +1,18 @@
 'use strict';
 
 boardModule.controller('dialogController', dialogController);
-dialogController.$inject = ['$scope', 'ngDialog'];
+dialogController.$inject = ['$scope', '$cookies','ngDialog'];
 
-
-function dialogController($scope, ngDialog) {
-
-  var opened = false;
-
+function dialogController($scope, $cookies, ngDialog) {
   function showInitialDialog() {
-    ngDialog.open({
-      template: 'views/initial-dialog.html',
-      scope: $scope
-    });
+    var open = $cookies.get('dialog');
+    if(!open){
+      ngDialog.open({
+        template: 'views/initial-dialog.html',
+        scope: $scope
+      });
+      $cookies.put('dialog', true);
+    }
   }
 
   $scope.closeDialog = function(){

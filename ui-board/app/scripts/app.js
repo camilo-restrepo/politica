@@ -10,4 +10,5 @@
  */
 var boardModule = angular.module('boardModule', []);
 var app = angular.module('boardApp', [ 'ngResource', 'ui.router', 'angular-websocket', 'boardModule', 'ngDialog', 
-                         'duScroll', 'config', 'angulartics', 'angulartics.google.analytics', 'angulartics.scroll']);
+                         'duScroll', 'config', 'angulartics', 'angulartics.google.analytics', 'angulartics.scroll', 
+                         'ngCookies']);
