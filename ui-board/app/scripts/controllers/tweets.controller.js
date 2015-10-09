@@ -6,28 +6,6 @@ tweetsController.$inject = ['$scope', '$websocket' , '$interval', 'environment',
 function tweetsController($scope, $websocket, $interval, environment, targetsService, tweetsService) {
 
   $scope.candidatos = [];
-
-  var ws = $websocket(environment.boardWS + '/board/api/ws'); 
-
-  /*
-  ws.$on('$open', function () {
-    //console.log('open');
-  });
- */
-
-  ws.onMessage(function(message) {
-    pushData(JSON.parse(message.data));
-    //ws.$close();
-  });
-
-  /*
-  ws.$on('$close', function () {
-    //console.log('close');
-  });
-
-  ws.$open();
- */
-
   var stop;
 
   function compareTweets(tweet1, tweet2) {
@@ -123,21 +101,32 @@ function tweetsController($scope, $websocket, $interval, environment, targetsSer
     return '';
   };
 
+  function lastTweetsCandidateSuccess(data){
+    var last = JSON.parse(data[0]);
+    var tweet = {
+        text: last.text,
+        prediction: last.prediction,
+        timestamp_ms: last.timestamp_ms.$numberLong
+    } ;
+    for(var i = 0 ; i < $scope.candidatos.length ; i++){
+      var actual = $scope.candidatos[i];
+      if(actual.twitterId.id === last.targetTwitterId){
+        $scope.candidatos[i].tweets = [tweet];
+      }
+    }
+  }
+
   function getTargetsSuccess(data) {
 
     for (var i = 0; i < data.length; i++) {
-      $scope.candidatos.push(data[i]);
+      var actual = data[i];
+      $scope.candidatos.push(actual);
     }
 
-    var emptyTweet = {
-      text: 'No hay tweets en este momento.',
-      prediction: 'neutral'
-    };
-
-    for (i = 0; i < $scope.candidatos.length; i++) {
-      $scope.candidatos[i].tweets = [emptyTweet];
+    for(var i = 0 ; i < $scope.candidatos.length ; i++){
+      var actual = $scope.candidatos[i];
+      tweetsService.getLastTweetsCandidate({twitterId: actual.twitterId.id}, lastTweetsCandidateSuccess, onError);
     }
-
     $scope.candidatos = shuffleArray($scope.candidatos);
   }
 
@@ -151,13 +140,20 @@ function tweetsController($scope, $websocket, $interval, environment, targetsSer
   //   console.log(data);
   // }
 
+  function initializeWebsocket() {
+    var ws = $websocket(environment.boardWS + '/board/api/ws');
+    ws.onMessage(function(message) {
+      pushData(JSON.parse(message.data));
+    });
+  }
+
   $scope.init = function() {
     targetsService.getTargets(getTargetsSuccess, onError);
     tweetsService.getAllTweetsCount(getAllTweetsCountSuccess, onError);
-    
     //tweetsService.getLastTweetsPolarity({prediction: 'positive'}, lastTweetsPolarity, onError);
     stop = $interval(function() {
       tweetsService.getAllTweetsCount(getAllTweetsCountSuccess, onError);
     }, 30000);
+    initializeWebsocket();
   };
 }
