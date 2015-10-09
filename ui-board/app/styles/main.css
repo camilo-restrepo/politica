@@ -50,6 +50,7 @@ body {
 
 .list-group {
   padding-left: 1%;
+  margin-bottom: 4%;
   width: 30%;
   margin-left: 2.3em;
   height: 185px;
@@ -115,11 +116,6 @@ body {
     margin-top: -5%;
 }
 
-.tweet-sentiment:hover{
-
-}
-
-
 .tweet-sentiment span {
     text-transform: lowercase;
     opacity: 1 !important;
@@ -140,10 +136,6 @@ body {
 
 .text-md {
   font-size: 15px;
-}
-
-.text-md2 {
-  font-size: 17px;
 }
 
 .text-sm {
@@ -617,5 +609,5 @@ body {
 
 .font{
   font-family: "Open Sans";
-  font-size:1.1em;
+  font-size:0.9em;
 }
