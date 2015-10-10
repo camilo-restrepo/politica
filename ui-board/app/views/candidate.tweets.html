@@ -4,7 +4,7 @@
         <li class="list-group-item height-lg tweet-content-candidate squared-box">
             <p class="text-sm">{{tw.text}}</p>
             <div class="padding-right-sm inline time-label" ng-show="tw.timestamp_ms !== 0"><small>{{tw.timestamp_ms | date:'dd-MM-yyyy HH:mm:ss'}}</small></div>
-            <div class="padding-right-sm label text-sm to-right tweet-sentiment squared-box" ng-class="getTweetLabelClass(tw.prediction)" ui-sref="polarity({ prediction: tw.prediction })">
+            <div class="padding-right-sm label text-sm to-right tweet-sentiment squared-box" ng-class="getTweetLabelClass(tw.prediction)" ui-sref="polarity({ prediction: tw.prediction })" analytics-on  analytics-category="Click">
               <span>{{ getTweetLabelText(tw.prediction) }}</span>
             </div>
         </li>
