@@ -21,7 +21,7 @@
         </div>
         <div class="cloud-tag-info">
           <svg class="svg-cloudtag-legend">
-            <rect ng-repeat="c in candidates" ng-attr-x="{{c.x}}" ng-attr-y="{{c.y}}" width="10" height="10" fill="{{c.color}}"ng-class="isTransparent2(c)"/>
+            <rect ng-repeat="c in candidates" ng-attr-x="{{c.x}}" ng-attr-y="{{c.y}}" width="10" height="10" fill="{{c.color}}"ng-class="isTransparent2(c)"></rect>
             <text ng-repeat="c in candidates" ng-attr-x="{{c.x+12}}" ng-attr-y="{{c.y+6}}" text-anchor="start" alignment-baseline="middle" ng-class="isTransparent2(c)">
               {{c.name}}
             </text>
