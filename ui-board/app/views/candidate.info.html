@@ -6,7 +6,9 @@
     <div id="candidate-square" ng-style="{ 'background-color' : getCandidateColor(candidate.screenName) }">
       <div id="candidate-rectangle" class="black-area">
         <b class="candidate-name">{{ getTargetName(candidate.screenName) }}</b><br>
-        <a class="link-white" target="blank" href="https://twitter.com/@{{ candidate.screenName }}"><small>@{{ candidate.screenName }}</small></a>
+        <a class="link-white" target="blank" href="https://twitter.com/@{{ candidate.screenName }}">
+          <small>@{{ candidate.screenName }}</small>
+        </a>
       </div>
     </div>
   </div>

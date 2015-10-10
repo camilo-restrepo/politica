@@ -133,6 +133,21 @@ body {
     padding-top: 45px;
 }
 
+.sentiment-rectangle {
+    padding: 9px;
+    width: 265px;
+    height: 95px;
+    background: white;
+    position: relative;
+    bottom: 74px;
+    left: 320px;
+    border-color: #333;
+    border: solid;
+    border-width: thin;
+    color: #333;
+    padding-left: 10px;
+}
+
 .tweet-sentiment-polarity-sm {
     padding: 15px 30px;
     margin-top: -5px;

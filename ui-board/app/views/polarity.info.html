@@ -1,10 +1,17 @@
 <div class="row">
   <div class="col-md-12">
     <div id="go-back-rectangle" class="black-area-top-tweets">
-      <a class="link-white glyphicon glyphicon-chevron-left font-go-back" ui-sref="home" analytics-on  analytics-category="Click">Volver</a>
+      <a class="link-white glyphicon glyphicon-chevron-left font-go-back" ui-sref="home" analytics-on  analytics-category="Click">
+        Volver
+      </a>
     </div>
     <div id="polarity-square" class="tweet-sentiment-polarity" ng-class="getTweetLabelClassNoHover(polarity)">
       <span><center><b>{{ getTweetLabelText(polarity) }}</b></center></span>
+      <div class="sentiment-rectangle">
+        <p>
+        La clasificación de los Tweets se realiza teniendo en cuenta los sentimientos asociados a cada una de las palabras del tweet.
+        </p>
+      </div>
     </div>
     <p>Ver Tweets:</p>
     <div class="label tweet-sentiment-polarity-sm pull-left squared-box" ng-class="getTweetLabelClass('positive')" ng-show="'positive' !== polarity" ng-mouseenter="hovering=true" ng-mouseleave="hovering=false" ui-sref="polarity({ prediction: 'positive' })" analytics-on  analytics-category="Click">
