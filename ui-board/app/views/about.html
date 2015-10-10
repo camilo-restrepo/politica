@@ -18,12 +18,16 @@
 				<div class="row">
 					<div class="col-md-6">
 						<p class="font-about about-margin-lg">No Creo es un proyecto en continuo desarrollo. Cualquier opinión es bienvenida, escríbenos:</p>
+            <div class="font-about confirmation-message" ng-show="showConfirmationBox">
+              <p><center>Tu mensaje ha sido enviado correctamente</center></p>
+              <p><center>¡Gracias por compartir tu opinión con nostros!</center></p>
+            </div>
 					</div>
 					<div class="col-md-6 input-align">
-						<input placeholder="Nombre" class="about-input">
-						<input placeholder="Correo" class="about-input">
-						<textarea placeholder="Mensaje" class="about-input textarea-height"></textarea>
-						<div class="about-rectangle"><center>ENVIAR</center></div>
+						<input class="about-input" placeholder="Nombre" ng-model="contactForm.name">
+						<input class="about-input" placeholder="Correo" ng-model="contactForm.email">
+						<textarea class="about-input textarea-height" placeholder="Mensaje" ng-model="contactForm.message"></textarea>
+						<div class="about-rectangle" ng-click="sendEmail(contactForm)"><center>ENVIAR</center></div>
 					</div>
 				</div>
 			</div>

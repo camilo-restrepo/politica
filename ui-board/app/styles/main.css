@@ -713,7 +713,20 @@ body {
   width: 88%;
   margin-bottom: 20px;
   border: none;
-  line-height: 2em;
+  font-size: 20px;
+  padding-left: 10px;
+}
+
+.confirmation-message {
+  margin-top: 30px;
+  margin-left: 50px;
+  padding-top: 20px;
+  padding-bottom: 30px;
+  width: 80%;
+  height: 50%;
+  border: solid;
+  border-width: thin;
+  border-color: #333;
 }
 
 .textarea-height{

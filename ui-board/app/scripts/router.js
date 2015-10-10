@@ -13,11 +13,15 @@ app.config(function($stateProvider, $urlRouterProvider) {
       url: '/candidatos/:twitterId',
       templateUrl: 'views/candidate.html'
     })
+
     .state('polarity', {
     	url: '/polaridad/:prediction',
     	templateUrl: 'views/polaridad.html'
-    }).state('about', {
+    })
+    
+    .state('about', {
         url: '/about',
+        controller: 'aboutController',
         templateUrl: 'views/about.html'
     });
 });
