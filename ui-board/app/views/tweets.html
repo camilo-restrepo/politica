@@ -6,34 +6,33 @@
       </div>
       <div class="col-md-3 tweets-title">Tweets por minuto: <b>{{ tweetsPerMinute | number}}</b></div>
       <div class="col-md-1">
-        
+
       </div>
       <div class="col-md-7 tweets-title">Tweets analizados desde el 31/07/2015: <b>{{ tweetsCount | number}}</b></div>
     </div>
   </div>
   <br>
   <br>
-  <div class="row">
-    <div class="col-md-12">
-      <ul class="col-md-4 list-group" ng-repeat="candidato in candidatos">
-        <li class="list-group-item list-title squared-box" ui-sref="candidate({ twitterId: candidato.twitterId.id })" analytics-on  analytics-category="Click">
-          <div class="text-md">
-            <a class="link-white" ui-sref="candidate({ twitterId: candidato.twitterId.id })" analytics-on  analytics-category="Click">{{ getTargetName(candidato.screenName) }}</a>
-          </div>
-          <small>
-            <a class="link-white" target="blank" href="http://twitter.com/{{candidato.twitterId.id}}"
-            analytics-on  analytics-category="Click">
-            @{{candidato.twitterId.id}}
+  <div class="row tweets-group">
+    <div class="col-md-4 list-group" ng-repeat="candidato in candidatos">
+      <div class="list-group-item list-title squared-box" ui-sref="candidate({ twitterId: candidato.twitterId.id })" analytics-on  analytics-category="Click">
+        <div class="text-md">
+          <a class="link-white" ui-sref="candidate({ twitterId: candidato.twitterId.id })" analytics-on  analytics-category="Click">{{ getTargetName(candidato.screenName) }}</a>
+        </div>
+        <small>
+          <a class="link-white" target="blank" href="http://twitter.com/{{candidato.twitterId.id}}"
+          analytics-on  analytics-category="Click">
+          @{{candidato.twitterId.id}}
           </a>
         </small>
-      </li>
-      <li class="list-group-item height-lg tweet-content squared-box" ng-repeat="tw in candidato.tweets | orderBy:'-timestamp_ms'">
+      </div>
+      <div class="list-group-item height-lg tweet-content squared-box" ng-repeat="tw in candidato.tweets | orderBy:'-timestamp_ms'">
         <p class="text-sm">{{tw.text}}</p>
         <div class="padding-right-sm inline time-label"><small>{{tw.timestamp_ms | date:'dd-MM-yyyy HH:mm:ss'}}</small></div>
         <div class="padding-right-sm label text-sm to-right tweet-sentiment squared-box" ng-class="getTweetLabelClass(tw.prediction)" ng-mouseenter="hovering=true" ng-mouseleave="hovering=false" ui-sref="polarity({ prediction: tw.prediction })" analytics-on  analytics-category="Click">
-          <span>{{ getTweetLabelText(tw.prediction) }}</span>
+        <span>{{ getTweetLabelText(tw.prediction) }}</span>
         </div>
-      </li>
-    </ul>
+      </div>
+    </div>
   </div>
 </div>
