@@ -645,7 +645,7 @@ body {
 }
 
 .cloud-tag-info {
-  padding-top: 100%;
+  padding-top: 70%;
 }
 
 .squared-box{
@@ -741,6 +741,17 @@ body {
 .about-rectangle:hover{
   cursor: pointer; 
   cursor: hand;
+}
+
+.svg-cloudtag-legend{
+  height: 290px;
+  font-size: 12px;
+  margin-left: 90px;
+  letter-spacing: -0.5px;
+}
+
+.svg-cloudtag-opacity{
+  opacity: 0.2;
 }
 
 ::-webkit-input-placeholder {

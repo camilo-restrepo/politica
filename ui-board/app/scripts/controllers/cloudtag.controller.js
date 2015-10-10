@@ -6,8 +6,7 @@ cloudtagController.$inject = ['$scope', 'cloudtagService'];
 function cloudtagController($scope, cloudtagService) {
   var popularCandidateWords = [];
   var allWords = [];
-
-
+  
   function getCandidateColor(candidateTwitterId) {
     var colors = {
       RicardoAriasM: '#D66F13',
@@ -68,11 +67,13 @@ function cloudtagController($scope, cloudtagService) {
 
   $scope.showAllCandidates = function() {
     $scope.words = shuffleArray(allWords);
+    $scope.isTransparent = false;
     //$scope.$apply()
   };
 
   $scope.showPopularCandidatesOnly = function() {
     $scope.words = shuffleArray(popularCandidateWords);
+    $scope.isTransparent = true;
     //$scope.$apply()
   };
 
@@ -85,7 +86,37 @@ function cloudtagController($scope, cloudtagService) {
     $scope.showOrHide = $scope.boxIsFull ? 'Ocultar' : "Mostrar";
   };
 
+  function initCandidatesLegend(){
+    $scope.candidates = [
+      {name: 'RicardoAriasM', color:'#D66F13', x:0, y:0, popular: false},
+      {name: 'MMMaldonadoC', color:'#FBD103' , x:0, y:30, popular: false},
+      {name: 'danielraisbeck', color:'#FF5C01' , x:0, y:60, popular: false},
+      {name: 'ClaraLopezObre', color:'#FFDF00' , x:0, y:90, popular: true},
+      {name: 'RafaelPardo', color:'#ED0A03' , x:0, y:120, popular: true},
+      {name: 'PachoSantosC', color:'#3C68B7' , x:0, y:150, popular: true},
+      {name: 'EnriquePenalosa', color:'#12ADE5' , x:0, y:180, popular: true},
+      {name: 'AlexVernot', color:'#0A5C6D' , x:0, y:210, popular: false},
+      {name: 'CVderoux', color:'#088543' , x:0, y:240, popular: false}
+    ];
+    $scope.candidates = shuffleArray($scope.candidates);
+    var y = 0;
+    for(var i = 0 ; i < $scope.candidates.length ; i++){
+      $scope.candidates[i].y = y;
+      y = y + 20;
+    }
+  }
+
+  $scope.isTransparent2 = function(candidate){
+
+    if($scope.isTransparent && !candidate.popular){
+      return 'svg-cloudtag-opacity';
+    }
+    return '';
+  }
+
   $scope.init = function() {
+    initCandidatesLegend();
+    $scope.isTransparent = true;
     $scope.boxIsFull = true;
     $scope.showOrHide = 'Ocultar';
     cloudtagService.getAllCandidatesCloudTags(success, error);
