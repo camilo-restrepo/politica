@@ -107,7 +107,7 @@ function scoreController($scope, scoreService, $state, $stateParams) {
   };
 
   var medellinCandidates = {
-    FicoGutierrez: '#D2EDFA',
+    FicoGutierrez: '#FE5859',
     AlcaldeAlonsoS: '#83AC2A',
     RICOGabriel: '#F6783B',
     jcvelezuribe: '#183A64'
