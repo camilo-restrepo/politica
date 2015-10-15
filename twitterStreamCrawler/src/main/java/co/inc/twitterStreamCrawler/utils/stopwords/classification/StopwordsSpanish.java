@@ -47,7 +47,7 @@ public class StopwordsSpanish {
 				"pacho", "francisco", "-", "http", "rt", "daniel", "raisbeck", "am", "pm", "debate", "hollman",
 				"propuesta", "propuestas", "encuesta", "encuestas", "sabe", "gracias", "candidata", "foro", "tema",
 				"expresado", "localidad", "seguimos", "señor", "retiran", "vernot", "x", "te", "jcvelezuribe", "puedes",
-				"equipo", "veo", "hicimos"};
+				"equipo", "veo", "hicimos", "etc"};
 
 		if (m_Stopwords == null) {
 			m_Stopwords = new HashSet<String>();
