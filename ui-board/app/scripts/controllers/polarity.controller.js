@@ -1,9 +1,9 @@
 'use strict';
 
 boardModule.controller('polarityController', polarityController);
-polarityController.$inject = ['$scope', 'tweetsService'];
+polarityController.$inject = ['$scope', 'tweetsService', '$state', '$stateParams'];
 
-function polarityController($scope, tweetsService) {
+function polarityController($scope, tweetsService, $state, $stateParams) {
 
     var todosLosCandidatos = {
       columnNamesArray: [],
@@ -18,18 +18,6 @@ function polarityController($scope, tweetsService) {
     };
 
   function getAllCandidatesPolarity(columnNamesArray, positiveArray, negativeArray) {
-
-    var colors = {
-      RicardoAriasM: '#D66F13',
-      MMMaldonadoC: '#FBD103',
-      danielraisbeck: '#FF5C01',
-      ClaraLopezObre: '#FFDF00',
-      RafaelPardo: '#ED0A03',
-      PachoSantosC: '#3C68B7',
-      EnriquePenalosa: '#12ADE5',
-      AlexVernot: '#0A5C6D',
-      CVderoux: '#088543'
-    };
 
     var chart = c3.generate({
       bindto: '#polarityChart',
@@ -64,29 +52,26 @@ function polarityController($scope, tweetsService) {
     return chart;
   }
 
-  function getTargetName(targetId){
-    if(targetId === 'CVderoux'){
-      return 'Carlos Vicente de Roux';
-    }else if(targetId === 'EnriquePenalosa'){
-      return 'Enrique Peñalosa';
-    }else if(targetId === 'PachoSantosC'){
-      return 'Francisco Santos';
-    }else if(targetId === 'ClaraLopezObre'){
-      return 'Clara López Obregon';
-    }else if(targetId === 'AlexVernot'){
-      return 'Alex Vernot';
-    }else if(targetId === 'RicardoAriasM'){
-      return 'Ricardo Arias Mora';
-    }else if(targetId === 'RafaelPardo'){
-      return 'Rafael Pardo';
-    }else if(targetId === 'MMMaldonadoC'){
-      return 'María Mercedes Maldonado';
-    }else if(targetId === 'danielraisbeck'){
-      return 'Daniel Raisbeck';
+  $scope.getTargetName = function(targetId) {
+
+    var candidateNames = {
+      RicardoAriasM: 'Ricardo Arias Mora',
+      MMMaldonadoC: 'María Mercedes Maldonado',
+      danielraisbeck: 'Daniel Raisbeck',
+      ClaraLopezObre: 'Clara López Obregón',
+      RafaelPardo: 'Rafael Pardo',
+      PachoSantosC: 'Francisco Santos',
+      EnriquePenalosa: 'Enrique Peñalosa',
+      AlexVernot: 'Alex Vernot',
+      CVderoux: 'Carlos Vicente de Roux',
+      FicoGutierrez: 'Federico Gutiérrez',
+      AlcaldeAlonsoS: 'Alonso Salazar',
+      RICOGabriel: 'Gabriel Jaime Rico',
+      jcvelezuribe: 'Juan Carlos Vélez'
     }
 
-    return '';
-  }
+    return candidateNames[targetId];
+  };
 
   function shuffleArray(o) {
     for(var j, x, i = o.length; i; j = Math.floor(Math.random() * i), x = o[--i], o[i] = o[j], o[j] = x);
@@ -95,17 +80,65 @@ function polarityController($scope, tweetsService) {
 
   $scope.showAllCandidates = function() {
     $scope.chart = getAllCandidatesPolarity(todosLosCandidatos.columnNamesArray, todosLosCandidatos.positiveArray, 
-      todosLosCandidatos.negativeArray);
+                                            todosLosCandidatos.negativeArray);
   };
 
   $scope.showPopularCandidatesOnly = function() {
     $scope.chart = getAllCandidatesPolarity(candidatosPopulares.columnNamesArray, candidatosPopulares.positiveArray, 
-      candidatosPopulares.negativeArray);
+                                            candidatosPopulares.negativeArray);
   };
 
+  var bogotaCandidates = {
+    RicardoAriasM: '#D66F13',
+    MMMaldonadoC: '#FBD103',
+    danielraisbeck: '#FF5C01',
+    ClaraLopezObre: '#FFDF00',
+    RafaelPardo: '#ED0A03',
+    PachoSantosC: '#3C68B7',
+    EnriquePenalosa: '#12ADE5',
+    AlexVernot: '#0A5C6D',
+    CVderoux: '#088543'
+  };
+
+  var medellinCandidates = {
+    FicoGutierrez: '#D2EDFA',
+    AlcaldeAlonsoS: '#83AC2A',
+    RICOGabriel: '#F6783B',
+    jcvelezuribe: '#183A64'
+  };
+
+  function getCandidatesFromCity(cityId, candidatos) {
+
+    var candidatesFromCity = [];
+
+    for (var i = 0; i < candidatos.length; i++) {
+
+      var candidateColor = null;
+      var candidate = candidatos[i];
+
+      if (cityId == 'bogota') {
+        candidateColor = bogotaCandidates[candidate.twitterId];
+      } else {
+        candidateColor = medellinCandidates[candidate.twitterId];
+      }
+
+      if (candidateColor) {
+        candidatesFromCity.push(candidate);
+      }
+    }
+
+    return candidatesFromCity;
+  }
+
   function success(response) {
-    var candidatosNoPopulares = ['CVderoux', 'MMMaldonadoC', 'RicardoAriasM', 'AlexVernot', 'danielraisbeck'];
-    var polarityArray = shuffleArray(response);
+
+    var candidatesFromCity = getCandidatesFromCity($scope.cityId, response);
+    var polarityArray = shuffleArray(candidatesFromCity);
+    var candidatosNoPopulares = [];
+
+    if ($scope.cityId == 'bogota') {
+      candidatosNoPopulares = ['CVderoux', 'MMMaldonadoC', 'RicardoAriasM', 'AlexVernot', 'danielraisbeck'];
+    }
 
     for (var i = 0; i < polarityArray.length; i++) {
 
@@ -134,8 +167,14 @@ function polarityController($scope, tweetsService) {
 
   $scope.init = function() {
 
-    $scope.boxIsFull = true;
-    $scope.showOrHide = 'Ocultar';
-    tweetsService.getAllCandidatesPolarity({time: 'day'}, success, error);
+    $scope.cityId = $stateParams.cityId;
+
+    if ($scope.cityId) {
+      $scope.boxIsFull = true;
+      $scope.showOrHide = 'Ocultar';
+      tweetsService.getAllCandidatesPolarity({time: 'day'}, success, error);
+    } else {
+      $state.go('select');
+    }
   };
 }

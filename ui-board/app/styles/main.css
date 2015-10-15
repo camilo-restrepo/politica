@@ -268,6 +268,19 @@ body {
   background-color: #662F8F;
 }
 
+.btn-nocreo-black {
+  background-color: rgba(0,0,0,1);
+  color: #FFF;
+  font-size: 26px;
+  padding: 5px 15px;
+  margin: 0 0px 10px !important;
+  line-height: 1.1em;
+  width: 250px;
+  text-align: center;
+  font-family: "Open Sans";
+  letter-spacing: 10px;
+}
+
 .btn-outline {
   color: #000;
   background-color: transparent;
@@ -385,6 +398,34 @@ body {
   position: relative;
 }
 
+.black-background {
+  color: #FFF;
+  background: black;
+}
+
+.header-div {
+  padding: 30px;
+}
+
+.options-div {
+  padding: 60px;
+  padding-bottom: 100px;
+}
+
+.margin-md {
+  margin-bottom: 50px;
+}
+
+.main-link {
+  background-color: rgba(0,0,0,1);
+  color: #FFF;
+  font-size: 26px;
+  font-family: "Open Sans";
+  letter-spacing: 10px;
+  padding: 10px;
+  margin-bottom: 50px;
+}
+
 .black-area {
   color: #FFF;
   font-size: 18px;
@@ -464,142 +505,142 @@ body {
 
 
 .tangcloud {
-    height: 500px;
-    width: 1000px;
+  height: 500px;
+  width: 1000px;
 }
 
 .tangcloud span {
-    line-height: 100%;
-    font-family: "Open Sans";
+  line-height: 100%;
+  font-family: "Open Sans";
 }
 
 .tangcloud-item-1 {
-    font-size: 1.3em;
-    display: inline-block;
-    margin-right:0.3em;
-    margin-left:0.3em;
-    font-family: "Open Sans";
+  font-size: 1.3em;
+  display: inline-block;
+  margin-right:0.3em;
+  margin-left:0.3em;
+  font-family: "Open Sans";
 }
 
 .tangcloud-item-2 {
-    font-size: 1.6em;
-    display: inline-block;
-    margin-right:0.3em;
-    margin-left:0.3em;
-    font-family: "Open Sans";
+  font-size: 1.6em;
+  display: inline-block;
+  margin-right:0.3em;
+  margin-left:0.3em;
+  font-family: "Open Sans";
 }
 
 .tangcloud-item-3 {
-    font-size: 1.9em;
-    display: inline-block;
-    margin-right:0.3em;
-    margin-left:0.3em;
-    font-family: "Open Sans";
+  font-size: 1.9em;
+  display: inline-block;
+  margin-right:0.3em;
+  margin-left:0.3em;
+  font-family: "Open Sans";
 }
 
 .tangcloud-item-4 {
-    font-size: 2.2em;
-    display: inline-block;
-    margin-right:0.3em;
-    margin-left:0.3em;
-    font-family: "Open Sans";
+  font-size: 2.2em;
+  display: inline-block;
+  margin-right:0.3em;
+  margin-left:0.3em;
+  font-family: "Open Sans";
 }
 
 .tangcloud-item-5 {
-    font-size: 2.5em;
-    display: inline-block;
-    margin-right:0.3em;
-    margin-left:0.3em;
-    font-family: "Open Sans";
+  font-size: 2.5em;
+  display: inline-block;
+  margin-right:0.3em;
+  margin-left:0.3em;
+  font-family: "Open Sans";
 }
 
 .tangcloud-item-6 {
-    font-size: 2.8em;
-    display: inline-block;
-    margin-right:0.3em;
-    margin-left:0.3em;
-    font-family: "Open Sans";
+  font-size: 2.8em;
+  display: inline-block;
+  margin-right:0.3em;
+  margin-left:0.3em;
+  font-family: "Open Sans";
 }
 
 .tangcloud-item-7 {
-    font-size: 3.1em;
-    display: inline-block;
-    margin-right:0.3em;
-    margin-left:0.3em;
-    font-family: "Open Sans";
+  font-size: 3.1em;
+  display: inline-block;
+  margin-right:0.3em;
+  margin-left:0.3em;
+  font-family: "Open Sans";
 }
 
 .tangcloud-item-8 {
-    font-size: 3.4em;
-    display: inline-block;
-    margin-right:0.3em;
-    margin-left:0.3em;
-    font-family: "Open Sans";
+  font-size: 3.4em;
+  display: inline-block;
+  margin-right:0.3em;
+  margin-left:0.3em;
+  font-family: "Open Sans";
 }
 
 .tangcloud-item-9 {
-    font-size: 3.7em;
-    display: inline-block;
-    margin-right:0.3em;
-    margin-left:0.3em;
-    font-family: "Open Sans";
+  font-size: 3.7em;
+  display: inline-block;
+  margin-right:0.3em;
+  margin-left:0.3em;
+  font-family: "Open Sans";
 }
 
 .tangcloud-item-10 {
-    font-size: 4em;
-    display: inline-block;
-    margin-right:0.3em;
-    margin-left:0.3em;
-    font-family: "Open Sans";
+  font-size: 4em;
+  display: inline-block;
+  margin-right:0.3em;
+  margin-left:0.3em;
+  font-family: "Open Sans";
 }
 
 .tangcloud-item-RicardoAriasM {
-    color: '#D66F13' !important;
-    font-family: "Open Sans";
+  color: '#D66F13' !important;
+  font-family: "Open Sans";
 }
 
 .tangcloud-item-MMMaldonadoC {
-    color: '#FBD103' !important;
-    font-family: "Open Sans";
+  color: '#FBD103' !important;
+  font-family: "Open Sans";
 }
 
 .tangcloud-item-danielraisbeck {
-    color: '#FF5C01' !important;
-    font-family: "Open Sans";
+  color: '#FF5C01' !important;
+  font-family: "Open Sans";
 }
 
 .tangcloud-item-ClaraLopezObre {
-    color: '#FFDF00' !important;
-    font-family: "Open Sans";
+  color: '#FFDF00' !important;
+  font-family: "Open Sans";
 }
 
 .tangcloud-item-RafaelPardo {
-    color: '#ED0A03' !important;
-    font-family: "Open Sans";
+  color: '#ED0A03' !important;
+  font-family: "Open Sans";
 }
 
 .tangcloud-item-PachoSantosC {
-    color: '#3C68B7' !important;
-    font-family: "Open Sans";
+  color: '#3C68B7' !important;
+  font-family: "Open Sans";
 }
 
 .tangcloud-item-EnriquePenalosa {
-    color: '#12ADE5' !important;
-    font-family: "Open Sans";
+  color: '#12ADE5' !important;
+  font-family: "Open Sans";
 }
 
 .tangcloud-item-AlexVernot {
-    color: '#0A5C6D' !important;
-    font-family: "Open Sans";
+  color: '#0A5C6D' !important;
+  font-family: "Open Sans";
 }
 
 .tangcloud-item-CVderoux {
-    color: '#088543' !important;
-    font-family: "Open Sans";
+  color: '#088543' !important;
+  font-family: "Open Sans";
 }
 
 .tangcloud-item-hidden {
-    visibility: hidden;
+  visibility: hidden;
 }
 
 .initial-dialog-left {
@@ -785,27 +826,27 @@ body {
 }
 
 ::-webkit-input-placeholder {
-   color: white;
-   font-family: "Open Sans";
-   font-size: 20px;
+  color: white;
+  font-family: "Open Sans";
+  font-size: 20px;
 }
 
 :-moz-placeholder { /* Firefox 18- */
-   color: white;
-   font-family: "Open Sans";
-   font-size: 20px;
+  color: white;
+  font-family: "Open Sans";
+  font-size: 20px;
 }
 
 ::-moz-placeholder {  /* Firefox 19+ */
-   color: white;
-   font-family: "Open Sans";
-   font-size: 20px;
+  color: white;
+  font-family: "Open Sans";
+  font-size: 20px;
 }
 
 :-ms-input-placeholder {  
-   color: white;
-   font-family: "Open Sans";
-   font-size: 20px;
+  color: white;
+  font-family: "Open Sans";
+  font-size: 20px;
 }
 
 .tweets-group{
