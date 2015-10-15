@@ -4,29 +4,28 @@ boardModule.controller('candidateTweetsController', candidateTweetsController);
 candidateTweetsController.$inject = ['$scope', '$stateParams', '$websocket', 'environment', 'targetsService', 'tweetsService'];
 
 function candidateTweetsController($scope, $stateParams, $websocket, environment, targetsService, tweetsService) {
+
   var tweetsLimit = 3;
-  $scope.getTargetName = function(targetId){
-    if(targetId === 'CVderoux'){
-      return 'Carlos Vicente de Roux';
-    }else if(targetId === 'EnriquePenalosa'){
-      return 'Enrique Peñalosa';
-    }else if(targetId === 'PachoSantosC'){
-      return 'Francisco Santos';
-    }else if(targetId === 'ClaraLopezObre'){
-      return 'Clara López Obregon';
-    }else if(targetId === 'AlexVernot'){
-      return 'Alex Vernot';
-    }else if(targetId === 'RicardoAriasM'){
-      return 'Ricardo Arias Mora';
-    }else if(targetId === 'RafaelPardo'){
-      return 'Rafael Pardo';
-    }else if(targetId === 'MMMaldonadoC'){
-      return 'María Mercedes Maldonado';
-    }else if(targetId === 'DanielRaisbeck'){
-      return 'Daniel Raisbeck';
+
+  $scope.getTargetName = function(targetId) {
+
+    var candidateNames = {
+      RicardoAriasM: 'Ricardo Arias Mora',
+      MMMaldonadoC: 'María Mercedes Maldonado',
+      DanielRaisbeck: 'Daniel Raisbeck',
+      ClaraLopezObre: 'Clara López Obregón',
+      RafaelPardo: 'Rafael Pardo',
+      PachoSantosC: 'Francisco Santos',
+      EnriquePenalosa: 'Enrique Peñalosa',
+      AlexVernot: 'Alex Vernot',
+      CVderoux: 'Carlos Vicente de Roux',
+      FicoGutierrez: 'Federico Gutiérrez',
+      AlcaldeAlonsoS: 'Alonso Salazar',
+      RICOGabriel: 'Gabriel Jaime Rico',
+      jcvelezuribe: 'Juan Carlos Vélez'
     }
 
-    return '';
+    return candidateNames[targetId];
   };
 
   $scope.getCandidateColor = function(twitterId) {
@@ -35,13 +34,16 @@ function candidateTweetsController($scope, $stateParams, $websocket, environment
       RicardoAriasM: '#D66F13',
       MMMaldonadoC: '#FBD103',
       danielraisbeck: '#FF5C01',
-      DanielRaisbeck: '#FF5C01',
       ClaraLopezObre: '#FFDF00',
       RafaelPardo: '#ED0A03',
       PachoSantosC: '#3C68B7',
       EnriquePenalosa: '#12ADE5',
       AlexVernot: '#0A5C6D',
-      CVderoux: '#088543'
+      CVderoux: '#088543',
+      FicoGutierrez: '#FE5859',
+      AlcaldeAlonsoS: '#83AC2A',
+      RICOGabriel: '#F6783B',
+      jcvelezuribe: '#183A64'
     };
 
     return colors[twitterId];
