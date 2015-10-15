@@ -1,9 +1,10 @@
 'use strict';
 
 boardModule.controller('tweetsController', tweetsController);
-tweetsController.$inject = ['$scope', '$websocket' , '$interval', 'environment', 'targetsService', 'tweetsService'];
+tweetsController.$inject = ['$scope', '$websocket' , '$interval', 'environment', 'targetsService', 'tweetsService', '$state',
+  '$stateParams'];
 
-function tweetsController($scope, $websocket, $interval, environment, targetsService, tweetsService) {
+function tweetsController($scope, $websocket, $interval, environment, targetsService, tweetsService, $state, $stateParams) {
 
   $scope.candidatos = [];
   var stop;
@@ -127,6 +128,7 @@ function tweetsController($scope, $websocket, $interval, environment, targetsSer
       var actual = $scope.candidatos[i];
       tweetsService.getLastTweetsCandidate({twitterId: actual.twitterId.id}, lastTweetsCandidateSuccess, onError);
     }
+
     $scope.candidatos = shuffleArray($scope.candidatos);
   }
 
@@ -148,12 +150,23 @@ function tweetsController($scope, $websocket, $interval, environment, targetsSer
   });
 
   $scope.init = function() {
-    targetsService.getTargets(getTargetsSuccess, onError);
-    tweetsService.getAllTweetsCount(getAllTweetsCountSuccess, onError);
-    
-    stop = $interval(function() {
+
+    $scope.cityId = $stateParams.cityId;
+
+    if ($scope.cityId) {
+
+      targetsService.getTargets(getTargetsSuccess, onError);
       tweetsService.getAllTweetsCount(getAllTweetsCountSuccess, onError);
-    }, 30000);
-    initializeWebsocket();
+
+      stop = $interval(function() {
+        tweetsService.getAllTweetsCount(getAllTweetsCountSuccess, onError);
+      }, 30000);
+
+      initializeWebsocket();
+
+    } else {
+
+      $state.go('select');
+    }
   };
 }
