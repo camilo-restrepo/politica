@@ -20,7 +20,8 @@ function scoreController($scope, scoreService, $state, $stateParams) {
       FicoGutierrez: '#FE5859',
       AlcaldeAlonsoS: '#83AC2A',
       RICOGabriel: '#F6783B',
-      jcvelezuribe: '#183A64'
+      jcvelezuribe: '#183A64',
+      HectorHAlcalde: '#FFDF00'
     };
 
     var chart = c3.generate({

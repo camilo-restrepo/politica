@@ -21,6 +21,8 @@ db.twitterIds.insert({id: "RICOGabriel", relatedWords: ["Gabriel Jaime Rico", "R
 db.twitterIds.insert({id: "jcvelezuribe", relatedWords: ["Juan Carlos Vélez", "jcvelezuribe"]}) 
 db.twitterIds.insert({id: "AlcaldeAlonsoS", relatedWords: ["AlcaldeAlonsoS", "AlonsoAlcalde"]}) 
 db.twitterIds.insert({id: "FicoGutierrez", relatedWords: ["Federico Gutiérrez", "FicoGutierrez", "FedericoAlcalde"]})
+db.twitterIds.insert({id: "HectorHAlcalde", relatedWords: ["Héctor Hoyos", "HectorHAlcalde"]})
+
 
 
 

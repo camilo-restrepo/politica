@@ -21,7 +21,8 @@ function cloudtagController($scope, cloudtagService, $state, $stateParams) {
       FicoGutierrez: '#FE5859',
       AlcaldeAlonsoS: '#83AC2A',
       RICOGabriel: '#F6783B',
-      jcvelezuribe: '#183A64'
+      jcvelezuribe: '#183A64',
+      HectorHAlcalde: '#FFDF00'
     };
     var col = colors[candidateTwitterId];
     return col;
@@ -53,7 +54,8 @@ function cloudtagController($scope, cloudtagService, $state, $stateParams) {
     FicoGutierrez: '#D2EDFA',
     AlcaldeAlonsoS: '#83AC2A',
     RICOGabriel: '#F6783B',
-    jcvelezuribe: '#183A64'
+    jcvelezuribe: '#183A64',
+    HectorHAlcalde: '#FFDF00'
   };
 
   function getCandidatesFromCity(cityId, candidatos) {
@@ -162,7 +164,8 @@ function cloudtagController($scope, cloudtagService, $state, $stateParams) {
         {name: 'FicoGutierrez', color:'#FE5859', x:0, y:0, popular: true},
         {name: 'AlcaldeAlonsoS', color:'#83AC2A' , x:0, y:30, popular: true},
         {name: 'RICOGabriel', color:'#F6783B' , x:0, y:60, popular: true},
-        {name: 'jcvelezuribe', color:'#183A64' , x:0, y:90, popular: true}
+        {name: 'jcvelezuribe', color:'#183A64' , x:0, y:90, popular: true},
+        {name: 'HectorHAlcalde', color:'#FFDF00' , x:0, y:120, popular: true}
       ];
     }
 

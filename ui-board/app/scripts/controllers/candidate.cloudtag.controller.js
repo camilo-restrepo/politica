@@ -15,7 +15,8 @@ function candidateCloudtagController($scope, $stateParams, cloudtagService) {
       PachoSantosC: '#3C68B7',
       EnriquePenalosa: '#12ADE5',
       AlexVernot: '#0A5C6D',
-      CVderoux: '#088543'
+      CVderoux: '#088543',
+      HectorHAlcalde: '#FFDF00'
     };
     var col = colors[candidateTwitterId];
     return col;
