@@ -1,26 +1,23 @@
 package co.inc.twitterStreamCrawler.domain.workers;
 
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.regex.Pattern;
-
-import org.bson.Document;
-
-import com.sun.jersey.api.client.Client;
-import com.sun.jersey.api.client.WebResource;
-
 import co.inc.twitterStreamCrawler.domain.entities.Prediction;
 import co.inc.twitterStreamCrawler.persistence.daos.TargetDAO;
 import co.inc.twitterStreamCrawler.persistence.daos.TweetDAO;
 import co.inc.twitterStreamCrawler.utils.PolarityClassifier;
 import co.inc.twitterStreamCrawler.utils.constants.GlobalConstants;
 import co.inc.twitterStreamCrawler.utils.stopwords.classification.StopwordsSpanish;
+import com.sun.jersey.api.client.Client;
+import com.sun.jersey.api.client.WebResource;
+import org.bson.Document;
 import weka.classifiers.meta.FilteredClassifier;
 import weka.core.Attribute;
 import weka.core.FastVector;
 import weka.core.Instance;
 import weka.core.Instances;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.regex.Pattern;
 
 public class TwitterConsumerWorker implements Runnable {
 
@@ -74,7 +71,8 @@ public class TwitterConsumerWorker implements Runnable {
 		String cleanText = GlobalConstants.UNDESIRABLES.matcher(text).replaceAll("");
 		String[] tokens = GlobalConstants.SPACE.split(cleanText);
 		for (String token : tokens) {
-			if (!token.startsWith("@") && !token.startsWith("#") && !stopwords.isStopword(token)) {
+			if (!token.startsWith("@") && !token.startsWith("#") && !stopwords.isStopword(token)
+					&& !token.startsWith("htt")) {
 				tweetDAO.incrementWordCount(token, target);
 			}
 		}
