@@ -83,7 +83,7 @@ function tweetsController($scope, $websocket, $interval, environment, targetsSer
     var candidateNames = {
       RicardoAriasM: 'Ricardo Arias Mora',
       MMMaldonadoC: 'María Mercedes Maldonado',
-      danielraisbeck: 'Daniel Raisbeck',
+      DanielRaisbeck: 'Daniel Raisbeck',
       ClaraLopezObre: 'Clara López Obregón',
       RafaelPardo: 'Rafael Pardo',
       PachoSantosC: 'Francisco Santos',
