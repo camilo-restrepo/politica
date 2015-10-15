@@ -37,59 +37,47 @@ public final class WordCount {
 				Object.class, BSONObject.class);
 
 		JavaRDD<CandidateWord> words = documents
-				.flatMap(new FlatMapFunction<Tuple2<Object, BSONObject>, CandidateWord>() {
-					public Iterable<CandidateWord> call(Tuple2<Object, BSONObject> t) throws Exception {
-						BasicDBList targets = (BasicDBList) t._2.get("targetTwitterIds");
-						String text = (String) t._2.get("text");
+				.flatMap(t -> {
+                    BasicDBList targets = (BasicDBList) t._2.get("targetTwitterIds");
+                    String text = (String) t._2.get("text");
 
-						List<CandidateWord> words = new ArrayList<CandidateWord>();
-						if (text != null) {
-							text = text.replace(".", "").replace("\u2026", "").replace(",", "").replace(":", "")
-									.replace("\r", "").replace("\n", "").replace("\"", "").replace("|", "").trim()
-									.toLowerCase();
-							text = UNDESIRABLES.matcher(text).replaceAll("");
+                    List<CandidateWord> words1 = new ArrayList<>();
+                    if (text != null) {
+                        text = text.replace(".", "").replace("\u2026", "").replace(",", "").replace(":", "")
+                                .replace("\r", "").replace("\n", "").replace("\"", "").replace("|", "").trim()
+                                .toLowerCase();
+                        text = UNDESIRABLES.matcher(text).replaceAll("");
 
-							String[] tweetTokens = SPACE.split(text);
-							StopwordsSpanish stopwords = new StopwordsSpanish();
-							for (String token : tweetTokens) {
-								if (!token.equals("rt") && !token.startsWith("@") && !token.startsWith("#")
-										&& !token.startsWith("http") && !stopwords.isStopword(token)) {
-									if (targets != null && targets.size() > 0 && !token.isEmpty()) {
-										for(int i = 0 ; i < targets.size() ; i++){
-											String target = (String) targets.get(i);
-											words.add(new CandidateWord(token, target));
-										}
-									}
-								}
-							}
-						}
-						return words;
-					}
-				});
+                        String[] tweetTokens = SPACE.split(text);
+                        StopwordsSpanish stopwords = new StopwordsSpanish();
+                        for (String token : tweetTokens) {
+                            if (!token.equals("rt") && !token.startsWith("@") && !token.startsWith("#")
+                                    && !token.startsWith("http") && !stopwords.isStopword(token)) {
+                                if (targets != null && targets.size() > 0 && !token.isEmpty()) {
+                                    for(int i = 0 ; i < targets.size() ; i++){
+                                        String target = (String) targets.get(i);
+                                        words1.add(new CandidateWord(token, target));
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    return words1;
+                });
 
 		JavaPairRDD<CandidateWord, Integer> ones = words
-				.mapToPair(new PairFunction<CandidateWord, CandidateWord, Integer>() {
-					public Tuple2<CandidateWord, Integer> call(CandidateWord s) {
-						return new Tuple2<CandidateWord, Integer>(s, 1);
-					}
-				});
+				.mapToPair(s -> new Tuple2<>(s, 1));
 
-		JavaPairRDD<CandidateWord, Integer> counts = ones.reduceByKey(new Function2<Integer, Integer, Integer>() {
-			public Integer call(Integer i1, Integer i2) {
-				return i1 + i2;
-			}
-		});
+		JavaPairRDD<CandidateWord, Integer> counts = ones.reduceByKey((i1, i2) -> i1 + i2);
 
 		JavaPairRDD<Object, BSONObject> save = counts
-				.mapToPair(new PairFunction<Tuple2<CandidateWord, Integer>, Object, BSONObject>() {
-					public Tuple2<Object, BSONObject> call(Tuple2<CandidateWord, Integer> tuple) {
-						BSONObject bson = new BasicBSONObject();
-						bson.put("word", tuple._1.getWord());
-						bson.put("target", tuple._1.getCandidate());
-						bson.put("count", tuple._2);
-						return new Tuple2<Object, BSONObject>(null, bson);
-					}
-				});
+				.mapToPair(tuple -> {
+                    BSONObject bson = new BasicBSONObject();
+                    bson.put("word", tuple._1.getWord());
+                    bson.put("target", tuple._1.getCandidate());
+                    bson.put("count", tuple._2);
+                    return new Tuple2<>(null, bson);
+                });
 
 		Configuration outputConfig = new Configuration();
 		outputConfig.set("mongo.output.uri", "mongodb://localhost:27017/boarddb.words");
