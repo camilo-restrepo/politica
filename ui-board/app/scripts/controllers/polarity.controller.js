@@ -1,9 +1,9 @@
 'use strict';
 
 boardModule.controller('polarityController', polarityController);
-polarityController.$inject = ['$scope', 'tweetsService'];
+polarityController.$inject = ['$scope', 'tweetsService', '$state', '$stateParams'];
 
-function polarityController($scope, tweetsService) {
+function polarityController($scope, tweetsService, $state, $stateParams) {
 
     var todosLosCandidatos = {
       columnNamesArray: [],
@@ -103,9 +103,57 @@ function polarityController($scope, tweetsService) {
       candidatosPopulares.negativeArray);
   };
 
+  var bogotaCandidates = {
+    RicardoAriasM: '#D66F13',
+    MMMaldonadoC: '#FBD103',
+    danielraisbeck: '#FF5C01',
+    ClaraLopezObre: '#FFDF00',
+    RafaelPardo: '#ED0A03',
+    PachoSantosC: '#3C68B7',
+    EnriquePenalosa: '#12ADE5',
+    AlexVernot: '#0A5C6D',
+    CVderoux: '#088543'
+  };
+
+  var medellinCandidates = {
+    FicoGutierrez: '#D2EDFA',
+    AlcaldeAlonsoS: '#83AC2A',
+    RICOGabriel: '#F6783B',
+    jcvelezuribe: '#183A64'
+  };
+
+  function getCandidatesFromCity(cityId, candidatos) {
+
+    var candidatesFromCity = [];
+
+    for (var i = 0; i < candidatos.length; i++) {
+
+      var candidateColor = null;
+      var candidate = candidatos[i];
+
+      if (cityId == 'bogota') {
+        candidateColor = bogotaCandidates[candidate.twitterId];
+      } else {
+        candidateColor = medellinCandidates[candidate.twitterId];
+      }
+
+      if (candidateColor) {
+        candidatesFromCity.push(candidate);
+      }
+    }
+
+    return candidatesFromCity;
+  }
+
   function success(response) {
-    var candidatosNoPopulares = ['CVderoux', 'MMMaldonadoC', 'RicardoAriasM', 'AlexVernot', 'danielraisbeck'];
-    var polarityArray = shuffleArray(response);
+
+    var candidatesFromCity = getCandidatesFromCity($scope.cityId, response);
+    var polarityArray = shuffleArray(candidatesFromCity);
+    var candidatosNoPopulares = [];
+
+    if ($scope.cityId == 'bogota') {
+      candidatosNoPopulares = ['CVderoux', 'MMMaldonadoC', 'RicardoAriasM', 'AlexVernot', 'danielraisbeck'];
+    }
 
     for (var i = 0; i < polarityArray.length; i++) {
 
@@ -134,8 +182,15 @@ function polarityController($scope, tweetsService) {
 
   $scope.init = function() {
 
-    $scope.boxIsFull = true;
-    $scope.showOrHide = 'Ocultar';
-    tweetsService.getAllCandidatesPolarity({time: 'day'}, success, error);
+    $scope.cityId = $stateParams.cityId;
+    console.debug('******************************** 123:' + $scope.cityId);
+
+    if ($scope.cityId) {
+      $scope.boxIsFull = true;
+      $scope.showOrHide = 'Ocultar';
+      tweetsService.getAllCandidatesPolarity({time: 'day'}, success, error);
+    } else {
+      $state.go('select');
+    }
   };
 }

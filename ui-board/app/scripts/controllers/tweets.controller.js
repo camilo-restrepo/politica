@@ -78,37 +78,35 @@ function tweetsController($scope, $websocket, $interval, environment, targetsSer
     return o;
   }
 
-  $scope.getTargetName = function(targetId){
-    if(targetId === 'CVderoux'){
-      return 'Carlos Vicente de Roux';
-    }else if(targetId === 'EnriquePenalosa'){
-      return 'Enrique Peñalosa';
-    }else if(targetId === 'PachoSantosC'){
-      return 'Francisco Santos';
-    }else if(targetId === 'ClaraLopezObre'){
-      return 'Clara López Obregon';
-    }else if(targetId === 'AlexVernot'){
-      return 'Alex Vernot';
-    }else if(targetId === 'RicardoAriasM'){
-      return 'Ricardo Arias Mora';
-    }else if(targetId === 'RafaelPardo'){
-      return 'Rafael Pardo';
-    }else if(targetId === 'MMMaldonadoC'){
-      return 'María Mercedes Maldonado';
-    }else if(targetId === 'DanielRaisbeck'){
-      return 'Daniel Raisbeck';
+  $scope.getTargetName = function(targetId) {
+
+    var candidateNames = {
+      RicardoAriasM: 'Ricardo Arias Mora',
+      MMMaldonadoC: 'María Mercedes Maldonado',
+      danielraisbeck: 'Daniel Raisbeck',
+      ClaraLopezObre: 'Clara López Obregón',
+      RafaelPardo: 'Rafael Pardo',
+      PachoSantosC: 'Francisco Santos',
+      EnriquePenalosa: 'Enrique Peñalosa',
+      AlexVernot: 'Alex Vernot',
+      CVderoux: 'Carlos Vicente de Roux',
+      FicoGutierrez: 'Federico Gutiérrez',
+      AlcaldeAlonsoS: 'Alonso Salazar',
+      RICOGabriel: 'Gabriel Jaime Rico',
+      jcvelezuribe: 'Juan Carlos Vélez'
     }
 
-    return '';
+    return candidateNames[targetId];
   };
 
   function lastTweetsCandidateSuccess(data){
     var last = JSON.parse(data[0]);
     var tweet = {
-        text: last.text,
-        prediction: last.prediction,
-        timestamp_ms: last.timestamp_ms.$numberLong
-    } ;
+      text: last.text,
+      prediction: last.prediction,
+      timestamp_ms: last.timestamp_ms.$numberLong
+    };
+
     for(var i = 0 ; i < $scope.candidatos.length ; i++){
       var actual = $scope.candidatos[i];
       if(actual.twitterId.id === last.targetTwitterId){
@@ -117,12 +115,56 @@ function tweetsController($scope, $websocket, $interval, environment, targetsSer
     }
   }
 
+  var bogotaCandidates = {
+    RicardoAriasM: '#D66F13',
+    MMMaldonadoC: '#FBD103',
+    danielraisbeck: '#FF5C01',
+    ClaraLopezObre: '#FFDF00',
+    RafaelPardo: '#ED0A03',
+    PachoSantosC: '#3C68B7',
+    EnriquePenalosa: '#12ADE5',
+    AlexVernot: '#0A5C6D',
+    CVderoux: '#088543'
+  };
+
+  var medellinCandidates = {
+    FicoGutierrez: '#D2EDFA',
+    AlcaldeAlonsoS: '#83AC2A',
+    RICOGabriel: '#F6783B',
+    jcvelezuribe: '#183A64'
+  };
+
+  function getCandidatesFromCity(cityId, candidatos) {
+
+    var candidatesFromCity = [];
+
+    for (var i = 0; i < candidatos.length; i++) {
+
+      var candidateColor = null;
+      var candidate = candidatos[i];
+
+      if (cityId == 'bogota') {
+        candidateColor = bogotaCandidates[candidate.twitterId.id];
+      } else {
+        candidateColor = medellinCandidates[candidate.twitterId.id];
+      }
+
+      if (candidateColor) {
+        candidatesFromCity.push(candidate);
+      }
+    }
+
+    return candidatesFromCity;
+  }
+
   function getTargetsSuccess(data) {
 
     for (var i = 0; i < data.length; i++) {
       var actual = data[i];
       $scope.candidatos.push(actual);
     }
+
+    $scope.candidatos = getCandidatesFromCity($scope.cityId, $scope.candidatos);
 
     for(var i = 0 ; i < $scope.candidatos.length ; i++){
       var actual = $scope.candidatos[i];
