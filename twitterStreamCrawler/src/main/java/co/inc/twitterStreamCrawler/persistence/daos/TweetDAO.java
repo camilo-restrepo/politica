@@ -3,6 +3,7 @@ package co.inc.twitterStreamCrawler.persistence.daos;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.mongodb.client.model.UpdateOptions;
 import org.bson.Document;
 
 import com.mongodb.client.MongoCollection;
@@ -53,6 +54,8 @@ public class TweetDAO {
 		Document incQuery = new Document("$inc", modifier);
 		Document searchQuery = new Document("word", word);
 		searchQuery.put("target", candidate);
-		collection.updateOne(searchQuery, incQuery);
+		UpdateOptions options = new UpdateOptions();
+		options.upsert(true);
+		collection.updateOne(searchQuery, incQuery, options);
 	}
 }

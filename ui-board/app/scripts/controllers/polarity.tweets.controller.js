@@ -22,7 +22,8 @@ function polarityTweetsController($scope, $stateParams, $websocket, environment,
       FicoGutierrez: 'Federico Gutiérrez',
       AlcaldeAlonsoS: 'Alonso Salazar',
       RICOGabriel: 'Gabriel Jaime Rico',
-      jcvelezuribe: 'Juan Carlos Vélez'
+      jcvelezuribe: 'Juan Carlos Vélez',
+      HectorHAlcalde: 'Héctor Hoyos'
     }
 
     return candidateNames[targetId];
@@ -123,7 +124,8 @@ function polarityTweetsController($scope, $stateParams, $websocket, environment,
     FicoGutierrez: '#D2EDFA',
     AlcaldeAlonsoS: '#83AC2A',
     RICOGabriel: '#F6783B',
-    jcvelezuribe: '#183A64'
+    jcvelezuribe: '#183A64',
+    HectorHAlcalde: '#FFDF00'
   };
 
   function lastTweetsPolarity(data) {
