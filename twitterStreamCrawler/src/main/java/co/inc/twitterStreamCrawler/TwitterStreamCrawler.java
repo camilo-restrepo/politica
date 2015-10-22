@@ -126,7 +126,7 @@ public class TwitterStreamCrawler {
 
 	private List<String> getTerms() {
 		List<TwitterId> ids = targetsDAO.getAllIds();
-		List<String> relatedWords = new ArrayList<String>();
+		List<String> relatedWords = new ArrayList<>();
 		for (TwitterId id : ids) {
 			relatedWords.addAll(id.getRelatedWords());
 		}

@@ -165,7 +165,7 @@ public class TwitterConsumerWorker implements Runnable {
 	}
 
 	private List<String> getTargets(final String text, final List<Document> targetsList) {
-		List<String> targets = new ArrayList<String>();
+		List<String> targets = new ArrayList<>();
 		for (Document target : targetsList) {
 			List<String> relatedWords = (List<String>) target.get("relatedWords");
 			for (String word : relatedWords) {
