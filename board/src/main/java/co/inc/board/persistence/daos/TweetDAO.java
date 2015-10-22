@@ -161,6 +161,7 @@ public class TweetDAO {
         List<Double[]> result = new ArrayList<>();
         while(it.hasNext()){
             Document document = it.next();
+            System.out.println(document.toString());
             Double[] coords = (Double[]) document.get("geo.coordinates");
             result.add(coords);
         }
