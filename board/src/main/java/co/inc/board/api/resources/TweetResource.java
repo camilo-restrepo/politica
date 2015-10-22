@@ -103,7 +103,7 @@ public class TweetResource {
     @GET
     @Path("/location")
     public Response getTweetsLocation(){
-        List<String> locations = tweetBusiness.getTweetsLocation();
+        List<Double[]> locations = tweetBusiness.getTweetsLocation();
         return Response.status(Response.Status.OK).entity(locations).build();
     }
 }

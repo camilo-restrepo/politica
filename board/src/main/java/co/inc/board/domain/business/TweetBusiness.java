@@ -99,7 +99,7 @@ public class TweetBusiness {
         return tweetDAO.getLastTweetsPolarity(prediction);
     }
 
-    public List<String> getTweetsLocation(){
+    public List<Double[]> getTweetsLocation(){
         return tweetDAO.getTweetsLocation();
     }
 }
