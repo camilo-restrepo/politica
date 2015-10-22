@@ -143,7 +143,8 @@ public class TwitterStreamCrawler {
 	public void crawl() {
 		Client hosebirdClient = getTwitterClient();
 		hosebirdClient.connect();
-		ExecutorService threadPool = Executors.newCachedThreadPool();
+		//ExecutorService threadPool = Executors.newCachedThreadPool();
+		ExecutorService threadPool = Executors.newFixedThreadPool(5);
 		StopwordsSpanish stopwordsSpanish = new StopwordsSpanish();
 
 		com.sun.jersey.api.client.Client client = com.sun.jersey.api.client.Client.create();
