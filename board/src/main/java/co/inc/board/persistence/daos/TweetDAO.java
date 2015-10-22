@@ -21,6 +21,7 @@ public class TweetDAO {
     private static final Logger LOGGER = LoggerFactory.getLogger(TweetDAO.class);
 
 	public static final String TWEETS_COLLECTION = "minimumTweets";
+    public static final String ALL_TWEETS_COLLECTION = "tweets";
 
 	private final MongoDatabase mongoDatabase;
 
@@ -151,6 +152,17 @@ public class TweetDAO {
             latestTweets.add(it.next().toJson());
         }
         return latestTweets;
+    }
 
+    public List<String> getTweetsLocation(){
+        MongoCollection<Document> collection = mongoDatabase.getCollection(ALL_TWEETS_COLLECTION);
+        MongoCursor<Document> it = collection.find(Filters.ne("geo", null)).projection(Projections.excludeId())
+                .projection(Projections.include("geo.coordinates")).iterator();
+        List<String> result = new ArrayList<>();
+        while(it.hasNext()){
+            String json = it.next().toJson();
+            result.add(json);
+        }
+        return result;
     }
 }

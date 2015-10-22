@@ -99,4 +99,11 @@ public class TweetResource {
         List<String> tweets = tweetBusiness.getLastTweetsPolarity(prediction);
         return Response.status(Response.Status.OK).entity(tweets).build();
     }
+
+    @GET
+    @Path("/location")
+    public Response getTweetsLocation(){
+        List<String> locations = tweetBusiness.getTweetsLocation();
+        return Response.status(Response.Status.OK).entity(locations).build();
+    }
 }

@@ -98,4 +98,8 @@ public class TweetBusiness {
     public List<String> getLastTweetsPolarity(String prediction){
         return tweetDAO.getLastTweetsPolarity(prediction);
     }
+
+    public List<String> getTweetsLocation(){
+        return tweetDAO.getTweetsLocation();
+    }
 }
