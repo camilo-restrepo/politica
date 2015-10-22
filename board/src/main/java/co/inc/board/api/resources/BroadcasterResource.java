@@ -20,7 +20,6 @@ public class BroadcasterResource {
 	@POST
 	@Consumes("application/json")
 	public void broadcast(Object data) throws Exception {
-
 		String jsonData = objectMapper.writeValueAsString(data);
 		BroadcastSocket.broadcast(jsonData);
 	}

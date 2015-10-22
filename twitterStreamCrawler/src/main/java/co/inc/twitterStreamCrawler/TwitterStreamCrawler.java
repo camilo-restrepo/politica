@@ -1,23 +1,19 @@
 package co.inc.twitterStreamCrawler;
 
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.concurrent.BlockingQueue;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.LinkedBlockingQueue;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
+import co.inc.twitterStreamCrawler.domain.entities.TwitterId;
+import co.inc.twitterStreamCrawler.domain.entities.TwitterTarget;
+import co.inc.twitterStreamCrawler.domain.workers.TwitterConsumerWorker;
+import co.inc.twitterStreamCrawler.persistence.daos.TargetDAO;
+import co.inc.twitterStreamCrawler.persistence.daos.TweetDAO;
+import co.inc.twitterStreamCrawler.utils.PolarityClassifier;
+import co.inc.twitterStreamCrawler.utils.constants.GlobalConstants;
+import co.inc.twitterStreamCrawler.utils.stopwords.classification.StopwordsSpanish;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.mongodb.MongoClient;
 import com.mongodb.client.MongoDatabase;
+import com.sun.jersey.api.client.WebResource;
 import com.twitter.hbc.ClientBuilder;
 import com.twitter.hbc.core.Client;
 import com.twitter.hbc.core.Constants;
@@ -28,20 +24,24 @@ import com.twitter.hbc.core.event.Event;
 import com.twitter.hbc.core.processor.StringDelimitedProcessor;
 import com.twitter.hbc.httpclient.auth.Authentication;
 import com.twitter.hbc.httpclient.auth.OAuth1;
-
-import co.inc.twitterStreamCrawler.domain.entities.TwitterId;
-import co.inc.twitterStreamCrawler.domain.entities.TwitterTarget;
-import co.inc.twitterStreamCrawler.domain.workers.TwitterConsumerWorker;
-import co.inc.twitterStreamCrawler.persistence.daos.TargetDAO;
-import co.inc.twitterStreamCrawler.persistence.daos.TweetDAO;
-import co.inc.twitterStreamCrawler.utils.PolarityClassifier;
-import co.inc.twitterStreamCrawler.utils.stopwords.classification.StopwordsSpanish;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import twitter4j.Twitter;
 import twitter4j.TwitterException;
 import twitter4j.TwitterFactory;
 import twitter4j.User;
 import twitter4j.conf.ConfigurationBuilder;
 import weka.classifiers.meta.FilteredClassifier;
+
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.concurrent.BlockingQueue;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.LinkedBlockingQueue;
 
 public class TwitterStreamCrawler {
 
@@ -145,11 +145,15 @@ public class TwitterStreamCrawler {
 		hosebirdClient.connect();
 		ExecutorService threadPool = Executors.newCachedThreadPool();
 		StopwordsSpanish stopwordsSpanish = new StopwordsSpanish();
+
+		com.sun.jersey.api.client.Client client = com.sun.jersey.api.client.Client.create();
+		WebResource webResource = client.resource(GlobalConstants.BOARD_URL);
+
 		while (!hosebirdClient.isDone()) {
 			try {
 				String stringTweet = msgQueue.take();
 				TwitterConsumerWorker worker = new TwitterConsumerWorker(targetsDAO, tweetDAO, stringTweet,
-						polarityClassifier, stopwordsSpanish, classifier);
+						polarityClassifier, stopwordsSpanish, classifier, webResource);
 				threadPool.submit(worker);
 			} catch (InterruptedException e) {
 				LOGGER.error("run", e);
