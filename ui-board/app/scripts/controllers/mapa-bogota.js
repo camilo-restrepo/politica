@@ -17,6 +17,7 @@ function mapController($scope, tweetsService, $state, $stateParams) {
   	}
 
   	function success(data){
+  		console.log(data);
   		centroids = data;
   	}
 
@@ -26,8 +27,7 @@ function mapController($scope, tweetsService, $state, $stateParams) {
 		$scope.boxIsFull = true;
       	$scope.showOrHide = 'Ocultar';
 
-		var width = 500,
-		height = 900;
+		var width = 500, height = 900;
 
 		var mapa = d3.select("#mapa").append("svg").attr("width", width).attr("height", height);
 		var projection = d3.geo.mercator().scale(135000).translate([width / 2, height / 2]).center([-74.11991,4.649404]);
