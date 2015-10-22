@@ -154,15 +154,15 @@ public class TweetDAO {
         return latestTweets;
     }
 
-    public List<Double[]> getTweetsLocation(){
+    public List<List<Double>> getTweetsLocation(){
         MongoCollection<Document> collection = mongoDatabase.getCollection(ALL_TWEETS_COLLECTION);
         MongoCursor<Document> it = collection.find(Filters.ne("geo", null)).projection(Projections.excludeId())
                 .projection(Projections.include("geo.coordinates")).iterator();
-        List<Double[]> result = new ArrayList<>();
+        List<List<Double>> result = new ArrayList<>();
         while(it.hasNext()){
             Document document = it.next();
             Document geo = (Document) document.get("geo");
-            Double[] coords = (Double[]) geo.get("coordinates");
+            List<Double> coords = (List<Double>) geo.get("coordinates");
             System.out.println(coords);
             result.add(coords);
         }
