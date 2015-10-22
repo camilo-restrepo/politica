@@ -15,12 +15,12 @@ app.config(function($stateProvider, $urlRouterProvider) {
     })
 
     .state('candidate', {
-      url: '/candidatos/:twitterId',
+      url: '/candidatos/:twitterId/:cityId',
       templateUrl: 'views/candidate.html'
     })
 
     .state('polarity', {
-      url: '/polaridad/:prediction',
+      url: '/polaridad/:prediction/:cityId',
       templateUrl: 'views/polaridad.html'
     })
 

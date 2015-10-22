@@ -151,6 +151,7 @@ function candidateTweetsController($scope, $stateParams, $websocket, environment
 
   $scope.init = function() {
     var candidateTwitterId = $stateParams.twitterId;
+    $scope.city = $stateParams.cityId;
     tweetsService.getCandidateTweetStats({ twitterId: candidateTwitterId }, candidateTweetStatsSuccess, logError);
     targetsService.getSingleTarget({ twitterId: candidateTwitterId }, singleTargetSuccess, logError);
     initializeWebsocket();

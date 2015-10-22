@@ -163,7 +163,6 @@ public class TweetDAO {
             Document document = it.next();
             Document geo = (Document) document.get("geo");
             List<Double> coords = (List<Double>) geo.get("coordinates");
-            System.out.println(coords);
             result.add(coords);
         }
         return result;
