@@ -34,7 +34,7 @@ function mapController($scope, tweetsService, $state, $stateParams) {
 		$scope.boxIsFull = true;
       	$scope.showOrHide = 'Ocultar';
 
-		d3.json("scripts/controllers/unidades.json", function(error, bogota) {
+		d3.json("resources/unidades.json", function(error, bogota) {
 			
 			var unidades = topojson.feature(bogota, bogota.objects.zonasurbanas),
 			vecinos = topojson.neighbors(bogota.objects.zonasurbanas.geometries);
