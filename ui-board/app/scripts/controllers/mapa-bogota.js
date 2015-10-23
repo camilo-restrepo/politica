@@ -1,9 +1,9 @@
 'use strict';
 
 boardModule.controller('mapController', mapController);
-mapController.$inject = ['$scope', 'tweetsService', '$state', '$stateParams'];
+mapController.$inject = ['$scope', 'tweetsService', '$state', '$stateParams', '$rootScope'];
 
-function mapController($scope, tweetsService, $state, $stateParams) {
+function mapController($scope, tweetsService, $state, $stateParams, $rootScope) {
 
 	var centroids = [];
 	var width = 500, height = 900;
@@ -31,6 +31,7 @@ function mapController($scope, tweetsService, $state, $stateParams) {
 
 	$scope.init = function(){
 		$scope.cityId = $stateParams.cityId;
+    $rootScope.cityId = $stateParams.cityId;
 		$scope.boxIsFull = true;
       	$scope.showOrHide = 'Ocultar';
 

@@ -1,9 +1,9 @@
 <div class="mapDiv" ng-controller="mapController" ng-init="init()">
-<div class="row">
+  <div class="row">
     <div class="col-md-12 mapDiv">
       <div ng-class="{ 'full-message-box': boxIsFull, 'min-message-box': !boxIsFull }">
         <p class="white-text text-md padding-top-lg col-md-12" ng-show="boxIsFull">
-          El mapa presenta los lugares de Bogotá desde los cuales los usuarios opinan. Se presenta la información de todos los tweets generados por los usuarios.
+        El mapa presenta los lugares de Bogotá desde los cuales los usuarios opinan. Se presenta la información de todos los tweets generados por los usuarios.
         </p>
         <div class="hide-box">
           <button class="btn btn-link fa white-text text-md no-change-link" ng-class="{ 'fa-chevron-up': boxIsFull, 'fa-chevron-down': !boxIsFull }" ng-click="changeMessageBoxState()"> {{ showOrHide }}</button>
