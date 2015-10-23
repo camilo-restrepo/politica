@@ -47,7 +47,6 @@ function polarityTweetsController($scope, $stateParams, $websocket, environment,
   }
 
   function pushData(data) {
-    console.log(data);
     var tweet = data;
     tweet.timestamp_ms = tweet.timestamp_ms.$numberLong;
     var tweetBelongsToPolarity = ($scope.polarity === tweet.prediction);
@@ -59,9 +58,20 @@ function polarityTweetsController($scope, $stateParams, $websocket, environment,
         timestamp_ms: tweet.timestamp_ms,
         twitterId: tweet.targetTwitterId
       };
-      $scope.tweets.unshift(lastTweet);
-      if($scope.tweets.length > tweetsLimit) {
-        $scope.tweets.pop();
+
+      var isCandidateFromCity = false;
+
+      if ($scope.cityId == 'bogota') {
+        isCandidateFromCity = (bogotaCandidates[tweet.targetTwitterId]);
+      } else if ($scope.cityId == 'medellin'){
+        isCandidateFromCity = (medellinCandidates[tweet.targetTwitterId]);
+      }
+
+      if (isCandidateFromCity) {
+        $scope.tweets.unshift(lastTweet);
+        if($scope.tweets.length > tweetsLimit) {
+          $scope.tweets.pop();
+        }
       }
     }
     $scope.$apply();
@@ -145,13 +155,10 @@ function polarityTweetsController($scope, $stateParams, $websocket, environment,
 
       var isCandidateFromCity = false;
 
-      console.debug('*********************************** 1: ' + $scope.cityId);
-      console.debug('*********************************** 2: ' + tweet.twitterId);
-
       if ($scope.cityId == 'bogota') {
-        isCandidateFromCity = (bogotaCandidates[tweet.twitterId.id]);
-      } else {
-        isCandidateFromCity = (medellinCandidates[tweet.twitterId.id]);
+        isCandidateFromCity = (bogotaCandidates[tweet.twitterId]);
+      } else if ($scope.cityId == 'medellin'){
+        isCandidateFromCity = (medellinCandidates[tweet.twitterId]);
       }
 
       if (isCandidateFromCity) {
