@@ -47,7 +47,6 @@ function polarityTweetsController($scope, $stateParams, $websocket, environment,
   }
 
   function pushData(data) {
-    console.log(data);
     var tweet = data;
     tweet.timestamp_ms = tweet.timestamp_ms.$numberLong;
     var tweetBelongsToPolarity = ($scope.polarity === tweet.prediction);
