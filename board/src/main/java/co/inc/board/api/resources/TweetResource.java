@@ -106,4 +106,11 @@ public class TweetResource {
         List<List<Double>> locations = tweetBusiness.getTweetsLocation();
         return Response.status(Response.Status.OK).entity(locations).build();
     }
+
+    @GET
+    @Path("{twitterId}/location")
+    public Response getCandidateTweetsLocation(@PathParam("twitterId") String twitterId){
+        List<List<Double>> tweets = tweetBusiness.getCandidateTweetsLocation(twitterId);
+        return Response.status(Response.Status.OK).entity(tweets).build();
+    }
 }

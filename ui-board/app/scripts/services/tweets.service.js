@@ -15,7 +15,8 @@ function tweetsService($resource, environment) {
     getAllTweetsCount : {method: 'GET', url: url + '/count'},
     getLastTweetsCandidate: {method: 'GET', url: url + '/:twitterId/last', isArray: true},
     getLastTweetsPolarity: {method: 'GET', url: url + '/prediction/:prediction/last', isArray:true},
-    getTweetsLocation: {method: 'GET', url: url + '/location', isArray:true}
+    getTweetsLocation: {method: 'GET', url: url + '/location', isArray:true},
+    getTweetsCandidateLocation: {method: 'GET', url: url + '/:twitterId/location', isArray:true}
   };
 
   return $resource(url, defaultParams, actions);

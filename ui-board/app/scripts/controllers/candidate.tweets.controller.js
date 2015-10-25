@@ -5,7 +5,7 @@ candidateTweetsController.$inject = ['$scope', '$stateParams', '$websocket', 'en
 
 function candidateTweetsController($scope, $stateParams, $websocket, environment, targetsService, tweetsService) {
 
-  var tweetsLimit = 3;
+  var tweetsLimit = 6;
 
   $scope.getTargetName = function(targetId) {
 

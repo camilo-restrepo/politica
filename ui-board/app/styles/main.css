@@ -1049,6 +1049,12 @@ div.tooltip {
     transform: rotate(-110deg) translate(450px, 100px);
 }
 
+#candidateMap{
+    -ms-transform: rotate(-110deg) translate(300px, 120px); /* IE 9 */
+    -webkit-transform: rotate(-110deg) translate(300px, 120px); /* Chrome, Safari, Opera */
+    transform: rotate(-110deg) translate(300px, 120px);
+}
+
 .mapDiv{
   height: 520px;
 }

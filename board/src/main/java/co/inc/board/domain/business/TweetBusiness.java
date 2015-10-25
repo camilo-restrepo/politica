@@ -102,4 +102,8 @@ public class TweetBusiness {
     public List<List<Double>> getTweetsLocation(){
         return tweetDAO.getTweetsLocation();
     }
+
+    public List<List<Double>> getCandidateTweetsLocation(String twitterId) {
+        return tweetDAO.getCandidateTweetsLocation(twitterId);
+    }
 }
