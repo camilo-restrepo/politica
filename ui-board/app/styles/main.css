@@ -1046,7 +1046,8 @@ div.tooltip {
 #mapa{
     -ms-transform: rotate(-110deg) translate(450px, 100px); /* IE 9 */
     -webkit-transform: rotate(-110deg) translate(450px, 100px); /* Chrome, Safari, Opera */
-    transform: rotate(-110deg) translate(450px, 100px);
+    transform: rotate(-110deg) translate(80px, 350px);
+    width: 500px;
 }
 
 #candidateMap{
