@@ -1,33 +1,32 @@
 'use strict';
 
 boardModule.controller('polarityTweetsController', polarityTweetsController);
-polarityTweetsController.$inject = ['$scope', '$stateParams', '$websocket', 'environment', 'tweetsService'];
+polarityTweetsController.$inject = ['$scope', '$stateParams', '$websocket', 'environment', 'tweetsService', '$state'];
 
-function polarityTweetsController($scope, $stateParams, $websocket, environment, tweetsService) {
+function polarityTweetsController($scope, $stateParams, $websocket, environment, tweetsService, $state) {
   var tweetsLimit = 9;
   $scope.polarity = '';
 
-  $scope.getTargetName = function(targetId){
-    if(targetId === 'CVderoux'){
-      return 'Carlos Vicente de Roux';
-    }else if(targetId === 'EnriquePenalosa'){
-      return 'Enrique Peñalosa';
-    }else if(targetId === 'PachoSantosC'){
-      return 'Francisco Santos';
-    }else if(targetId === 'ClaraLopezObre'){
-      return 'Clara López Obregon';
-    }else if(targetId === 'AlexVernot'){
-      return 'Alex Vernot';
-    }else if(targetId === 'RicardoAriasM'){
-      return 'Ricardo Arias Mora';
-    }else if(targetId === 'RafaelPardo'){
-      return 'Rafael Pardo';
-    }else if(targetId === 'MMMaldonadoC'){
-      return 'María Mercedes Maldonado';
-    }else if(targetId === 'DanielRaisbeck'){
-      return 'Daniel Raisbeck';
+  $scope.getTargetName = function(targetId) {
+
+    var candidateNames = {
+      RicardoAriasM: 'Ricardo Arias Mora',
+      MMMaldonadoC: 'María Mercedes Maldonado',
+      danielraisbeck: 'Daniel Raisbeck',
+      ClaraLopezObre: 'Clara López Obregón',
+      RafaelPardo: 'Rafael Pardo',
+      PachoSantosC: 'Francisco Santos',
+      EnriquePenalosa: 'Enrique Peñalosa',
+      AlexVernot: 'Alex Vernot',
+      CVderoux: 'Carlos Vicente de Roux',
+      FicoGutierrez: 'Federico Gutiérrez',
+      AlcaldeAlonsoS: 'Alonso Salazar',
+      RICOGabriel: 'Gabriel Jaime Rico',
+      jcvelezuribe: 'Juan Carlos Vélez',
+      HectorHAlcalde: 'Héctor Hoyos'
     }
-    return '';
+
+    return candidateNames[targetId];
   };
 
   function compareTweets(tweet1, tweet2) {
@@ -48,7 +47,6 @@ function polarityTweetsController($scope, $stateParams, $websocket, environment,
   }
 
   function pushData(data) {
-    console.log(data);
     var tweet = data;
     tweet.timestamp_ms = tweet.timestamp_ms.$numberLong;
     var tweetBelongsToPolarity = ($scope.polarity === tweet.prediction);
@@ -60,9 +58,20 @@ function polarityTweetsController($scope, $stateParams, $websocket, environment,
         timestamp_ms: tweet.timestamp_ms,
         twitterId: tweet.targetTwitterId
       };
-      $scope.tweets.unshift(lastTweet);
-      if($scope.tweets.length > tweetsLimit) {
-        $scope.tweets.pop();
+
+      var isCandidateFromCity = false;
+
+      if ($scope.cityId == 'bogota') {
+        isCandidateFromCity = (bogotaCandidates[tweet.targetTwitterId]);
+      } else if ($scope.cityId == 'medellin'){
+        isCandidateFromCity = (medellinCandidates[tweet.targetTwitterId]);
+      }
+
+      if (isCandidateFromCity) {
+        $scope.tweets.unshift(lastTweet);
+        if($scope.tweets.length > tweetsLimit) {
+          $scope.tweets.pop();
+        }
       }
     }
     $scope.$apply();
@@ -109,10 +118,34 @@ function polarityTweetsController($scope, $stateParams, $websocket, environment,
     console.error(response);
   }
 
-  function lastTweetsPolarity(data){
+  var bogotaCandidates = {
+    RicardoAriasM: '#D66F13',
+    MMMaldonadoC: '#FBD103',
+    danielraisbeck: '#FF5C01',
+    ClaraLopezObre: '#FFDF00',
+    RafaelPardo: '#ED0A03',
+    PachoSantosC: '#3C68B7',
+    EnriquePenalosa: '#12ADE5',
+    AlexVernot: '#0A5C6D',
+    CVderoux: '#088543'
+  };
+
+  var medellinCandidates = {
+    FicoGutierrez: '#D2EDFA',
+    AlcaldeAlonsoS: '#83AC2A',
+    RICOGabriel: '#F6783B',
+    jcvelezuribe: '#183A64',
+    HectorHAlcalde: '#FFDF00'
+  };
+
+  function lastTweetsPolarity(data) {
+
     $scope.tweets = [];
+
     for(var i = 0 ; i < data.length ; i++){
+
       var json = JSON.parse(data[i]);
+
       var tweet = {
         text: json.text,
         prediction: json.prediction,
@@ -120,14 +153,33 @@ function polarityTweetsController($scope, $stateParams, $websocket, environment,
         twitterId: json.targetTwitterId
       };
 
-      $scope.tweets.push(tweet);
+      var isCandidateFromCity = false;
+
+      if ($scope.cityId == 'bogota') {
+        isCandidateFromCity = (bogotaCandidates[tweet.twitterId]);
+      } else if ($scope.cityId == 'medellin'){
+        isCandidateFromCity = (medellinCandidates[tweet.twitterId]);
+      }
+
+      if (isCandidateFromCity) {
+        $scope.tweets.push(tweet);
+      }
     }
+
     $scope.tweets = shuffleArray($scope.tweets);
   }
 
   $scope.init = function() {
-    $scope.polarity = $stateParams.prediction;
-    tweetsService.getLastTweetsPolarity({prediction: $scope.polarity}, lastTweetsPolarity, logError);
-    initializeWebsocket();
+
+    $scope.cityId = $stateParams.cityId;
+
+    if ($scope.cityId) {
+      $scope.polarity = $stateParams.prediction;
+      tweetsService.getLastTweetsPolarity({prediction: $scope.polarity}, lastTweetsPolarity, logError);
+      initializeWebsocket();
+    } else {
+      $state.go('select');
+    }
+
   };
 }

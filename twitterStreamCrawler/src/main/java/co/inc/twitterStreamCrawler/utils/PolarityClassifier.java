@@ -22,10 +22,10 @@ public class PolarityClassifier {
 	private Set<String> englishWords;
 
 	public PolarityClassifier(String nrcFile, String translateFile) {
-		englishDictionary = new Hashtable<String, List<String>>();
-		englishPolarities = new Hashtable<String, List<Polarity>>();
-		spanishWords = new HashSet<String>();
-		englishWords = new HashSet<String>();
+		englishDictionary = new Hashtable<>();
+		englishPolarities = new Hashtable<>();
+		spanishWords = new HashSet<>();
+		englishWords = new HashSet<>();
 		try {
 			loadEnglishTranslation(translateFile);
 			loadEnglishPolarities(nrcFile);
@@ -50,7 +50,7 @@ public class PolarityClassifier {
 				polarities.add(new Polarity(word, probability, category));
 				englishPolarities.put(word, polarities);
 			} else {
-				List<Polarity> polarities = new ArrayList<Polarity>();
+				List<Polarity> polarities = new ArrayList<>();
 				polarities.add(new Polarity(word, probability, category));
 				englishPolarities.put(word, polarities);
 			}
@@ -84,7 +84,7 @@ public class PolarityClassifier {
 	}
 
 	private List<Token> getTweetTokens(final String tweet) {
-		List<Token> tokens = new ArrayList<Token>();
+		List<Token> tokens = new ArrayList<>();
 		if (tweet != null) {
 			String nTweet = removeSpanishAccent(tweet);
 			nTweet = nTweet.trim().toLowerCase();
@@ -106,17 +106,17 @@ public class PolarityClassifier {
 	}
 
 	private List<String> getSimilarities(final String token) {
-		Set<String> similarities = new HashSet<String>();
+		Set<String> similarities = new HashSet<>();
 		for (String word : spanishWords) {
 			if (FuzzyMatch.getRatio(word, token, false) > 80) {
 				similarities.add(word);
 			}
 		}
-		return new ArrayList<String>(similarities);
+		return new ArrayList<>(similarities);
 	}
 
 	private ArrayList<Token> translateTokens(final String tweet) {
-		Set<Token> translatedTokens = new HashSet<Token>();
+		Set<Token> translatedTokens = new HashSet<>();
 		List<Token> tokens = getTweetTokens(tweet);
 		for (Token token : tokens) {
 			if (englishDictionary.containsKey(token.getToken())) {
@@ -126,12 +126,12 @@ public class PolarityClassifier {
 				}
 			}
 		}
-		return new ArrayList<Token>(translatedTokens);
+		return new ArrayList<>(translatedTokens);
 	}
 
 	private List<Polarity> getTweetPolarities(final String tweet) {
 		List<Token> translatedTokens = translateTokens(tweet);
-		List<Polarity> polarities = new ArrayList<Polarity>();
+		List<Polarity> polarities = new ArrayList<>();
 		for (Token token : translatedTokens) {
 			if (englishPolarities.containsKey(token.getToken())) {
 				List<Polarity> actualPolarities = englishPolarities.get(token.getToken());

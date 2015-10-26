@@ -35,14 +35,18 @@ public class TwitterConsumerWorker implements Runnable {
 
 	private final List<Document> targetsList;
 
+	private final WebResource webResource;
+
 	public TwitterConsumerWorker(TargetDAO targetsDAO, TweetDAO tweetDAO, String stringTweet,
-			PolarityClassifier polarityClassifier, StopwordsSpanish stopwords, FilteredClassifier classifier) {
+								 PolarityClassifier polarityClassifier, StopwordsSpanish stopwords,
+								 FilteredClassifier classifier, WebResource webResource) {
 		this.tweetDAO = tweetDAO;
 		this.stringTweet = stringTweet;
 		this.targetsDAO = targetsDAO;
 		this.polarityClassifier = polarityClassifier;
 		this.stopwords = stopwords;
 		this.classifier = classifier;
+		this.webResource = webResource;
 		targetsList = this.targetsDAO.getAllTargetsIds();
 	}
 
@@ -71,7 +75,8 @@ public class TwitterConsumerWorker implements Runnable {
 		String cleanText = GlobalConstants.UNDESIRABLES.matcher(text).replaceAll("");
 		String[] tokens = GlobalConstants.SPACE.split(cleanText);
 		for (String token : tokens) {
-			if (!token.startsWith("@") && !token.startsWith("#") && !stopwords.isStopword(token)) {
+			if (!token.startsWith("@") && !token.startsWith("#") && !stopwords.isStopword(token)
+					&& !token.startsWith("htt")) {
 				tweetDAO.incrementWordCount(token, target);
 			}
 		}
@@ -164,7 +169,7 @@ public class TwitterConsumerWorker implements Runnable {
 	}
 
 	private List<String> getTargets(final String text, final List<Document> targetsList) {
-		List<String> targets = new ArrayList<String>();
+		List<String> targets = new ArrayList<>();
 		for (Document target : targetsList) {
 			List<String> relatedWords = (List<String>) target.get("relatedWords");
 			for (String word : relatedWords) {
@@ -191,10 +196,7 @@ public class TwitterConsumerWorker implements Runnable {
 		sendTweet(documentTweet);
 	}
 
-	private void sendTweet(final Document documentTweet)  {
-		Client client = Client.create();
-		WebResource webResource = client.resource(GlobalConstants.BOARD_URL);
+	private void sendTweet(final Document documentTweet) {
 		webResource.type("application/json").post(documentTweet.toJson());
-		client.destroy();
 	}
 }

@@ -4,7 +4,6 @@
     <meta charset="utf-8">
     <title>NoCreo.co</title>
     <meta name="description" content="">
-    <meta name="viewport" content="width=device-width">
     <link rel="icon" href="favicon.ico" type="image/x-icon"/>
     <!-- Place favicon.ico and apple-touch-icon.png in the root directory -->
     <!-- build:css(.) styles/vendor.css -->
@@ -29,7 +28,7 @@
     <nav class="navbar navbar-default navbar-fixed-top">
       <div class="container">
         <div class="navbar-header navbar-right">
-          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+          <button type="button" class="navbar-toggle" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
             <span class="sr-only">Toggle navigation</span>
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
@@ -39,11 +38,16 @@
             <img id="logo-img" class="img-responsive" src="../images/nocreo_black.svg" onmouseover="this.src='../images/nocreo_colour.svg';" onmouseout="this.src='../images/nocreo_black.svg';">
           </a>
         </div>
-        <div id="navbar" class="navbar-collapse collapse">
+        <div id="navbar">
           <ul class="margin-top-md nav navbar-nav">
             <li>
             <a class="menu-link" href="#tweets" du-smooth-scroll duration="1500" du-scrollspy offset="92" analytics-on analytics-category="Click">
               Tweets
+            </a>
+            </li>
+            <li>
+            <a class="menu-link" href="#map" du-smooth-scroll duration="1500" du-scrollspy offset="92" analytics-on analytics-category="Click">
+              Mapa
             </a>
             </li>
             <li>
@@ -61,84 +65,87 @@
               CloudTag
             </a>
             </li>
+          </div>
+        </div>
+      </nav>
+
+      <!-- Add your site or application content here -->
+      <div id="main-container" ui-view>
+      </div>
+
+      <div class="footer">
+        <div class="footer-text">
+          No Creo | Contacto: info@nocreo.co
         </div>
       </div>
-    </nav>
 
-    <!-- Add your site or application content here -->
-    <div id="main-container" ui-view>
-    </div>
-
-    <div class="footer">
-      <div class="footer-text">
-        No Creo | Contacto: info@nocreo.co
-      </div>
-    </div>
-
-    <!-- Google Analytics: change UA-XXXXX-X to be your site's ID -->
-    <script>
+      <!-- Google Analytics: change UA-XXXXX-X to be your site's ID -->
+      <script>
 !function(A,n,g,u,l,a,r){A.GoogleAnalyticsObject=l,A[l]=A[l]||function(){
   (A[l].q=A[l].q||[]).push(arguments)},A[l].l=+new Date,a=n.createElement(g),
   r=n.getElementsByTagName(g)[0],a.src=u,r.parentNode.insertBefore(a,r)
 }(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
 
 ga('create', 'UA-66929464-1');
-    </script>
+      </script>
 
-    <!-- build:js(.) scripts/vendor.js -->
-    <!-- bower:js -->
-    <script src="bower_components/jquery/dist/jquery.js"></script>
-    <script src="bower_components/angular/angular.js"></script>
-    <script src="bower_components/angular-resource/angular-resource.js"></script>
-    <script src="bower_components/angular-scroll/angular-scroll.js"></script>
-    <script src="bower_components/angular-ui-router/release/angular-ui-router.js"></script>
-    <script src="bower_components/angular-websocket/angular-websocket.min.js"></script>
-    <script src="bower_components/waypoints/lib/noframework.waypoints.min.js"></script>
-    <script src="bower_components/SHA-1/sha1.js"></script>
-    <script src="bower_components/angulartics/src/angulartics.js"></script>
-    <script src="bower_components/angulartics/src/angulartics-clicky.js"></script>
-    <script src="bower_components/angulartics/src/angulartics-cnzz.js"></script>
-    <script src="bower_components/angulartics/src/angulartics-ga-cordova.js"></script>
-    <script src="bower_components/angulartics/src/angulartics-gtm.js"></script>
-    <script src="bower_components/angulartics/src/angulartics-piwik.js"></script>
-    <script src="bower_components/angulartics/src/angulartics-scroll.js"></script>
-    <script src="bower_components/angulartics/src/angulartics-splunk.js"></script>
-    <script src="bower_components/angulartics/src/angulartics-woopra.js"></script>
-    <script src="bower_components/angulartics/src/angulartics-marketo.js"></script>
-    <script src="bower_components/angulartics/src/angulartics-intercom.js"></script>
-    <script src="bower_components/angulartics/src/angulartics-inspectlet.js"></script>
-    <script src="bower_components/angulartics/src/angulartics-newrelic-insights.js"></script>
-    <script src="bower_components/angulartics-google-analytics/dist/angulartics-google-analytics.min.js"></script>
-    <script src="bower_components/bootstrap/dist/js/bootstrap.js"></script>
-    <script src="bower_components/d3/d3.js"></script>
-    <script src="bower_components/c3/c3.js"></script>
-    <script src="bower_components/ngDialog/js/ngDialog.js"></script>
-    <script src="bower_components/angular-cookies/angular-cookies.js"></script>
-    <!-- endbower -->
-    <!-- endbuild -->
+      <!-- build:js(.) scripts/vendor.js -->
+      <!-- bower:js -->
+      <script src="bower_components/jquery/dist/jquery.js"></script>
+      <script src="bower_components/angular/angular.js"></script>
+      <script src="bower_components/angular-resource/angular-resource.js"></script>
+      <script src="bower_components/angular-scroll/angular-scroll.js"></script>
+      <script src="bower_components/angular-ui-router/release/angular-ui-router.js"></script>
+      <script src="bower_components/angular-websocket/angular-websocket.min.js"></script>
+      <script src="bower_components/waypoints/lib/noframework.waypoints.min.js"></script>
+      <script src="bower_components/SHA-1/sha1.js"></script>
+      <script src="bower_components/angulartics/src/angulartics.js"></script>
+      <script src="bower_components/angulartics/src/angulartics-clicky.js"></script>
+      <script src="bower_components/angulartics/src/angulartics-cnzz.js"></script>
+      <script src="bower_components/angulartics/src/angulartics-ga-cordova.js"></script>
+      <script src="bower_components/angulartics/src/angulartics-gtm.js"></script>
+      <script src="bower_components/angulartics/src/angulartics-piwik.js"></script>
+      <script src="bower_components/angulartics/src/angulartics-scroll.js"></script>
+      <script src="bower_components/angulartics/src/angulartics-splunk.js"></script>
+      <script src="bower_components/angulartics/src/angulartics-woopra.js"></script>
+      <script src="bower_components/angulartics/src/angulartics-marketo.js"></script>
+      <script src="bower_components/angulartics/src/angulartics-intercom.js"></script>
+      <script src="bower_components/angulartics/src/angulartics-inspectlet.js"></script>
+      <script src="bower_components/angulartics/src/angulartics-newrelic-insights.js"></script>
+      <script src="bower_components/angulartics-google-analytics/dist/angulartics-google-analytics.min.js"></script>
+      <script src="bower_components/bootstrap/dist/js/bootstrap.js"></script>
+      <script src="bower_components/d3/d3.js"></script>
+      <script src="bower_components/c3/c3.js"></script>
+      <script src="bower_components/ngDialog/js/ngDialog.js"></script>
+      <script src="bower_components/angular-cookies/angular-cookies.js"></script>
+      <script src="bower_components/topojson/topojson.js"></script>
+      <!-- endbower -->
+      <!-- endbuild -->
 
-    <!-- build:js({.tmp,app}) scripts/scripts.js -->
-    <script src="scripts/app.js"></script>
-    <script src="scripts/config.js"></script>
-    <script src="scripts/router.js"></script>
+      <!-- build:js({.tmp,app}) scripts/scripts.js -->
+      <script src="scripts/app.js"></script>
+      <script src="scripts/config.js"></script>
+      <script src="scripts/router.js"></script>
 
-    <script src="scripts/controllers/polarity.controller.js"></script>
-    <script src="scripts/controllers/score.controller.js"></script>
-    <script src="scripts/controllers/cloudtag.controller.js"></script>
-    <script src="scripts/controllers/tweets.controller.js"></script>
-    <script src="scripts/controllers/dialog.controller.js"></script>
-    <script src="scripts/controllers/about.controller.js"></script>
+      <script src="scripts/controllers/polarity.controller.js"></script>
+      <script src="scripts/controllers/score.controller.js"></script>
+      <script src="scripts/controllers/cloudtag.controller.js"></script>
+      <script src="scripts/controllers/tweets.controller.js"></script>
+      <script src="scripts/controllers/dialog.controller.js"></script>
+      <script src="scripts/controllers/about.controller.js"></script>
 
-    <script src="scripts/controllers/candidate.tweets.controller.js"></script>
-    <script src="scripts/controllers/candidate.cloudtag.controller.js"></script>
+      <script src="scripts/controllers/candidate.tweets.controller.js"></script>
+      <script src="scripts/controllers/candidate.map.controller.js"></script>
+      <script src="scripts/controllers/candidate.cloudtag.controller.js"></script>
 
-    <script src="scripts/controllers/polarity.tweets.controller.js"></script>
+      <script src="scripts/controllers/polarity.tweets.controller.js"></script>
 
-    <script src="scripts/services/targets.service.js"></script>
-    <script src="scripts/services/tweets.service.js"></script>
-    <script src="scripts/services/score.service.js"></script>
-    <script src="scripts/services/cloudtag.service.js"></script>
-    <script src="scripts/services/email.service.js"></script>
-    <!-- endbuild -->
-  </body>
-</html>
+      <script src="scripts/services/targets.service.js"></script>
+      <script src="scripts/services/tweets.service.js"></script>
+      <script src="scripts/services/score.service.js"></script>
+      <script src="scripts/services/cloudtag.service.js"></script>
+      <script src="scripts/services/email.service.js"></script>
+      <script src="scripts/controllers/mapa-bogota.js"></script>
+      <!-- endbuild -->
+    </body>
+  </html>

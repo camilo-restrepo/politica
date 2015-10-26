@@ -1,7 +1,7 @@
 <div class="row">
   <div class="col-md-12">
     <div id="go-back-rectangle" class="black-area-top-tweets">
-      <a class="link-white glyphicon glyphicon-chevron-left font-go-back" ui-sref="home" analytics-on  analytics-category="Click">
+      <a class="link-white glyphicon glyphicon-chevron-left font-go-back" ui-sref="city({cityId: cityId})" analytics-on  analytics-category="Click">
         Volver
       </a>
     </div>
@@ -14,13 +14,13 @@
       </div>
     </div>
     <p>Ver Tweets:</p>
-    <div class="label tweet-sentiment-polarity-sm pull-left squared-box" ng-class="getTweetLabelClass('positive')" ng-show="'positive' !== polarity" ng-mouseenter="hovering=true" ng-mouseleave="hovering=false" ui-sref="polarity({ prediction: 'positive' })" analytics-on  analytics-category="Click">
+    <div class="label tweet-sentiment-polarity-sm pull-left squared-box" ng-class="getTweetLabelClass('positive')" ng-show="'positive' !== polarity" ng-mouseenter="hovering=true" ng-mouseleave="hovering=false" ui-sref="polarity({ prediction: 'positive',  cityId: cityId })" analytics-on  analytics-category="Click">
       <span><center><b>{{ getTweetLabelText('positive') }}</b></center></span>
     </div>
-    <div class="label tweet-sentiment-polarity-sm pull-left squared-box" ng-class="getTweetLabelClass('neutral')" ng-show="'neutral' !== polarity" ng-mouseenter="hovering=true" ng-mouseleave="hovering=false" ui-sref="polarity({ prediction: 'neutral' })" analytics-on  analytics-category="Click">
+    <div class="label tweet-sentiment-polarity-sm pull-left squared-box" ng-class="getTweetLabelClass('neutral')" ng-show="'neutral' !== polarity" ng-mouseenter="hovering=true" ng-mouseleave="hovering=false" ui-sref="polarity({ prediction: 'neutral', cityId: cityId })" analytics-on  analytics-category="Click">
       <span><center><b>{{ getTweetLabelText('neutral') }}</b></center></span>
     </div>
-    <div class="label tweet-sentiment-polarity-sm pull-left squared-box" ng-class="getTweetLabelClass('negative')" ng-show="'negative' !== polarity" ng-mouseenter="hovering=true" ng-mouseleave="hovering=false" ui-sref="polarity({ prediction: 'negative' })" analytics-on  analytics-category="Click">
+    <div class="label tweet-sentiment-polarity-sm pull-left squared-box" ng-class="getTweetLabelClass('negative')" ng-show="'negative' !== polarity" ng-mouseenter="hovering=true" ng-mouseleave="hovering=false" ui-sref="polarity({ prediction: 'negative' , cityId: cityId})" analytics-on  analytics-category="Click">
       <span><center><b>{{ getTweetLabelText('negative') }}</b></center></span>
     </div>
   </div>

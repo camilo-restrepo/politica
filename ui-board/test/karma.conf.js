@@ -49,6 +49,7 @@ module.exports = function(config) {
       'bower_components/c3/c3.js',
       'bower_components/ngDialog/js/ngDialog.js',
       'bower_components/angular-cookies/angular-cookies.js',
+      'bower_components/topojson/topojson.js',
       'bower_components/angular-mocks/angular-mocks.js',
       // endbower
       "app/scripts/**/*.js",

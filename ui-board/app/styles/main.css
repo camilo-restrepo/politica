@@ -31,11 +31,12 @@ body {
 
 #main-container {
   margin-top: 87px;
+  width: 1300px !important;
 }
 
 .margin-top-md {
   margin-top: 36px;
-  margin-left: 35px;
+  margin-left: 20px;
 }
 
 .footer {
@@ -268,6 +269,19 @@ body {
   background-color: #662F8F;
 }
 
+.btn-nocreo-black {
+  background-color: rgba(0,0,0,1);
+  color: #FFF;
+  font-size: 26px;
+  padding: 5px 15px;
+  margin: 0 0px 10px !important;
+  line-height: 1.1em;
+  width: 250px;
+  text-align: center;
+  font-family: "Open Sans";
+  letter-spacing: 10px;
+}
+
 .btn-outline {
   color: #000;
   background-color: transparent;
@@ -385,6 +399,34 @@ body {
   position: relative;
 }
 
+.black-background {
+  color: #FFF;
+  background: black;
+}
+
+.header-div {
+  padding: 30px;
+}
+
+.options-div {
+  padding: 60px;
+  padding-bottom: 100px;
+}
+
+.margin-md {
+  margin-bottom: 50px;
+}
+
+.main-link {
+  background-color: rgba(0,0,0,1);
+  color: #FFF;
+  font-size: 26px;
+  font-family: "Open Sans";
+  letter-spacing: 10px;
+  padding: 10px;
+  margin-bottom: 50px;
+}
+
 .black-area {
   color: #FFF;
   font-size: 18px;
@@ -464,142 +506,142 @@ body {
 
 
 .tangcloud {
-    height: 500px;
-    width: 1000px;
+  height: 500px;
+  width: 1000px;
 }
 
 .tangcloud span {
-    line-height: 100%;
-    font-family: "Open Sans";
+  line-height: 100%;
+  font-family: "Open Sans";
 }
 
 .tangcloud-item-1 {
-    font-size: 1.3em;
-    display: inline-block;
-    margin-right:0.3em;
-    margin-left:0.3em;
-    font-family: "Open Sans";
+  font-size: 1.3em;
+  display: inline-block;
+  margin-right:0.3em;
+  margin-left:0.3em;
+  font-family: "Open Sans";
 }
 
 .tangcloud-item-2 {
-    font-size: 1.6em;
-    display: inline-block;
-    margin-right:0.3em;
-    margin-left:0.3em;
-    font-family: "Open Sans";
+  font-size: 1.6em;
+  display: inline-block;
+  margin-right:0.3em;
+  margin-left:0.3em;
+  font-family: "Open Sans";
 }
 
 .tangcloud-item-3 {
-    font-size: 1.9em;
-    display: inline-block;
-    margin-right:0.3em;
-    margin-left:0.3em;
-    font-family: "Open Sans";
+  font-size: 1.9em;
+  display: inline-block;
+  margin-right:0.3em;
+  margin-left:0.3em;
+  font-family: "Open Sans";
 }
 
 .tangcloud-item-4 {
-    font-size: 2.2em;
-    display: inline-block;
-    margin-right:0.3em;
-    margin-left:0.3em;
-    font-family: "Open Sans";
+  font-size: 2.2em;
+  display: inline-block;
+  margin-right:0.3em;
+  margin-left:0.3em;
+  font-family: "Open Sans";
 }
 
 .tangcloud-item-5 {
-    font-size: 2.5em;
-    display: inline-block;
-    margin-right:0.3em;
-    margin-left:0.3em;
-    font-family: "Open Sans";
+  font-size: 2.5em;
+  display: inline-block;
+  margin-right:0.3em;
+  margin-left:0.3em;
+  font-family: "Open Sans";
 }
 
 .tangcloud-item-6 {
-    font-size: 2.8em;
-    display: inline-block;
-    margin-right:0.3em;
-    margin-left:0.3em;
-    font-family: "Open Sans";
+  font-size: 2.8em;
+  display: inline-block;
+  margin-right:0.3em;
+  margin-left:0.3em;
+  font-family: "Open Sans";
 }
 
 .tangcloud-item-7 {
-    font-size: 3.1em;
-    display: inline-block;
-    margin-right:0.3em;
-    margin-left:0.3em;
-    font-family: "Open Sans";
+  font-size: 3.1em;
+  display: inline-block;
+  margin-right:0.3em;
+  margin-left:0.3em;
+  font-family: "Open Sans";
 }
 
 .tangcloud-item-8 {
-    font-size: 3.4em;
-    display: inline-block;
-    margin-right:0.3em;
-    margin-left:0.3em;
-    font-family: "Open Sans";
+  font-size: 3.4em;
+  display: inline-block;
+  margin-right:0.3em;
+  margin-left:0.3em;
+  font-family: "Open Sans";
 }
 
 .tangcloud-item-9 {
-    font-size: 3.7em;
-    display: inline-block;
-    margin-right:0.3em;
-    margin-left:0.3em;
-    font-family: "Open Sans";
+  font-size: 3.7em;
+  display: inline-block;
+  margin-right:0.3em;
+  margin-left:0.3em;
+  font-family: "Open Sans";
 }
 
 .tangcloud-item-10 {
-    font-size: 4em;
-    display: inline-block;
-    margin-right:0.3em;
-    margin-left:0.3em;
-    font-family: "Open Sans";
+  font-size: 4em;
+  display: inline-block;
+  margin-right:0.3em;
+  margin-left:0.3em;
+  font-family: "Open Sans";
 }
 
 .tangcloud-item-RicardoAriasM {
-    color: '#D66F13' !important;
-    font-family: "Open Sans";
+  color: '#D66F13' !important;
+  font-family: "Open Sans";
 }
 
 .tangcloud-item-MMMaldonadoC {
-    color: '#FBD103' !important;
-    font-family: "Open Sans";
+  color: '#FBD103' !important;
+  font-family: "Open Sans";
 }
 
 .tangcloud-item-danielraisbeck {
-    color: '#FF5C01' !important;
-    font-family: "Open Sans";
+  color: '#FF5C01' !important;
+  font-family: "Open Sans";
 }
 
 .tangcloud-item-ClaraLopezObre {
-    color: '#FFDF00' !important;
-    font-family: "Open Sans";
+  color: '#FFDF00' !important;
+  font-family: "Open Sans";
 }
 
 .tangcloud-item-RafaelPardo {
-    color: '#ED0A03' !important;
-    font-family: "Open Sans";
+  color: '#ED0A03' !important;
+  font-family: "Open Sans";
 }
 
 .tangcloud-item-PachoSantosC {
-    color: '#3C68B7' !important;
-    font-family: "Open Sans";
+  color: '#3C68B7' !important;
+  font-family: "Open Sans";
 }
 
 .tangcloud-item-EnriquePenalosa {
-    color: '#12ADE5' !important;
-    font-family: "Open Sans";
+  color: '#12ADE5' !important;
+  font-family: "Open Sans";
 }
 
 .tangcloud-item-AlexVernot {
-    color: '#0A5C6D' !important;
-    font-family: "Open Sans";
+  color: '#0A5C6D' !important;
+  font-family: "Open Sans";
 }
 
 .tangcloud-item-CVderoux {
-    color: '#088543' !important;
-    font-family: "Open Sans";
+  color: '#088543' !important;
+  font-family: "Open Sans";
 }
 
 .tangcloud-item-hidden {
-    visibility: hidden;
+  visibility: hidden;
 }
 
 .initial-dialog-left {
@@ -785,29 +827,235 @@ body {
 }
 
 ::-webkit-input-placeholder {
-   color: white;
-   font-family: "Open Sans";
-   font-size: 20px;
+  color: white;
+  font-family: "Open Sans";
+  font-size: 20px;
 }
 
 :-moz-placeholder { /* Firefox 18- */
-   color: white;
-   font-family: "Open Sans";
-   font-size: 20px;
+  color: white;
+  font-family: "Open Sans";
+  font-size: 20px;
 }
 
 ::-moz-placeholder {  /* Firefox 19+ */
-   color: white;
-   font-family: "Open Sans";
-   font-size: 20px;
+  color: white;
+  font-family: "Open Sans";
+  font-size: 20px;
 }
 
 :-ms-input-placeholder {  
-   color: white;
-   font-family: "Open Sans";
-   font-size: 20px;
+  color: white;
+  font-family: "Open Sans";
+  font-size: 20px;
 }
 
 .tweets-group{
   margin-left: 10px;
+}
+
+
+.container {
+  width: 1300px !important;
+}
+
+@media (min-width: 1px) {
+  .container {
+    max-width: 1150px;
+  }
+  .col-lg-1,
+  .col-lg-2,
+  .col-lg-3,
+  .col-lg-4,
+  .col-lg-5,
+  .col-lg-6,
+  .col-lg-7,
+  .col-lg-8,
+  .col-lg-9,
+  .col-lg-10,
+  .col-lg-11,
+  .col-lg-12 {
+    float: left;
+  }
+  .col-lg-1 {
+    width: 8.333333333333332%;
+  }
+  .col-lg-2 {
+    width: 16.666666666666664%;
+  }
+  .col-lg-3 {
+    width: 25%;
+  }
+  .col-lg-4 {
+    width: 29.33333333333333%;
+  }
+  .col-lg-5 {
+    width: 41.66666666666667%;
+  }
+  .col-lg-6 {
+    width: 50%;
+  }
+  .col-lg-7 {
+    width: 58.333333333333336%;
+  }
+  .col-lg-8 {
+    width: 66.66666666666666%;
+  }
+  .col-lg-9 {
+    width: 75%;
+  }
+  .col-lg-10 {
+    width: 83.33333333333334%;
+  }
+  .col-lg-11 {
+    width: 91.66666666666666%;
+  }
+  .col-lg-12 {
+    width: 100%;
+  }
+  .col-lg-push-1 {
+    left: 8.333333333333332%;
+  }
+  .col-lg-push-2 {
+    left: 16.666666666666664%;
+  }
+  .col-lg-push-3 {
+    left: 25%;
+  }
+  .col-lg-push-4 {
+    left: 33.33333333333333%;
+  }
+  .col-lg-push-5 {
+    left: 41.66666666666667%;
+  }
+  .col-lg-push-6 {
+    left: 50%;
+  }
+  .col-lg-push-7 {
+    left: 58.333333333333336%;
+  }
+  .col-lg-push-8 {
+    left: 66.66666666666666%;
+  }
+  .col-lg-push-9 {
+    left: 75%;
+  }
+  .col-lg-push-10 {
+    left: 83.33333333333334%;
+  }
+  .col-lg-push-11 {
+    left: 91.66666666666666%;
+  }
+  .col-lg-pull-1 {
+    right: 8.333333333333332%;
+  }
+  .col-lg-pull-2 {
+    right: 16.666666666666664%;
+  }
+  .col-lg-pull-3 {
+    right: 25%;
+  }
+  .col-lg-pull-4 {
+    right: 33.33333333333333%;
+  }
+  .col-lg-pull-5 {
+    right: 41.66666666666667%;
+  }
+  .col-lg-pull-6 {
+    right: 50%;
+  }
+  .col-lg-pull-7 {
+    right: 58.333333333333336%;
+  }
+  .col-lg-pull-8 {
+    right: 66.66666666666666%;
+  }
+  .col-lg-pull-9 {
+    right: 75%;
+  }
+  .col-lg-pull-10 {
+    right: 83.33333333333334%;
+  }
+  .col-lg-pull-11 {
+    right: 91.66666666666666%;
+  }
+  .col-lg-offset-1 {
+    margin-left: 8.333333333333332%;
+  }
+  .col-lg-offset-2 {
+    margin-left: 16.666666666666664%;
+  }
+  .col-lg-offset-3 {
+    margin-left: 25%;
+  }
+  .col-lg-offset-4 {
+    margin-left: 33.33333333333333%;
+  }
+  .col-lg-offset-5 {
+    margin-left: 41.66666666666667%;
+  }
+  .col-lg-offset-6 {
+    margin-left: 50%;
+  }
+  .col-lg-offset-7 {
+    margin-left: 58.333333333333336%;
+  }
+  .col-lg-offset-8 {
+    margin-left: 66.66666666666666%;
+  }
+  .col-lg-offset-9 {
+    margin-left: 75%;
+  }
+  .col-lg-offset-10 {
+    margin-left: 83.33333333333334%;
+  }
+  .col-lg-offset-11 {
+    margin-left: 91.66666666666666%;
+  }
+}
+
+.unidad {
+  fill: #000;
+}
+
+.unidad:hover{
+  opacity: 0.5;
+}
+
+div.tooltip {
+  position: absolute;
+  text-align: center;     
+  width: 150px;          
+  height: 50px;         
+  padding: 2px; 
+  margin: 10px;      
+  font: 12px sans-serif;    
+  background: lightsteelblue; 
+  border: 0px;    
+  border-radius: 8px;     
+  pointer-events: none;
+  -ms-transform: rotate(110deg) translate(0,0); /* IE 9 */
+  -webkit-transform: rotate(110deg) translate(0,0); /* Chrome, Safari, Opera */
+  transform: rotate(110deg) translate(0,0); 
+}
+
+.dot{
+  fill: #910CF5;
+}
+
+#mapa{
+    -ms-transform: rotate(-110deg) translate(450px, 100px); /* IE 9 */
+    -webkit-transform: rotate(-110deg) translate(450px, 100px); /* Chrome, Safari, Opera */
+    transform: rotate(-110deg) translate(80px, 350px);
+    width: 500px;
+}
+
+#candidateMap{
+    -ms-transform: rotate(-110deg) translate(300px, 120px); /* IE 9 */
+    -webkit-transform: rotate(-110deg) translate(300px, 120px); /* Chrome, Safari, Opera */
+    transform: rotate(-110deg) translate(300px, 120px);
+}
+
+.mapDiv{
+  height: 520px;
 }

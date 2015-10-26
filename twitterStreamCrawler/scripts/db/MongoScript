@@ -15,3 +15,16 @@ db.twitterIds.insert({id: "PachoSantosC", relatedWords: ["Francisco Santos", "Pa
 db.twitterIds.insert({id: "HOLLMANMORRIS", relatedWords: ["Hollman Morris", "HollmanMorris"]}) //Hollman morris
 db.twitterIds.insert({id: "AlexVernot", relatedWords: ["Alex Vernot", "AlexVernot"]}) //Alex Vernot
 db.twitterIds.insert({id: "danielraisbeck", relatedWords: ["Daniel Raisbeck", "danielraisbeck"]}) //Daniel Raisbeck
+
+//Medellin
+db.twitterIds.insert({id: "RICOGabriel", relatedWords: ["Gabriel Jaime Rico", "RICOGabriel", "RicoAlcalde"]})
+db.twitterIds.insert({id: "jcvelezuribe", relatedWords: ["Juan Carlos Vélez", "jcvelezuribe"]}) 
+db.twitterIds.insert({id: "AlcaldeAlonsoS", relatedWords: ["AlcaldeAlonsoS", "AlonsoAlcalde"]}) 
+db.twitterIds.insert({id: "FicoGutierrez", relatedWords: ["Federico Gutiérrez", "FicoGutierrez", "FedericoAlcalde"]})
+db.twitterIds.insert({id: "HectorHAlcalde", relatedWords: ["Héctor Hoyos", "HectorHAlcalde"]})
+
+
+
+
+
+
