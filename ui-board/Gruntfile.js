@@ -453,7 +453,7 @@ module.exports = function (grunt) {
 
     grunt.task.run([
       'clean:server',
-      'ngconstant:production',
+      'ngconstant:development',
       'wiredep',
       'concurrent:server',
       'autoprefixer:server',

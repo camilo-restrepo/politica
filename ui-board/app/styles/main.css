@@ -1024,9 +1024,7 @@ body {
 
 div.tooltip {
   position: absolute;
-  text-align: center;     
-  width: 150px;          
-  height: 50px;         
+  text-align: center;
   padding: 2px; 
   margin: 10px;      
   font: 12px sans-serif;    
@@ -1044,16 +1042,18 @@ div.tooltip {
 }
 
 #mapa{
-    -ms-transform: rotate(-110deg) translate(450px, 100px); /* IE 9 */
-    -webkit-transform: rotate(-110deg) translate(450px, 100px); /* Chrome, Safari, Opera */
-    transform: rotate(-110deg) translate(80px, 350px);
+    -ms-transform: rotate(-110deg) translate(30px, 350px); /* IE 9 */
+    -webkit-transform: rotate(-110deg) translate(30px, 350px); /* Chrome, Safari, Opera */
+    transform: rotate(-110deg) translate(30px, 350px);
     width: 500px;
 }
 
 #candidateMap{
-    -ms-transform: rotate(-110deg) translate(300px, 120px); /* IE 9 */
-    -webkit-transform: rotate(-110deg) translate(300px, 120px); /* Chrome, Safari, Opera */
-    transform: rotate(-110deg) translate(300px, 120px);
+    -ms-transform: rotate(-110deg) translate(-380px, 20px); /* IE 9 */
+    -webkit-transform: rotate(-110deg) translate(-380px, 20px); /* Chrome, Safari, Opera */
+    transform: rotate(-110deg) translate(-380px, 20px);
+    height: 300px;
+    width: 2px;
 }
 
 .mapDiv{

@@ -21,7 +21,6 @@ public class TweetDAO {
     private static final Logger LOGGER = LoggerFactory.getLogger(TweetDAO.class);
 
 	public static final String TWEETS_COLLECTION = "minimumTweets";
-    public static final String ALL_TWEETS_COLLECTION = "tweets";
 
 	private final MongoDatabase mongoDatabase;
 
@@ -131,9 +130,9 @@ public class TweetDAO {
         MongoCursor<Document> it = collection.find(Filters.eq("targetTwitterId", twitterId))
                 .projection(Projections.include("text", "timestamp_ms", "prediction", "targetTwitterId"))
                 .projection(Projections.excludeId())
-                .sort(new Document("timestamp_ms", -1)).limit(3).iterator();
+                .sort(new Document("timestamp_ms", -1)).limit(6).iterator();
 
-        List<String> latestTweets = new ArrayList<>(3);
+        List<String> latestTweets = new ArrayList<>(6);
         while(it.hasNext()){
             latestTweets.add(it.next().toJson());
         }
@@ -156,42 +155,27 @@ public class TweetDAO {
         return latestTweets;
     }
 
-    public List<List<Double>> getTweetsLocation(){
-        MongoCollection<Document> collection = mongoDatabase.getCollection(ALL_TWEETS_COLLECTION);
+    public List<Document> getTweetsLocation(){
+        MongoCollection<Document> collection = mongoDatabase.getCollection(TWEETS_COLLECTION);
         MongoCursor<Document> it = collection.find(Filters.ne("geo", null)).projection(Projections.excludeId())
-                .projection(Projections.include("geo.coordinates")).iterator();
-        List<List<Double>> result = new ArrayList<>();
+                .projection(Projections.exclude("id")).iterator();
+        List<Document> result = new ArrayList<>();
         while(it.hasNext()){
             Document document = it.next();
-            Document geo = (Document) document.get("geo");
-            List<Double> coords = (List<Double>) geo.get("coordinates");
-            result.add(coords);
+            result.add(document);
         }
         it.close();
         return result;
     }
 
-    public List<List<Double>> getCandidateTweetsLocation(String twitterId) {
-        MongoCollection<Document> minTweets = mongoDatabase.getCollection(TWEETS_COLLECTION);
-        MongoCursor<Document> it = minTweets.find(Filters.eq("targetTwitterId", twitterId))
-                .projection(Projections.include("id")).projection(Projections.excludeId()).iterator();
-        List<Long> ids = new ArrayList<>();
-        while(it.hasNext()){
-            Document doc = it.next();
-            ids.add(doc.getLong("id"));
-        }
-        it.close();
-
-        MongoCollection<Document> collection = mongoDatabase.getCollection(ALL_TWEETS_COLLECTION);
-        it = collection.find(Filters.and(Filters.ne("geo", null), Filters.in("id", ids)))
-                .projection(Projections.excludeId())
-                .projection(Projections.include("geo.coordinates")).iterator();
-        List<List<Double>> result = new ArrayList<>();
+    public List<Document> getCandidateTweetsLocation(String twitterId) {
+        MongoCollection<Document> collection = mongoDatabase.getCollection(TWEETS_COLLECTION);
+        MongoCursor<Document> it = collection.find(Filters.and(Filters.ne("geo", null), Filters.eq("targetTwitterId", twitterId)))
+                .projection(Projections.excludeId()).projection(Projections.exclude("id")).iterator();
+        List<Document> result = new ArrayList<>();
         while(it.hasNext()){
             Document document = it.next();
-            Document geo = (Document) document.get("geo");
-            List<Double> coords = (List<Double>) geo.get("coordinates");
-            result.add(coords);
+            result.add(document);
         }
         it.close();
         return result;

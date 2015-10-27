@@ -3,6 +3,7 @@ package co.inc.board.api.resources;
 import co.inc.board.domain.business.TargetBusiness;
 import co.inc.board.domain.business.TweetBusiness;
 import co.inc.board.domain.entities.*;
+import org.bson.Document;
 
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
@@ -103,14 +104,14 @@ public class TweetResource {
     @GET
     @Path("/location")
     public Response getTweetsLocation(){
-        List<List<Double>> locations = tweetBusiness.getTweetsLocation();
+        List<Document> locations = tweetBusiness.getTweetsLocation();
         return Response.status(Response.Status.OK).entity(locations).build();
     }
 
     @GET
     @Path("{twitterId}/location")
     public Response getCandidateTweetsLocation(@PathParam("twitterId") String twitterId){
-        List<List<Double>> tweets = tweetBusiness.getCandidateTweetsLocation(twitterId);
+        List<Document> tweets = tweetBusiness.getCandidateTweetsLocation(twitterId);
         return Response.status(Response.Status.OK).entity(tweets).build();
     }
 }

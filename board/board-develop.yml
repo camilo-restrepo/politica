@@ -20,3 +20,4 @@ logging:
 
 mongoConfig:
   dbName: boarddb
+  ip: 172.24.99.50

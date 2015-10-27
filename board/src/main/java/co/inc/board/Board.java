@@ -65,7 +65,7 @@ public class Board extends Application<BoardConfig> {
 
     private MongoClient getMongoClient(BoardConfig boardConfig) {
         MongoConfig mongoConfig = boardConfig.getMongoConfig();
-        return new MongoClient("10.132.1.53");
+        return new MongoClient(mongoConfig.getIp());
     }
 
     @Override

@@ -2,6 +2,7 @@ package co.inc.board.domain.business;
 
 import co.inc.board.domain.entities.*;
 import co.inc.board.persistence.daos.TweetDAO;
+import org.bson.Document;
 import org.joda.time.DateTime;
 
 import java.util.ArrayList;
@@ -99,11 +100,11 @@ public class TweetBusiness {
         return tweetDAO.getLastTweetsPolarity(prediction);
     }
 
-    public List<List<Double>> getTweetsLocation(){
+    public List<Document> getTweetsLocation(){
         return tweetDAO.getTweetsLocation();
     }
 
-    public List<List<Double>> getCandidateTweetsLocation(String twitterId) {
+    public List<Document> getCandidateTweetsLocation(String twitterId) {
         return tweetDAO.getCandidateTweetsLocation(twitterId);
     }
 }
