@@ -60,7 +60,7 @@ function candidateMapController($scope, tweetsService, $state, $stateParams, $ro
 				div.transition().duration(200).style("opacity", .9);
 				div.style("z-index", "2000").style("width" , "300px")
 				.style("height", d3.select("div.tooltip").node().getBoundingClientRect().height);
-				div.style("left", (d.geo.coordinates[0] + 100) + "px").style("top", (d.geo.coordinates[1] + 460) + "px");
+				div.style("left", (d.geo.coordinates[0] + 50) + "px").style("top", (d.geo.coordinates[1] + 460) + "px");
         }).on("mouseout", function() {   
 				div.transition().duration(500).style("opacity", 0); 
 		});
@@ -85,7 +85,8 @@ function candidateMapController($scope, tweetsService, $state, $stateParams, $ro
 			mapa.selectAll(".unidad").data(unidades.features).enter().append("path").attr("class", function(){return "unidad"}).attr("d", path)
 			.on("mouseover", function(d) { 
 				div.html("<b>"+d.properties.name+"</b>");
-				div.transition().duration(200).style("opacity", .9);
+				div.transition().duration(200).style("opacity", .9).style("width" , "150px")
+				.style("height", d3.select("div.tooltip").node().getBoundingClientRect().height);
 				div.style("left", (d.centroid[0]) + "px").style("top", (d.centroid[1] - 18) + "px");
 			})          
 			.on("mouseout", function() {   

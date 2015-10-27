@@ -1049,10 +1049,10 @@ div.tooltip {
 }
 
 #candidateMap{
-    -ms-transform: rotate(-110deg) translate(-380px, 20px); /* IE 9 */
-    -webkit-transform: rotate(-110deg) translate(-380px, 20px); /* Chrome, Safari, Opera */
-    transform: rotate(-110deg) translate(-380px, 20px);
-    height: 300px;
+    -ms-transform: rotate(-110deg) translate(-580px, -180px); /* IE 9 */
+    -webkit-transform: rotate(-110deg) translate(-580px, -180px); /* Chrome, Safari, Opera */
+    transform: rotate(-110deg) translate(-580px, -180px);
+    height: 1px;
     width: 2px;
 }
 
