@@ -1,4 +1,3 @@
-package co.inc.twitterStreamCrawler.utils.stopwords.classification;
 
 import java.util.Arrays;
 import java.util.HashSet;
@@ -47,10 +46,12 @@ public class StopwordsSpanish {
 				"pacho", "francisco", "-", "http", "rt", "daniel", "raisbeck", "am", "pm", "debate", "hollman",
 				"propuesta", "propuestas", "encuesta", "encuestas", "sabe", "gracias", "candidata", "foro", "tema",
 				"expresado", "localidad", "seguimos", "señor", "retiran", "vernot", "x", "te", "jcvelezuribe", "puedes",
-				"equipo", "veo", "hicimos", "etc", "á", "í", "…"};
+				"equipo", "veo", "hicimos", "etc", "á", "í", "…", "dr", "'", "pachosantosc", "\"", "alexvernot", "alex",
+				"cc", "maldonado", "mercedes", "mora", "arias", "ricardo", "retweeted", "v", "#", "”", "“", "somos",
+				"propone", "quiero"};
 
 		if (m_Stopwords == null) {
-			m_Stopwords = new HashSet<String>();
+			m_Stopwords = new HashSet<>();
 			m_Stopwords.addAll(Arrays.asList(words));
 		}
 	}

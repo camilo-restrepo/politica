@@ -51,8 +51,6 @@ public final class WordCount {
                     return words1;
                 });
 
-
-
 		JavaPairRDD<CandidateWord, Integer> ones = words
 				.mapToPair(s -> new Tuple2<>(s, 1));
 
