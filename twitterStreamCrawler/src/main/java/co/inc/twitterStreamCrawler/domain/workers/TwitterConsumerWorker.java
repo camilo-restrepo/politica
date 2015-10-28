@@ -4,9 +4,9 @@ import co.inc.twitterStreamCrawler.domain.entities.Prediction;
 import co.inc.twitterStreamCrawler.persistence.daos.TargetDAO;
 import co.inc.twitterStreamCrawler.persistence.daos.TweetDAO;
 import co.inc.twitterStreamCrawler.utils.PolarityClassifier;
+import co.inc.twitterStreamCrawler.utils.Twokenize;
 import co.inc.twitterStreamCrawler.utils.constants.GlobalConstants;
 import co.inc.twitterStreamCrawler.utils.stopwords.classification.StopwordsSpanish;
-import com.sun.jersey.api.client.Client;
 import com.sun.jersey.api.client.WebResource;
 import org.bson.Document;
 import weka.classifiers.meta.FilteredClassifier;
@@ -73,10 +73,11 @@ public class TwitterConsumerWorker implements Runnable {
 
 	private void updateWordCount(final String text, final String target) {
 		String cleanText = GlobalConstants.UNDESIRABLES.matcher(text).replaceAll("");
-		String[] tokens = GlobalConstants.SPACE.split(cleanText);
-		for (String token : tokens) {
-			if (!token.startsWith("@") && !token.startsWith("#") && !stopwords.isStopword(token)
-					&& !token.startsWith("htt")) {
+		//String[] tokens = GlobalConstants.SPACE.split(cleanText);
+		List<String> tweetTokens = Twokenize.tokenizeRawTweetText(cleanText);
+		for (String token : tweetTokens) {
+			if (!token.toLowerCase().equals("rt") && !token.toLowerCase().startsWith("htt")
+					&& !token.toLowerCase().startsWith("@") && !stopwords.isStopword(token)) {
 				tweetDAO.incrementWordCount(token, target);
 			}
 		}

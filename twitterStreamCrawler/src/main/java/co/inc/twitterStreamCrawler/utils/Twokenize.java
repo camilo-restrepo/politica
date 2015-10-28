@@ -1,3 +1,5 @@
+package co.inc.twitterStreamCrawler.utils;
+
 import org.apache.commons.lang.StringEscapeUtils;
 
 import java.io.IOException;
