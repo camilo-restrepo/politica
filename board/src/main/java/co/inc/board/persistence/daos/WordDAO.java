@@ -19,7 +19,7 @@ public class WordDAO {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(WordDAO.class);
 
-    public static final String WORDS_COLLECTION = "words";
+    public static final String WORDS_COLLECTION = "words2";
 
     private final MongoDatabase mongoDatabase;
 
@@ -33,7 +33,7 @@ public class WordDAO {
         MongoCursor<Document> documentsIterator = collection.find(Filters.eq("target", twitterId))
                 .sort(Sorts.descending("count")).limit(limit).iterator();
 
-        List<WordCount> wordCountList = new ArrayList<WordCount>();
+        List<WordCount> wordCountList = new ArrayList<>();
 
         while (documentsIterator.hasNext()) {
 
