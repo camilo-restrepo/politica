@@ -43,4 +43,10 @@ public class UsersResource {
     public Response getUserCreationCandidate(@PathParam("twitterId") String twitterId){
         return Response.status(Response.Status.OK).entity(usersBusiness.getUserCreationCandidate(twitterId)).build();
     }
+
+    @GET
+    @Path("/venn")
+    public Response getVennData(){
+        return Response.status(Response.Status.OK).entity(usersBusiness.getVennData()).build();
+    }
 }

@@ -24,7 +24,7 @@ function polarityTweetsController($scope, $stateParams, $websocket, environment,
       RICOGabriel: 'Gabriel Jaime Rico',
       jcvelezuribe: 'Juan Carlos Vélez',
       HectorHAlcalde: 'Héctor Hoyos'
-    }
+    };
 
     return candidateNames[targetId];
   };
@@ -61,9 +61,9 @@ function polarityTweetsController($scope, $stateParams, $websocket, environment,
 
       var isCandidateFromCity = false;
 
-      if ($scope.cityId == 'bogota') {
+      if ($scope.cityId === 'bogota') {
         isCandidateFromCity = (bogotaCandidates[tweet.targetTwitterId]);
-      } else if ($scope.cityId == 'medellin'){
+      } else if ($scope.cityId === 'medellin'){
         isCandidateFromCity = (medellinCandidates[tweet.targetTwitterId]);
       }
 
@@ -155,9 +155,9 @@ function polarityTweetsController($scope, $stateParams, $websocket, environment,
 
       var isCandidateFromCity = false;
 
-      if ($scope.cityId == 'bogota') {
+      if ($scope.cityId === 'bogota') {
         isCandidateFromCity = (bogotaCandidates[tweet.twitterId]);
-      } else if ($scope.cityId == 'medellin'){
+      } else if ($scope.cityId === 'medellin'){
         isCandidateFromCity = (medellinCandidates[tweet.twitterId]);
       }
 

@@ -48,4 +48,8 @@ public class UsersBusiness {
     public List<Document> getUserCreationCandidate(String twitterId){
         return usersDAO.getUserCreationCandidate(twitterId);
     }
+
+    public List<Document> getVennData(){
+        return usersDAO.getVennData();
+    }
 }

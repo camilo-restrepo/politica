@@ -24,7 +24,7 @@ function candidateTweetsController($scope, $stateParams, $websocket, environment
       RICOGabriel: 'Gabriel Jaime Rico',
       jcvelezuribe: 'Juan Carlos Vélez',
       HectorHAlcalde: 'Héctor Hoyos'
-    }
+    };
 
     return candidateNames[targetId];
   };

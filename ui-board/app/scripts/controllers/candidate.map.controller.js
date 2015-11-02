@@ -38,22 +38,22 @@ function candidateMapController($scope, tweetsService, $state, $stateParams, $ro
 		};
 
 		return colors[twitterId];
-	};
+	}
 
 	function success(data){
 		centroids = data;
   		
-  		mapa.selectAll("dot").data(centroids).enter().append("circle").style("fill", function(d){return getCandidateColor(d.targetTwitterId)}).attr("r", 3).attr("transform", function(d) {return "translate(" + projection([d.geo.coordinates[1],d.geo.coordinates[0]]) + ")";})
+  		mapa.selectAll("dot").data(centroids).enter().append("circle").style("fill", function(d){return getCandidateColor(d.targetTwitterId);}).attr("r", 3).attr("transform", function(d) {return "translate(" + projection([d.geo.coordinates[1],d.geo.coordinates[0]]) + ")";})
   		.on("mouseover", function(d) {
   				var date = new Date(d.timestamp_ms);
   				var dateStr = date.getDate()+"-"+(date.getMonth()+1)+"-"+date.getFullYear()+ " "+ date.getHours()+":"+date.getMinutes()+":"+date.getSeconds();
    				var html = "<b>"+d.targetTwitterId+"</b> <p><u>Tweet:</u> "+d.text+"</p><p><u>Fecha:</u> "+dateStr+"</p><p><u>Polaridad:</u> ";
   				if(d.prediction === "negative"){
-  					html = html + "Negativo</p>"
+  					html = html + "Negativo</p>";
   				}else if(d.prediction === "positive"){
-  					html = html + "Positivo</p>"
+  					html = html + "Positivo</p>";
   				}else{
-					html = html + "Neutral</p>"
+					html = html + "Neutral</p>";
   				}
 
 				div.html(html);
@@ -82,7 +82,7 @@ function candidateMapController($scope, tweetsService, $state, $stateParams, $ro
     			unidad.neighbors = unidad.centroid ? vecinos[i].filter(function(j) { return j < i && unidades.features[j].centroid; }).map(function(j) { return unidades.features[j]; }) : [];
     		});
 
-			mapa.selectAll(".unidad").data(unidades.features).enter().append("path").attr("class", function(){return "unidad"}).attr("d", path)
+			mapa.selectAll(".unidad").data(unidades.features).enter().append("path").attr("class", function(){return "unidad";}).attr("d", path)
 			.on("mouseover", function(d) { 
 				div.html("<b>"+d.properties.name+"</b>");
 				div.transition().duration(200).style("opacity", .9).style("width" , "150px")

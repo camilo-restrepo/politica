@@ -19,6 +19,7 @@ public class UsersDAO {
     public static final String USERS_COLLECTION = "users";
     public static final String USER_CREATION_COLLECTION = "userCreation";
     public static final String TARGET_USER_CREATION_COLLECTION = "targetUserCreation";
+    public static final String VENN_COLLECTION = "venn";
 
     private final MongoDatabase mongoDatabase;
 
@@ -62,6 +63,17 @@ public class UsersDAO {
         MongoCollection<Document> collection = mongoDatabase.getCollection(TARGET_USER_CREATION_COLLECTION);
         MongoCursor<Document> it = collection.find().projection(Projections.excludeId()).sort(Sorts.ascending("timestamp"))
                 .filter(Filters.and(Filters.gt("timestamp", 1230699600000L), Filters.eq("target", twitterId))).iterator();
+        List<Document> result = new ArrayList<>();
+        while(it.hasNext()){
+            result.add(it.next());
+        }
+        it.close();
+        return result;
+    }
+
+    public List<Document> getVennData(){
+        MongoCollection<Document> collection = mongoDatabase.getCollection(VENN_COLLECTION);
+        MongoCursor<Document> it = collection.find().projection(Projections.excludeId()).iterator();
         List<Document> result = new ArrayList<>();
         while(it.hasNext()){
             result.add(it.next());

@@ -95,7 +95,7 @@ function tweetsController($scope, $websocket, $interval, environment, targetsSer
       RICOGabriel: 'Gabriel Jaime Rico',
       jcvelezuribe: 'Juan Carlos Vélez',
       HectorHAlcalde: 'Héctor Hoyos'
-    }
+    };
 
     return candidateNames[targetId];
   };
@@ -145,7 +145,7 @@ function tweetsController($scope, $websocket, $interval, environment, targetsSer
       var candidateColor = null;
       var candidate = candidatos[i];
 
-      if (cityId == 'bogota') {
+      if (cityId === 'bogota') {
         candidateColor = bogotaCandidates[candidate.twitterId.id];
       } else {
         candidateColor = medellinCandidates[candidate.twitterId.id];

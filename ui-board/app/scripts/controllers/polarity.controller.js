@@ -69,7 +69,7 @@ function polarityController($scope, tweetsService, $state, $stateParams) {
       RICOGabriel: 'Gabriel Jaime Rico',
       jcvelezuribe: 'Juan Carlos Vélez',
       HectorHAlcalde: 'Héctor Hoyos'
-    }
+    };
 
     return candidateNames[targetId];
   };
@@ -118,7 +118,7 @@ function polarityController($scope, tweetsService, $state, $stateParams) {
       var candidateColor = null;
       var candidate = candidatos[i];
 
-      if (cityId == 'bogota') {
+      if (cityId === 'bogota') {
         candidateColor = bogotaCandidates[candidate.twitterId];
       } else {
         candidateColor = medellinCandidates[candidate.twitterId];
@@ -138,7 +138,7 @@ function polarityController($scope, tweetsService, $state, $stateParams) {
     var polarityArray = shuffleArray(candidatesFromCity);
     var candidatosNoPopulares = [];
 
-    if ($scope.cityId == 'bogota') {
+    if ($scope.cityId === 'bogota') {
       candidatosNoPopulares = ['CVderoux', 'MMMaldonadoC', 'RicardoAriasM', 'AlexVernot', 'danielraisbeck'];
     }
 

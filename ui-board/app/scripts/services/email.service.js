@@ -1,4 +1,4 @@
-"use strict"
+"use strict";
 
 boardModule.factory('emailService', emailService);
 emailService.$inject = ['$resource'];
@@ -10,7 +10,7 @@ function emailService($resource) {
 
     var actions = {
         sendEmail: { method: 'POST' }
-    }
+    };
 
     return $resource(url, paramDefaults, actions);
 }

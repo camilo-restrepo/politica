@@ -20,7 +20,7 @@ function aboutController($scope, emailService) {
         recipients: [ 'elpisco@gmail.com', 'julianespinel@gmail.com' ],
         subject: 'No Creo: contact form',
         body: (' Name: ' + contactForm.name + '\n Email: ' + contactForm.email + '\n Message: ' + contactForm.message)
-      }
+      };
 
       var emailSendPromise = emailService.sendEmail(email).$promise;
       emailSendPromise.then(showConfirmationBox());

@@ -67,7 +67,7 @@ function cloudtagController($scope, cloudtagService, $state, $stateParams) {
       var candidateColor = null;
       var candidate = candidatos[i];
 
-      if (cityId == 'bogota') {
+      if (cityId === 'bogota') {
         candidateColor = bogotaCandidates[candidate.twitterId];
       } else {
         candidateColor = medellinCandidates[candidate.twitterId];
@@ -88,7 +88,7 @@ function cloudtagController($scope, cloudtagService, $state, $stateParams) {
     var candidatos = getCandidatesFromCity($scope.cityId, response);
     var candidatosNoPopulares = [];
 
-    if ($scope.cityId == 'bogota') {
+    if ($scope.cityId === 'bogota') {
       candidatosNoPopulares = ['CVderoux', 'MMMaldonadoC', 'RicardoAriasM', 'AlexVernot', 'danielraisbeck'];
     }
 
@@ -144,7 +144,7 @@ function cloudtagController($scope, cloudtagService, $state, $stateParams) {
 
   function initCandidatesLegend() {
 
-    if ($scope.cityId == 'bogota') {
+    if ($scope.cityId === 'bogota') {
 
       $scope.candidates = [
         {name: 'RicardoAriasM', color:'#D66F13', x:0, y:0, popular: false},
@@ -184,7 +184,7 @@ function cloudtagController($scope, cloudtagService, $state, $stateParams) {
       return 'svg-cloudtag-opacity';
     }
     return '';
-  }
+  };
 
   $scope.init = function() {
 

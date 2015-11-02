@@ -19,7 +19,7 @@ function candidateUsersController($scope, environment, $state, $stateParams, use
 			dates.push(actual.timestamp);
 		}
 
-		var chart = c3.generate({
+		c3.generate({
 			bindto: '#userCreationChart',
 			size: {
 				height: 530
@@ -59,5 +59,5 @@ function candidateUsersController($scope, environment, $state, $stateParams, use
 		var candidateTwitterId = $stateParams.twitterId;
 		usersService.getTargetUsersCount({ twitterId: candidateTwitterId }, success, onError);
 		usersService.getUserCreationCandidate({ twitterId: candidateTwitterId }, successCreation, onError);
-	}
+	};
 }
