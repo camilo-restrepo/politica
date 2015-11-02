@@ -1,0 +1,24 @@
+<div ng-controller="candidateUsersController" ng-init="init()">
+	<div class="row">
+		<div class="col-md-12">
+			<table class='table table-striped'>
+				<tr>
+					<td><b>Usuario</b></td>
+					<td><b>Fecha de creación</b></td>
+					<td><b>Tweets</b></td> 
+				</tr>
+				<tr ng-repeat="user in data">
+					<td>{{user.user}}</td>
+					<td>{{user.timestamp | date:'MM-yyyy'}}</td>
+					<td>{{user.count}}</td>
+				</tr>
+			</table>
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-md-12">
+			<div id="userCreationChart">
+			</div>
+		</div>
+	</div>
+</div>

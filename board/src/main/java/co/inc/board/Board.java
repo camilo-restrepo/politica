@@ -1,21 +1,11 @@
 package co.inc.board;
 
-import co.inc.board.api.resources.BroadcasterResource;
-import co.inc.board.api.resources.ScoreResource;
-import co.inc.board.api.resources.TargetResource;
-import co.inc.board.api.resources.TweetResource;
-import co.inc.board.api.resources.WordResource;
+import co.inc.board.api.resources.*;
 import co.inc.board.api.ws.BroadcastServlet;
-import co.inc.board.domain.business.ScoreBusiness;
-import co.inc.board.domain.business.TargetBusiness;
-import co.inc.board.domain.business.TweetBusiness;
-import co.inc.board.domain.business.WordBusiness;
+import co.inc.board.domain.business.*;
 import co.inc.board.infrastructure.config.BoardConfig;
 import co.inc.board.infrastructure.config.MongoConfig;
-import co.inc.board.persistence.daos.ScoreDAO;
-import co.inc.board.persistence.daos.TargetDAO;
-import co.inc.board.persistence.daos.TweetDAO;
-import co.inc.board.persistence.daos.WordDAO;
+import co.inc.board.persistence.daos.*;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
@@ -100,6 +90,11 @@ public class Board extends Application<BoardConfig> {
         ScoreBusiness scoreBusiness = new ScoreBusiness(scoreDAO, targetBusiness);
         ScoreResource scoreResource = new ScoreResource(scoreBusiness);
         environment.jersey().register(scoreResource);
+
+        UsersDAO usersDAO = new UsersDAO(mongoDatabase);
+        UsersBusiness usersBusiness = new UsersBusiness(usersDAO, targetBusiness);
+        UsersResource usersResource = new UsersResource(usersBusiness);
+        environment.jersey().register(usersResource);
         
         // webSockets
 

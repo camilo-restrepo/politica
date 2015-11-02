@@ -8,6 +8,7 @@ import org.apache.spark.api.java.JavaSparkContext;
 import org.bson.BSONObject;
 import org.bson.BasicBSONObject;
 import scala.Tuple2;
+import userCount.Constants;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -23,7 +24,7 @@ public final class WordCount {
 
 		Configuration mongodbConfig = new Configuration();
 		mongodbConfig.set("mongo.job.input.format", "com.mongodb.hadoop.MongoInputFormat");
-		mongodbConfig.set("mongo.input.uri", "mongodb://172.24.99.50:27017/boarddb.minimumTweets");
+		mongodbConfig.set("mongo.input.uri", "mongodb://"+ Constants.IP+":27017/boarddb.minimumTweets");
 
 		SparkConf conf = new SparkConf().setAppName("Word Count Twitter");
 
@@ -59,14 +60,14 @@ public final class WordCount {
         JavaPairRDD<Object, BSONObject> save = counts
 				.mapToPair(tuple -> {
                     BSONObject bson = new BasicBSONObject();
-                    bson.put("word", tuple._1.getWord());
-                    bson.put("target", tuple._1.getCandidate());
-                    bson.put("count", tuple._2);
+                    bson.put("word", tuple._1().getWord());
+                    bson.put("target", tuple._1().getCandidate());
+                    bson.put("count", tuple._2());
                     return new Tuple2<>(null, bson);
                 });
 
 		Configuration outputConfig = new Configuration();
-		outputConfig.set("mongo.output.uri", "mongodb://172.24.99.50:27017/boarddb.words2");
+		outputConfig.set("mongo.output.uri", "mongodb://"+ Constants.IP+":27017/boarddb.words2");
 		save.saveAsNewAPIHadoopFile("file:///empty", Object.class, Object.class, MongoOutputFormat.class, outputConfig);
         sc.stop();
 	}

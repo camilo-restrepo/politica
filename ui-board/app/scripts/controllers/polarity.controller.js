@@ -174,7 +174,7 @@ function polarityController($scope, tweetsService, $state, $stateParams) {
     if ($scope.cityId) {
       $scope.boxIsFull = true;
       $scope.showOrHide = 'Ocultar';
-      tweetsService.getAllCandidatesPolarity({time: 'day'}, success, error);
+      tweetsService.getAllCandidatesPolarity({time: 'month'}, success, error);
     } else {
       $state.go('select');
     }

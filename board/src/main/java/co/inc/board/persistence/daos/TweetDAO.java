@@ -1,13 +1,15 @@
 package co.inc.board.persistence.daos;
 
-import co.inc.board.domain.entities.*;
+import co.inc.board.domain.entities.MapCoordinate;
+import co.inc.board.domain.entities.PredictionEnum;
+import co.inc.board.domain.entities.TweetPerDay;
+import co.inc.board.domain.entities.TweetsCount;
+import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoCursor;
+import com.mongodb.client.MongoDatabase;
 import com.mongodb.client.model.Filters;
 import com.mongodb.client.model.Projections;
 import org.bson.Document;
-
-import com.mongodb.client.MongoCollection;
-import com.mongodb.client.MongoDatabase;
 import org.bson.conversions.Bson;
 import org.joda.time.DateTime;
 import org.slf4j.Logger;
@@ -30,7 +32,7 @@ public class TweetDAO {
 
 	public List<MapCoordinate> getMapFromTweetsLastMonth(String twitterId) {
 
-        List<MapCoordinate> mapCoordinates = new ArrayList<MapCoordinate>();
+        List<MapCoordinate> mapCoordinates = new ArrayList<>();
 
 		MongoCollection<Document> collection = mongoDatabase.getCollection(TWEETS_COLLECTION);
 
@@ -130,9 +132,9 @@ public class TweetDAO {
         MongoCursor<Document> it = collection.find(Filters.eq("targetTwitterId", twitterId))
                 .projection(Projections.include("text", "timestamp_ms", "prediction", "targetTwitterId"))
                 .projection(Projections.excludeId())
-                .sort(new Document("timestamp_ms", -1)).limit(6).iterator();
+                .sort(new Document("timestamp_ms", -1)).limit(12).iterator();
 
-        List<String> latestTweets = new ArrayList<>(6);
+        List<String> latestTweets = new ArrayList<>(12);
         while(it.hasNext()){
             latestTweets.add(it.next().toJson());
         }
@@ -173,7 +175,7 @@ public class TweetDAO {
         MongoCursor<Document> it = collection.find(Filters.and(Filters.ne("geo", null), Filters.eq("targetTwitterId", twitterId)))
                 .projection(Projections.excludeId()).projection(Projections.exclude("id")).iterator();
         List<Document> result = new ArrayList<>();
-        while(it.hasNext()){
+        while (it.hasNext()) {
             Document document = it.next();
             result.add(document);
         }
