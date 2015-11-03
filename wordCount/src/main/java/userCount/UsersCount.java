@@ -62,7 +62,7 @@ public class UsersCount {
 
         mongodbConfig.clear();
         mongodbConfig.set("mongo.job.input.format", "com.mongodb.hadoop.MongoInputFormat");
-        mongodbConfig.set("mongo.input.uri", "mongodb://192.168.0.16:27017/boarddb.minimumTweets");
+        mongodbConfig.set("mongo.input.uri", "mongodb://" + Constants.IP + ":27017/boarddb.minimumTweets");
 
         documents = sc.newAPIHadoopRDD(mongodbConfig, MongoInputFormat.class,
                 Object.class, BSONObject.class);

@@ -5,5 +5,5 @@ package userCount;
  */
 public class Constants {
 
-    public final static String IP = "192.168.0.16";
+    public final static String IP = "172.24.99.50";
 }
