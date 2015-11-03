@@ -5,19 +5,24 @@ usersController.$inject = ['$scope', 'environment', '$state', '$stateParams', 'u
 
 function usersController($scope, environment, $state, $stateParams, usersService) {
 
-	var todosLosCandidatos = {
-		columnNamesArray: [],
-		positiveArray: ['Positivo'],
-		negativeArray : ['Negativo']
-	};
-
-	var candidatosPopulares = {
-		columnNamesArray: [],
-		positiveArray: ['Positivo'],
-		negativeArray : ['Negativo']
-	};
-
 	var candidatosNoPopulares = ['CVderoux', 'MMMaldonadoC', 'RicardoAriasM', 'AlexVernot', 'danielraisbeck'];
+
+	var colors = {
+		RicardoAriasM: '#D66F13',
+		MMMaldonadoC: '#FBD103',
+		danielraisbeck: '#FF5C01',
+		ClaraLopezObre: '#FFDF00',
+		RafaelPardo: '#ED0A03',
+		PachoSantosC: '#3C68B7',
+		EnriquePenalosa: '#12ADE5',
+		AlexVernot: '#0A5C6D',
+		CVderoux: '#088543',
+		FicoGutierrez: '#FE5859',
+		AlcaldeAlonsoS: '#83AC2A',
+		RICOGabriel: '#F6783B',
+		jcvelezuribe: '#183A64',
+		HectorHAlcalde: '#FFDF00'
+	};
 
 	var bogotaCandidates = {
 		RicardoAriasM: '#D66F13',
@@ -41,24 +46,6 @@ function usersController($scope, environment, $state, $stateParams, usersService
 
 	var data = [];
 
-	function getCandidatesFromCity(cityId, candidatos) {
-
-		var candidatesFromCity = [];
-		for (var i = 0; i < candidatos.length; i++) {
-			var candidateColor = null;
-			var candidate = candidatos[i].target;
-			if (cityId === 'bogota') {
-				candidateColor = bogotaCandidates[candidate];
-			} else {
-				candidateColor = medellinCandidates[candidate];
-			}
-			if (candidateColor) {
-				candidatesFromCity.push(candidate);
-			}
-		}
-		return candidatesFromCity;
-	}
-
 	function getAllCandidatesPolarity(candidatosNoPopulares) {
 		var chartData = ['Usuarios'];
 		var targets = [];
@@ -66,33 +53,21 @@ function usersController($scope, environment, $state, $stateParams, usersService
 		
 		for(var i = 0 ; i < data2.length ; i++){
 			var actual = data2[i];
-			if(candidatosNoPopulares){
-				if(candidatosNoPopulares.indexOf(actual.target) === -1){
+			if($scope.cityId === 'bogota'){
+				if(candidatosNoPopulares){
+					if(candidatosNoPopulares.indexOf(actual.target) === -1 && bogotaCandidates[actual.target]){
+						chartData.push(actual.count);
+						targets.push(actual.target);
+					}
+				}else if(bogotaCandidates[actual.target]){
 					chartData.push(actual.count);
 					targets.push(actual.target);
 				}
-			}else{
+			}else if(medellinCandidates[actual.target]){
 				chartData.push(actual.count);
 				targets.push(actual.target);
 			}
 		}
-
-		var colors = {
-			RicardoAriasM: '#D66F13',
-			MMMaldonadoC: '#FBD103',
-			danielraisbeck: '#FF5C01',
-			ClaraLopezObre: '#FFDF00',
-			RafaelPardo: '#ED0A03',
-			PachoSantosC: '#3C68B7',
-			EnriquePenalosa: '#12ADE5',
-			AlexVernot: '#0A5C6D',
-			CVderoux: '#088543',
-			FicoGutierrez: '#FE5859',
-			AlcaldeAlonsoS: '#83AC2A',
-			RICOGabriel: '#F6783B',
-			jcvelezuribe: '#183A64',
-			HectorHAlcalde: '#FFDF00'
-		};
 
 		var chart = c3.generate({
 			bindto: '#usersChart',
@@ -202,6 +177,20 @@ function usersController($scope, environment, $state, $stateParams, usersService
 		});
 	}
 
+	function compareData(list1, list2){
+		if(list1.length === list2.length){
+			for(var i = 0 ; i < list1.length ; i++){
+				var ac1 = list1[i];
+				var ac2 = list2[i];
+				if(ac1 !== ac2){
+					return 1;
+				}
+			}
+			return 0;
+		}
+		return 1;
+	}
+
 	function successVenn(response){
 
 		var candidates = {
@@ -217,25 +206,78 @@ function usersController($scope, environment, $state, $stateParams, usersService
 			RicardoAriasM:9
 		};
 
+		var inverseCandidates = {
+			0: "RafaelPardo",
+			1: "PachoSantosC",
+			2: "AlexVernot",
+			3: "ClaraLopezObre",
+			4: "HOLLMANMORRIS",
+			5: "CVderoux",
+			6: "danielraisbeck",
+			7: "EnriquePenalosa",
+			8: "MMMaldonadoC",
+			9: "RicardoAriasM"
+		};
+
+		var medellinCandidatesV = {
+			FicoGutierrez: 0,
+			AlcaldeAlonsoS: 1,
+			RICOGabriel: 2,
+			jcvelezuribe: 3,
+			HectorHAlcalde: 4
+		};
+
+		var inverseCandidatesMedellin = {
+			0: "FicoGutierrez",
+			1: "AlcaldeAlonsoS",
+			2: "RICOGabriel",
+			3: "jcvelezuribe",
+			4: "HectorHAlcalde"
+		};
+
+		if($scope.cityId === 'medellin'){
+			candidates = medellinCandidatesV;
+			inverseCandidates = inverseCandidatesMedellin;
+		}
+
 		var sets = [];
 
 		for(var i = 0 ; i < response.length ; i++){
 			var actual = response[i];
-			var data = [];
+			var dataV = [];
 			for(var j = 0 ; j < actual.candidates.length ; j++){
 				var c = actual.candidates[j];
-				data.push(candidates[c]);
+				if(candidates[c]){
+					dataV.push(candidates[c]);
+				}
 			}
 
-			var set = {
-				sets: data,
-				size: actual.count
-			};
+			if(dataV.length > 0 && dataV.length < 4){
+				var set = {
+					sets: dataV,
+					size: actual.count
+				};
 
-			if(actual.candidates.length === 1){
-				set.label = actual.candidates[0];
+				var contains = 0;
+				for(var j = 0 ; j < sets.length ; j++){
+					var actualSet = sets[j].sets.sort();
+					if(compareData(actualSet, set.sets.sort())===0){
+						sets[j].size = set.size + sets[j].size;
+						contains = 1;
+					}
+				}
+
+				if(contains === 0){
+					sets.push(set);
+				}
 			}
-			sets.push(set);
+		}
+
+		for(var i = 0 ;  i < sets.length ; i++){
+			var actual = sets[i];
+			if(actual.sets.length === 1){
+				sets[i].label = inverseCandidates[actual.sets[0]];
+			}
 		}
 
 		var div = d3.select("#venn");
@@ -262,16 +304,17 @@ function usersController($scope, environment, $state, $stateParams, usersService
     	});
 
     	d3.selectAll("#venn .venn-circle path").style("fill", function(d){
-    		return bogotaCandidates[d.label];
+    		return colors[d.label];
     	});
 		d3.selectAll("#venn text").style("fill", function(d){
-			return bogotaCandidates[d.label];
+			return colors[d.label];
 		});
 	}
 
 	$scope.init = function(){
 		$scope.boxIsFull = true;
 		$scope.showOrHide = 'Ocultar';
+		$scope.cityId = $stateParams.cityId;
 		usersService.getAllUserCount(success, onError);
 		usersService.getCreationSummary(successCreation, onError);
 		usersService.getVennData(successVenn, onError);
