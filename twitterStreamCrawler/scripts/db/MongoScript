@@ -2,26 +2,19 @@ Mongdb Scripts:
 
 use boarddb
 
-db.createCollection("twitterIds")
+db.createCollection("twitterTargets")
 
-db.twitterIds.createIndex({id: 1}, {unique: true})
-db.twitterIds.insert({id: "CVderoux", relatedWords: ["Carlos Vicente De Roux", "Carlos Vicente de Roux", "cvderoux"]})
-db.twitterIds.insert({id: "ClaraLopezObre", relatedWords: ["Clara Lopez Obregon", "Clara Lopez", "ClaraLopezObre"]}) // Clara Lopez
-db.twitterIds.insert({id: "RafaelPardo", relatedWords: ["Rafael Pardo", "rafaelpardo"]}) //Rafael Pardo
-db.twitterIds.insert({id: "EnriquePenalosa", relatedWords: ["Enrique Penalosa", "Enrique Peñalosa", "enriquepenalosa", "equipoporbogota"]}) //Enrique Peñaloza
-db.twitterIds.insert({id: "MMMaldonadoC", relatedWords: ["Maria Mercedes Maldonado", "mmmaldonadoc"]}) //Maria Mercedez Maldonado
-db.twitterIds.insert({id: "RicardoAriasM", relatedWords: ["Ricardo Arias Mora", "ricardoariasm"]}) //Ricardo Arias Mora
-db.twitterIds.insert({id: "PachoSantosC", relatedWords: ["Francisco Santos", "Pacho Santos", "Pachito Santos", "PachoSantosC", "CambioConSeguridad"]}) // Pacho Santos
-db.twitterIds.insert({id: "HOLLMANMORRIS", relatedWords: ["Hollman Morris", "HollmanMorris"]}) //Hollman morris
-db.twitterIds.insert({id: "AlexVernot", relatedWords: ["Alex Vernot", "AlexVernot"]}) //Alex Vernot
-db.twitterIds.insert({id: "danielraisbeck", relatedWords: ["Daniel Raisbeck", "danielraisbeck"]}) //Daniel Raisbeck
-
-//Medellin
-db.twitterIds.insert({id: "RICOGabriel", relatedWords: ["Gabriel Jaime Rico", "RICOGabriel", "RicoAlcalde"]})
-db.twitterIds.insert({id: "jcvelezuribe", relatedWords: ["Juan Carlos Vélez", "jcvelezuribe"]}) 
-db.twitterIds.insert({id: "AlcaldeAlonsoS", relatedWords: ["AlcaldeAlonsoS", "AlonsoAlcalde"]}) 
-db.twitterIds.insert({id: "FicoGutierrez", relatedWords: ["Federico Gutiérrez", "FicoGutierrez", "FedericoAlcalde"]})
-db.twitterIds.insert({id: "HectorHAlcalde", relatedWords: ["Héctor Hoyos", "HectorHAlcalde"]})
+db.twitterTargets.createIndex({id: 1}, {unique: true})
+db.twitterTargets.insert({id: "CVderoux", relatedWords: ["Carlos Vicente De Roux", "Carlos Vicente de Roux", "cvderoux"]})
+db.twitterTargets.insert({id: "ClaraLopezObre", relatedWords: ["Clara Lopez Obregon", "Clara Lopez", "ClaraLopezObre"]}) // Clara Lopez
+db.twitterTargets.insert({id: "RafaelPardo", relatedWords: ["Rafael Pardo", "rafaelpardo"]}) //Rafael Pardo
+db.twitterTargets.insert({id: "EnriquePenalosa", relatedWords: ["Enrique Penalosa", "Enrique Peñalosa", "enriquepenalosa", "equipoporbogota"]}) //Enrique Peñaloza
+db.twitterTargets.insert({id: "MMMaldonadoC", relatedWords: ["Maria Mercedes Maldonado", "mmmaldonadoc"]}) //Maria Mercedez Maldonado
+db.twitterTargets.insert({id: "RicardoAriasM", relatedWords: ["Ricardo Arias Mora", "ricardoariasm"]}) //Ricardo Arias Mora
+db.twitterTargets.insert({id: "PachoSantosC", relatedWords: ["Francisco Santos", "Pacho Santos", "Pachito Santos", "PachoSantosC", "CambioConSeguridad"]}) // Pacho Santos
+db.twitterTargets.insert({id: "HOLLMANMORRIS", relatedWords: ["Hollman Morris", "HollmanMorris"]}) //Hollman morris
+db.twitterTargets.insert({id: "AlexVernot", relatedWords: ["Alex Vernot", "AlexVernot"]}) //Alex Vernot
+db.twitterTargets.insert({id: "danielraisbeck", relatedWords: ["Daniel Raisbeck", "danielraisbeck"]}) //Daniel Raisbeck
 
 
 
