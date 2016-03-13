@@ -19,7 +19,6 @@ dataset = []
 for document in documents:
     tweetText = document["text"]
     cleanTweetText = re.sub(r'ht\S+', 'URL', tweetText, flags=re.MULTILINE)
-    # tuple = [document[polarity], cleanTweetText]
     dataset.append({ "polarity" : document[polarity], "text": cleanTweetText })
 
 vectorized = CountVectorizer(analyzer="word", tokenizer=None, preprocessor=None, stop_words=None, max_features=5000)
@@ -56,5 +55,5 @@ for r in range(0, len(result)):
 print(counter)
 print("Accuracy: %d", (counter/len(result)))
 
-joblib.dump(vectorized, "model/vectorized.pkl")
-joblib.dump(forest, "model/forest.pkl")
+joblib.dump(vectorized, "model-part-1/vectorized.pkl")
+joblib.dump(forest, "model-part-1/forest.pkl")
